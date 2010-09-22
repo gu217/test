@@ -9,6 +9,6 @@
 		line +' </li><li>File:　'+
 		file+
 		'</li><ul></div>';
-		document.body.appendChild(dialog)
+		document.body.appendChild(dialog);
 		return true;
 	}
