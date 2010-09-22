@@ -1,6 +1,6 @@
 <?php
-include "function_gongye360.php";
-include "str_func.php";
+include "/include/func/function_360.php";
+include "/include/func/str_func.php";
 function ToEcho($var,$quit=false)
 {
 	echo '<pre>',var_dump($var),'</pre>';
@@ -8,6 +8,7 @@ function ToEcho($var,$quit=false)
 	{
 		exit();
 	}
+	//如果使用print_r NULL显示为空
 } 
 class MyClass
 {
