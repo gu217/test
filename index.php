@@ -1,6 +1,7 @@
 <?php
-include "/include/func/function_360.php";
-include "/include/func/str_func.php";
+define('INC_DIR',$_SERVER['DOCUMENT_ROOT'].'/include');
+include INC_DIR."/func/function_360.php";
+include INC_DIR."/func/str_func.php";
 function ToEcho($var,$quit=false)
 {
 	echo '<pre>',var_dump($var),'</pre>';
@@ -126,6 +127,7 @@ HEAD;
        $arr[]['a'] = 'aa';
        $arr[]['b'] = 'bb';
        ToEcho($arr);
+       ToEcho($_SERVER);
 
 	}
 
