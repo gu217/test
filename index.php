@@ -200,23 +200,28 @@ FOOT;
 		
 		echo date ( 'Y-m-d H:i:s', strtotime ( '+1 day', strtotime ( '2010-02-28 00:00:00' ) ) ), '<br />', $ip_long = sprintf ( '%u', ip2long ( '192.192.168.192' ) ), '<br />', $ip_long, '<br />', '<b>' . long2ip ( sprintf ( '%d', $ip_long ) ) . '</b>', //wrong
 long2ip ( sprintf ( '%d', 3233851584 ) ); //right
-	
+
 	}
 
 	public function TryCatch()
 	{
 		try
 		{
+			goog();
 			$error = 'Always throw this error';
 			throw new Exception ( $error );
-			// Code following an exception is not executed.
-		//echo 'Never executed';
+			//$this->b();
+
 		} catch ( Exception $e )
 		{
-			//echo 'Caught exception: ',  $e->getMessage(), "()()\n";
+			trigger_error('111 wrong');
 		}
-		// Continue execution
-	//echo 'Hello World';
+	}
+
+	public function PassReference($arr)
+	{
+		//		cann't pass value by reference
+		$arr [1] = '11';
 	}
 
 	public function __destruct()
@@ -224,6 +229,18 @@ long2ip ( sprintf ( '%d', 3233851584 ) ); //right
 		$this->EchoEnd ();
 	}
 }
+
+function PassReference(&$arr)
+{
+	$arr [1] = '11';
+}
 $a = new MyClass ( );
-$a->DateDiff ();
+$a->TryCatch();
+//
+/** cann't pass value by reference
+$arr[0] = '00';
+$arr[1] = '00';
+PassReference($arr);
+var_dump($arr);
+ ***/
 ?>
