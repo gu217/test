@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+ <head>
+  <title> Js 判断checkbox的选定状态 </title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script src="/js/jquery-1.4.2.min.js"></script>
+  <script src="/js/error.js"></script>
+ </head>
+ <body>
+<input type="checkbox" name="box" value="0" />
+<input type="checkbox" name="box" value="1" />
+<input type="checkbox" name="box" value="2" />
+<br />
+<input type="checkbox" name="box2" value="0" />
+<input type="checkbox" name="box2" value="1" />
+<input type="checkbox" name="box2" value="2" />
+<input type="radio" name="box1" value="3">
+<button onclick="GetValue()"> Test </button>
+ <script language="JavaScript">
+  function GetValue()
+  {
+	//alert($("input[name=box]:checked").length);  选定数目
+	var box = document.getElementsByName('box');
+	for(i=0;i<box.length;i++)
+	{
+		if( box[i].checked === true)
+		{
+			alert('OK');
+			break;
+		}
+	}
+  }
+  </script>
+ </body>
+</html>
