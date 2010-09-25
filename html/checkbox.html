@@ -7,9 +7,9 @@
   <script src="/js/error.js"></script>
  </head>
  <body>
-<input type="checkbox" name="box" value="0" />
-<input type="checkbox" name="box" value="1" />
-<input type="checkbox" name="box" value="2" />
+<input type="checkbox" name="box[]" value="0" />
+<input type="checkbox" name="box[]" value="1" />
+<input type="checkbox" name="box[]" value="2" />
 <br />
 <input type="checkbox" name="box2" value="0" />
 <input type="checkbox" name="box2" value="1" />
@@ -20,15 +20,22 @@
   function GetValue()
   {
 	//alert($("input[name=box]:checked").length);  选定数目
-	var box = document.getElementsByName('box');
-	for(i=0;i<box.length;i++)
+	function DoCheck(check_item)
 	{
-		if( box[i].checked === true)
+		check_flag = false;
+		var item_obj = document.getElementsByName(check_item);
+		for(i=0;i<item_obj.length;i++)
 		{
-			alert('OK');
-			break;
+			if( item_obj[i].checked === true)
+			{
+				check_flag = true;
+				break;
+			}
 		}
+		return check_flag;
 	}
+	if(!DoCheck('box[]'))
+	alert('请选择');
   }
   </script>
  </body>
