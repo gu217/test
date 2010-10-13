@@ -23,6 +23,12 @@ class MyClass
 		$this->EchoHead ();
 	}
 
+	public function ArrayAdd()
+	{
+		$arr_1 = array(1=>'a',2=>'b',3=>'c');
+		$arr_2 = array(3=>'d',5=>'e',6=>'f');
+		ToEcho($arr_1+$arr_2);
+	}
 	public function ArrayMultisort()
 	{
 		$ar = array (array ("10", 11, 100, 100, "a" ), array (1, 2, "2", 3, 1 ) );
@@ -92,7 +98,7 @@ class MyClass
 <head>
 <title> go.com </title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="Generator" content="EditPlus">
+<meta name="Generator" content="gu217_test">
 <meta name="Author" content="">
 <meta name="Keywords" content="">
 <meta name="Description" content="">
@@ -224,10 +230,27 @@ long2ip ( sprintf ( '%d', 3233851584 ) ); //right
 		$arr [1] = '11';
 	}
 
+	public function RegularExpressions()
+	{
+		// var_dump(preg_match("/^0|104$/","004"));  // wrong==>(0|1)04
+		var_dump(preg_match("/^(0|(104))$/","004",$matches),$matches,'<br />');	// int(1)
+		var_dump(preg_match("/^0|(104)$/","004",$matches),$matches,'<br />');	// int(1)
+		var_dump(preg_match("/^z|food$/","z",$matches),$matches,'<br />');	// int(1)
+		var_dump(preg_match("/^z|food$/","zood",$matches),$matches,'<br />');	// int(1)
+		var_dump(preg_match("/^(0|(104))$/","104",$matches),$matches,'<br />');	// int(1)
+		var_dump(preg_match("/^(0|104)$/","004",$matches),$matches,'<br />');	// int(1)
+		var_dump(preg_match("/^(0|104)$/","104",$matches),$matches,'<br />');	// int(1)
+		var_dump(preg_match("/^(0|104)$/","004",$matches),$matches,'<br />');		// int(0)
+		var_dump(preg_match("/^(0|104)$/","404",$matches),$matches,'<br />');		// int(0)
+		var_dump(preg_match("/^(0|99|100|101)$/","101",$matches),$matches,'<br />');		// int(0)
+		
+	}
 	public function __destruct()
 	{
 		$this->EchoEnd ();
 	}
+	
+	
 }
 
 function PassReference(&$arr)
@@ -235,7 +258,9 @@ function PassReference(&$arr)
 	$arr [1] = '11';
 }
 $a = new MyClass ( );
-$a->TryCatch();
+//$a->TryCatch();
+$a->ArrayAdd();
+$a->RegularExpressions();
 //
 /** cann't pass value by reference
 $arr[0] = '00';

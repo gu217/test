@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+ <head>
+  <title> RegularExpression Test </title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="Generator" content="EditPlus">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <script src="/js/error.js"></script>
+  <script src="/js/jquery-1.4.2.min.js"></script>
+ </head>
+ <body>
+  Reg: <input type="text" name="reg" id="reg" /> Str: <input type="text" name="str" id="str" /> <input type="button" value="Test" onclick="RegTest();" />
+<script language="JavaScript">
+function RegTest()
+{
+	var reg = new RegExp($('#reg').val());
+	var str = $('#str').val();
+	if(reg.test(str))
+		alert('OK');
+	else
+		alert('NO');
+}
+</script>
+ </body>
+</html>
