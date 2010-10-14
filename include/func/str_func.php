@@ -148,7 +148,7 @@ function Rfc2047Decode($str, $encoding = 'utf-8')
     preg_match_all('/=\?(.{3,13})\?([B|Q])\?([^\?]*)\?\=/i', $str, $ar);
     // 0 is all-string pattern, 1 is encoding, 2 is string to base64_decode
     $i = count($ar[0]);
-    //var_dump($ar);
+	
     if (0 < $i)
     {
         // Got match, process
@@ -172,7 +172,7 @@ function Rfc2047Decode($str, $encoding = 'utf-8')
             if (!empty($s))
                 $str = str_replace($ar[0][$j], $s, $str);
         }
-        //echo "$str \n";
+        
         return $str;
     }
     else
