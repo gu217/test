@@ -111,7 +111,6 @@ HEAD;
 
 	public function EchoEnd()
 	{
-		self::$_end = self::$_end * (- 1);
 		echo <<<FOOT
 
 </body>
@@ -138,7 +137,6 @@ FOOT;
 		$string = 'PHP 有支援很方便的 function 可以直接達到此功能.';
 		//$string = 'AF,S F,ADFSA,DFDAS  A AGHGHGH    FFFFFHHHHHHHHHJJJJJJPPPPPPOOOOOOOOOOO';
 		
-
 		$string = strip_tags ( $string );
 		//$string = mb_strimwidth ( $string, 0, $len, '...', 'UTF-8' );
 		$string = mb_substr ( $string, 0, $len, 'UTF-8' );
@@ -185,7 +183,6 @@ long2ip ( sprintf ( '%d', 3233851584 ) ); //right
 			$error = 'Always throw this error';
 			throw new Exception ( $error );
 			//$this->b();
-
 		} catch ( Exception $e )
 		{
 			trigger_error('111 wrong');
@@ -258,17 +255,13 @@ long2ip ( sprintf ( '%d', 3233851584 ) ); //right
 	public function __destruct()
 	{
 		$this->EchoEnd ();
-		echo Pager(100,empty($_GET['pn'])?1:$_GET['pn'],5,'index.php',array('a'=>1,'b'=>2));
-		ToEcho(range(1,1));
 	}
-	
 	
 }
 
-function PassReference(&$arr)
-{
-	$arr [1] = '11';
-}
+//echo Pager(100,empty($_GET['pn'])?1:$_GET['pn'],5,'index.php',array('a'=>1,'b'=>2));
+//ToEcho(range(1,1));
+
 $a = new MyClass ( );
 //$a->TryCatch();
 //$a->ArrayAdd();
