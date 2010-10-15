@@ -132,38 +132,6 @@ FOOT;
 		echo $str2;
 	}
 
-	/**
-	 * 获得网址中文件名的后缀
-	 * 
-	 * */
-	public function GetFileExtenionFromUrl()
-	{
-		$url = 'http://www.sina.com.cn/abc/de/fg.php?id=1&class=article';
-		$parse_url = parse_url ( $url );
-		/***parse_url ***
-		 * Array
-			(
-				[scheme] => http
-				[host] => www.sina.com.cn
-				[path] => /abc/de/fg.php
-				[query] =>  id=1&class=article
-			)
-		 * 
-		 **/
-		$pathinfo = pathinfo ( $parse_url ['path'] );
-		echo $pathinfo ['extension'];
-	/** pathinfo ***
-			 Array
-			(
-				[dirname] => /abc/de
-				[basename] => fg.php
-				[extension] => php
-				[filename] => fg
-			)
-	 **/
-	//print_r($parse_url);
-	}
-
 	public function StrFunction()
 	{
 		$len = 8;
@@ -249,9 +217,35 @@ long2ip ( sprintf ( '%d', 3233851584 ) ); //right
 	public function UrlFuncTest()
 	{
 		$url = "http://zhiyao.gongye360.com/index.html?a=1&b=2";
-		var_dump(http_build_query(array()));
+		var_dump(http_build_query(array('a'=>1,'b'=>2)));//string(7) "a=1&b=2" // array() ""
 		var_dump(parse_url($url));
+		/**
+		 * array(4) {
+					  ["scheme"]=>
+					  string(4) "http"
+					  ["host"]=>
+					  string(20) "zhiyao.gongye360.com"
+					  ["path"]=>
+					  string(11) "/index.html"
+					  ["query"]=>
+					  string(7) "a=1&b=2"
+					}
+		 * 
+		 */
 		var_dump(pathinfo($url));
+		/**
+		 * array(4) {
+					  ["dirname"]=>
+					  string(27) "http://zhiyao.gongye360.com"
+					  ["basename"]=>
+					  string(18) "index.html?a=1&b=2"
+					  ["extension"]=>
+					  string(12) "html?a=1&b=2"
+					  ["filename"]=>
+					  string(5) "index"
+					}
+		 * 
+		 */
 		echo self::GetSuffixOfUrl($url);
 	}
 	
@@ -264,6 +258,8 @@ long2ip ( sprintf ( '%d', 3233851584 ) ); //right
 	public function __destruct()
 	{
 		$this->EchoEnd ();
+		echo Pager(100,empty($_GET['pn'])?1:$_GET['pn'],5,'index.php',array('a'=>1,'b'=>2));
+		ToEcho(range(1,1));
 	}
 	
 	

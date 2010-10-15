@@ -435,4 +435,107 @@ function SubstrIgnHtml($str, $len, $marker = '...', $start = 0, $encoding = 'utf
     }
     return '';
 } // end of func SubstrIgnHtml
+
+/**
+ *		分页函数
+ * @param	$count			int		item total num
+ * @param	$current_page	int		current page
+ * @param	$per			int		item per page display
+ * @param	$params			array	params array  $key=>$value
+ */
+function Pager($count, $current_page, $per, $url,$params=array())
+{
+	$sum=ceil($count/$per);
+	$pages_display = 4;//当前页前后各显示几条
+	if ($sum < 1)
+	{
+		return '';
+	}
+	$current_page > $sum && $current_page=$sum;
+	(!is_numeric($current_page) || $current_page <1) && $current_page=1;
+	$url_param_str = http_build_query($params);
+	$url .= empty($url_param_str) ? '?' : '?'.$url_param_str.'&';
+	$pre_page_arr = ($current_page)<$pages_display ? range(1,$current_page) : range($current_page-$pages_display+1,$current_page-1);
+	if($current_page == 1)
+	{
+		$pre_page_arr = array();
+	}
+	elseif($current_page<$pages_display+1)
+	{
+		$pre_page_arr = range(1,$current_page-1);
+	}
+	else
+	{
+		$pre_page_arr = range($current_page-$pages_display,$current_page-1);
+	}
+	//当前页后面页显示的页数
+	$suf_page_arr = array();
+	if($current_page+$pages_display<=$sum)
+	{
+		$suf_page_arr = range($current_page+1,$current_page+$pages_display);
+	}
+	elseif($current_page+$pages_display>$sum&&$current_page!=$sum)
+	{
+		$suf_page_arr = range($current_page+1,$sum);
+	}
+	else
+	{
+		$suf_page_arr = array();
+	}
+	$pre_page_str = '';
+	foreach($pre_page_arr as $v)
+	{
+		$pre_page_str .= "<a href='$url"."pn=" .$v."'>{$v}</a>&nbsp;";
+	}
+	$suf_page_str = '';
+	foreach($suf_page_arr as $v)
+	{
+		$suf_page_str .= "<a href='$url"."pn=" .$v."'>{$v}</a>&nbsp;";
+	}
+	var_dump($suf_page_str);
+	$ret = '';
+	if($current_page!=1)
+	{
+		$ret = "<a href=\"" . $url . "pn=1\">首页</a>&nbsp;";
+		$ret.= "<a href='$url"."pn=" .($current_page-1)."'>上页</a>&nbsp;";
+	}
+	else
+	{
+		$ret = "首页&nbsp;";
+		$ret.= "上页&nbsp;";
+	}
+	$ret .= $pre_page_str;
+	$ret.= $current_page."&nbsp;";
+	$ret .= $suf_page_str;
+	if($current_page!=$sum)
+	{
+		$ret.= "<a href='$url"."pn=".($current_page == $sum ? $current_page : ($current_page+1))."'>下页</a>&nbsp;";
+		$ret.="<a href='$url". "pn=$sum" ."'>尾页</a><br/>";
+	}
+	else
+	{
+		$ret.= "下页&nbsp;";
+		$ret.= "尾页&nbsp;";
+	} 
+	$ret.= "&nbsp;<b>$current_page/$sum</b>&nbsp;&nbsp;&nbsp;";
+	$ret.="<input type='text' size='2' style='height: 16px; border:1px solid #E5E5E5;' id='PageKeyDownText' onkeydown=\"onPageKeyDown(event)\"> <input type='button' value='GO' onclick='GoPage()' />";
+	$ret.= <<<EOT
+<script language="javascript">
+	function onPageKeyDown(e)
+	{
+		e = window.event||e;
+		var code = e.keyCode||e.which;
+		if (code == 13)
+		{
+			GoPage();
+		}
+	}
+	function GoPage()
+	{
+		window.location.href = "{$url}pn="+document.getElementById("PageKeyDownText").value;
+	}
+</script>
+EOT;
+	return $ret;
+}
 ?>
