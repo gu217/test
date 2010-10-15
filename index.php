@@ -245,6 +245,22 @@ long2ip ( sprintf ( '%d', 3233851584 ) ); //right
 		var_dump(preg_match("/^(0|99|100|101)$/","101",$matches),$matches,'<br />');		// int(0)
 		
 	}
+	
+	public function UrlFuncTest()
+	{
+		$url = "http://zhiyao.gongye360.com/index.html?a=1&b=2";
+		var_dump(http_build_query(array()));
+		var_dump(parse_url($url));
+		var_dump(pathinfo($url));
+		echo self::GetSuffixOfUrl($url);
+	}
+	
+	public static function GetSuffixOfUrl($url)
+	{
+		$parse_url = parse_url($url);
+		$pathinfo = pathinfo($parse_url['path']);
+		return $pathinfo['extension'];
+	}
 	public function __destruct()
 	{
 		$this->EchoEnd ();
@@ -259,8 +275,9 @@ function PassReference(&$arr)
 }
 $a = new MyClass ( );
 //$a->TryCatch();
-$a->ArrayAdd();
-$a->RegularExpressions();
+//$a->ArrayAdd();
+//$a->RegularExpressions();
+$a->UrlFuncTest();
 //
 /** cann't pass value by reference
 $arr[0] = '00';
