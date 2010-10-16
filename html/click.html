@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>Auto Click</title>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+	<meta name="generator" content="Geany 0.19" />
+	<meta name="author" content="gu217" />
+	<meta name="date" content="2010-10-16 18:22:36" />
+	<meta name="description" content="把某个网址嵌入当前页的一个iframe中,然后查找某个连接并触发点击事件" />
+	<script src="http://go.com/js/jquery-1.4.2.min.js"></script>
+	<script src="http://go.com/js/error.js"></script>
+	<style type="text/css">
+		.iframe
+		{
+			width:100%;
+			height:150px;
+		}
+	</style>
+</head>
+<body>
+	<script type="text/javascript">
+		function CreatIframe(url)
+		{
+			url = url || default_url;
+			var iframe = document.createElement("iframe");
+			iframe.className = 'iframe';
+			iframe.src = url;
+			if (iframe.attachEvent)
+			{
+			   iframe.attachEvent("onload", function()
+			   {
+				   FindElement(src_elements[0],find_elements[0]);
+				})
+			} 
+			else 
+			{
+				iframe.onload = function()
+				{
+					FindElement(src_elements[0],find_elements[0]);
+				}
+			}
+			document.body.appendChild(iframe);
+		}
+		function FindElement(src_element,find_element)
+		{
+			find_element = find_element || find_elements[0]; // 此处是jQuery查找的规则
+			src_element = src_element || src_elements[0];
+			$(src_element).contents().find(find_element).click(
+				function ()
+				{
+					self_url = $(this).attr('href');
+					console.log(self_url);
+					//window.self.location = self_url;
+					$(src_element).attr('src',self_url);
+				}
+			);
+			// 直接对连接产生click事件不起作用,focus可以起作用
+			$(src_element).contents().find(find_element).click();
+		}
+	</script>
+	<script type="text/javascript">
+	var default_url = "http://go.com/";
+	var default_url = "http://www.baidu.com/"; //跨站不能实现 Permission denied for <http://go.com> to get property HTMLDocument.nodeType from <http://www.baidu.com>.
+	var find_flag = true;
+	var find_elements = new Array();
+		find_elements[0] = "a[href='http://google.com']";
+		find_elements[0] = "http://tieba.baidu.com/";
+	var src_elements = new Array();
+		src_elements[0] = "iframe";
+	CreatIframe();
+	//Note: 失败   考虑窗口化程序语言的实现C,C++,VC++.net,VB.NET等
+	</script>
+</body>
+</html>
