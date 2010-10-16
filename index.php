@@ -205,6 +205,7 @@ long2ip ( sprintf ( '%d', 3233851584 ) ); //right
 	public function UrlFuncTest()
 	{
 		$url = "http://zhiyao.gongye360.com/index.html?a=1&b=2";
+		$url = "index.html";
 		var_dump(http_build_query(array('a'=>1,'b'=>2)));//string(7) "a=1&b=2" // array() ""
 		var_dump(parse_url($url));
 		/**
@@ -241,10 +242,11 @@ long2ip ( sprintf ( '%d', 3233851584 ) ); //right
 	public function __destruct()
 	{
 		$this->EchoEnd ();
+		echo '<a href="http://google.com">google.com</a>';
 	}
 	
 }
 
 $a = new MyClass ( );
-//$a->UrlFuncTest();
+$a->UrlFuncTest();
 ?>
