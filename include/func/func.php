@@ -295,8 +295,8 @@ function GetFormatUrl($url='',$params=array(),$keep_old_params = FALSE)
  */
 function ToEcho($var, $exit = 0)
 {
-	$exit = $exit === 0 ? TRUE : FALSE;
-	echo '<pre>' . var_dump ( $var ) . '</pre>'; // 一些空的或为0的数用print_r不能很好的展现出来
+	$exit = $exit ? TRUE : FALSE;
+	echo '<pre>' . print_r ( $var,TRUE ) . '</pre>'; // 一些空的或为0的数用print_r不能很好的展现出来
 	if ($exit)
 		exit ();
 }

@@ -6,12 +6,10 @@ require_once INC_DIR . "/func/func.php";
 
 class MyClass
 {
-	public static $_start = 1;
-	public static $_end = 1;
 
 	public function __construct()
 	{
-		$this->EchoHead ();
+		self::EchoHead ();
 	}
 
 	public function ArrayAdd()
@@ -80,9 +78,8 @@ class MyClass
 		echo $dom->saveXML ();
 	}
 
-	public function EchoHead()
+	private static function EchoHead()
 	{
-		self::$_start = self::$_start * (- 1);
 		echo <<<HEAD
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -93,14 +90,14 @@ class MyClass
 <meta name="Author" content="">
 <meta name="Keywords" content="">
 <meta name="Description" content="">
-<script type="text/javascript" src="/js/error.js"></script>
+<script src="/js/error.js"></script>
 </head>
 <body>
 
 HEAD;
 	}
 
-	public function EchoEnd()
+	private static function EchoEnd()
 	{
 		echo <<<FOOT
 
@@ -122,6 +119,19 @@ FOOT;
 		echo $str2;
 	}
 
+	public static function JsonUsage()
+	{
+		$arr = array(
+						'a'=>'a',
+						'b'=>array('c'=>'d')
+						);
+		echo '
+		<script type="text/javascript"> 
+			js=\'',json_encode($arr),'\';
+			js=eval("("+js+")");
+			document.write(js.b.c);
+		</script>';
+	}
 	public function StrFunction()
 	{
 		$len = 8;
@@ -206,8 +216,8 @@ long2ip ( sprintf ( '%d', 3233851584 ) ); //right
 	{
 		$url = "http://zhiyao.gongye360.com/index.html?a=1&b=2";
 		$url = "index.html";
-		var_dump(http_build_query(array('a'=>1,'b'=>2)));//string(7) "a=1&b=2" // array() ""
-		var_dump(parse_url($url));
+		ToEcho(http_build_query(array('a'=>1,'b'=>2)));//string(7) "a=1&b=2" // array() ""
+		ToEcho(parse_url($url));
 		/**
 		 * array(4) {
 					  ["scheme"]=>
@@ -221,7 +231,7 @@ long2ip ( sprintf ( '%d', 3233851584 ) ); //right
 					}
 		 * 
 		 */
-		var_dump(pathinfo($url));
+		ToEcho(pathinfo($url));
 		/**
 		 * array(4) {
 					  ["dirname"]=>
@@ -235,18 +245,18 @@ long2ip ( sprintf ( '%d', 3233851584 ) ); //right
 					}
 		 * 
 		 */
-		echo GetSuffixOfUrl($url);
+		echo GetSuffixOfUrl($url),'<br />';
 	}
 	
 
 	public function __destruct()
 	{
-		$this->EchoEnd ();
-		echo '<a href="http://google.com">google.com</a>';
+		self::EchoEnd ();
 	}
 	
 }
 
 $a = new MyClass ( );
 $a->UrlFuncTest();
+MyClass::JsonUsage();
 ?>
