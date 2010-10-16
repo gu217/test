@@ -234,15 +234,10 @@ long2ip ( sprintf ( '%d', 3233851584 ) ); //right
 					}
 		 * 
 		 */
-		echo self::GetSuffixOfUrl($url);
+		echo GetSuffixOfUrl($url);
 	}
 	
-	public static function GetSuffixOfUrl($url)
-	{
-		$parse_url = parse_url($url);
-		$pathinfo = pathinfo($parse_url['path']);
-		return $pathinfo['extension'];
-	}
+
 	public function __destruct()
 	{
 		$this->EchoEnd ();
@@ -250,21 +245,6 @@ long2ip ( sprintf ( '%d', 3233851584 ) ); //right
 	
 }
 
-//echo Pager(100,empty($_GET['pn'])?1:$_GET['pn'],5,'index.php',array('a'=>1,'b'=>2));
-//ToEcho(range(1,1));
-echo '<a href="'.GetFormatUrl('',array('a'=>'bb','b'=>array(1,2,3))).'" >'.GetFormatUrl('',array('a'=>'bb','b'=>array(1,2,3))).'</a>';
-if(!empty($_GET))
-	print_r($_GET);
 $a = new MyClass ( );
-//$a->TryCatch();
-//$a->ArrayAdd();
-//$a->RegularExpressions();
 //$a->UrlFuncTest();
-//
-/** cann't pass value by reference
-$arr[0] = '00';
-$arr[1] = '00';
-PassReference($arr);
-var_dump($arr);
- ***/
 ?>

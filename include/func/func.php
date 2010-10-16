@@ -149,7 +149,14 @@ function GetFileExtentsion($file)
 	$pathinfo = pathinfo ( $file );
 	return $pathinfo ['extension'];
 }
-
+function GetSuffixOfUrl($url)
+{
+	$parse_url = parse_url($url);
+	if(empty($parse_url['path']))
+		return '';
+	$pathinfo = pathinfo($parse_url['path']);
+	return $pathinfo['extension'];
+}
 /**
  * Get current URL
  *
