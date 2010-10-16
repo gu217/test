@@ -1,17 +1,8 @@
 <?php
 define ( 'INC_DIR', $_SERVER ['DOCUMENT_ROOT'] . '/include' );
-include INC_DIR . "/func/function_360.php";
-include INC_DIR . "/func/str_func.php";
-
-function ToEcho($var, $quit = false)
-{
-	echo '<pre>', var_dump ( $var ), '</pre>';
-	if ($quit)
-	{
-		exit ();
-	}
-	//如果使用print_r NULL显示为空
-}
+require_once INC_DIR . "/func/function_360.php"; 
+require_once INC_DIR . "/func/str_func.php";
+require_once INC_DIR . "/func/func.php";
 
 class MyClass
 {
@@ -261,12 +252,14 @@ long2ip ( sprintf ( '%d', 3233851584 ) ); //right
 
 //echo Pager(100,empty($_GET['pn'])?1:$_GET['pn'],5,'index.php',array('a'=>1,'b'=>2));
 //ToEcho(range(1,1));
-
+echo '<a href="'.GetFormatUrl('',array('a'=>'bb','b'=>array(1,2,3))).'" >'.GetFormatUrl('',array('a'=>'bb','b'=>array(1,2,3))).'</a>';
+if(!empty($_GET))
+	print_r($_GET);
 $a = new MyClass ( );
 //$a->TryCatch();
 //$a->ArrayAdd();
 //$a->RegularExpressions();
-$a->UrlFuncTest();
+//$a->UrlFuncTest();
 //
 /** cann't pass value by reference
 $arr[0] = '00';
