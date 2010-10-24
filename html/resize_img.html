@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+ <head>
+  <title> new document </title>
+  <meta http-equive="Content-Type" content="text/html; charset=utf-8">
+  <meta name="Generator" content="EditPlus">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+ </head>
+<script type="text/javascript">
+var getElementsByClassName = function (searchClass, node,tag) 
+{
+	if(document.getElementsByClassName)
+	{  
+		var nodes =  (node || document).getElementsByClassName(searchClass),result = [];  
+		for(var i=0 ;node = nodes[i++];)
+		{
+			if(tag !== "*" && node.tagName === tag.toUpperCase())
+			{  
+				result.push(node);
+			}
+			else
+			{
+				result.push(node); 
+			}  
+		}
+		return result  
+    }
+	else
+	{  
+      node = node || document;  
+      tag = tag || "*";  
+      var classes = searchClass.split(" "),  
+      elements = (tag === "*" && node.all)? node.all : node.getElementsByTagName(tag),  
+      patterns = [],  
+      current,  
+      match;  
+      var i = classes.length;  
+      while(--i >= 0)
+	  {  
+		patterns.push(new RegExp("(^|\\s)" + classes[i] + "(\\s|$)"));  
+      }  
+      var j = elements.length;  
+      while(--j >= 0)
+	  {  
+        current = elements[j];  
+        match = false;  
+        for(var k=0, kl=patterns.length; k<kl; k++)
+		{  
+			match = patterns[k].test(current.className);  
+			if (!match)  break;  
+        }  
+        if (match)  result.push(current);  
+      }  
+      return result;  
+    }  
+  } 
+</script>
+<style>
+
+</style>
+ <body>
+ <img class="img" src="/image/福彩-双色球.png" />
+ <img class="img" src="/image/福彩-双色球.png" />
+  <script type="text/javascript">
+  //var w = 100;//要转换成的宽度
+  //var h = 100;//要转换成的高度
+  	function ReSizeImg(imgObj,w,h)
+	{
+		var width = imgObj.width;
+		var height = imgObj.height;
+		if(width<=w && height<=h)
+		{
+			 return;
+		}
+		if (width/height >= w/h) 
+		{
+			height = height*w/width;
+			width = w;
+		} 
+		else 
+		{
+			width = width*h/height;
+			height = h;
+		}
+		imgObj.width = width;
+		imgObj.height = height;
+	}
+//ReSizeImg(document.images.item(0),300,300);
+	function DoReSize()
+	{
+		//var resize_obj = document.images;
+		//var  resize_obj = document.getElementsByTagName('img');
+		var  resize_obj = document.getElementsByClassName('img');
+		image_size = resize_obj.length;
+		if(image_size<1)
+			return ;
+		for(i=0;i<image_size;i++)
+		{
+			ReSizeImg(resize_obj.item(i),300,300);
+		}
+	}
+	DoReSize();
+  </script>
+ </body>
+</html>
