@@ -1,4 +1,4 @@
-	window.onerror =function error(msg,file,line)	
+	window.onerror = function error(msg,file,line)	
 	{
 		//generate error message-div
 		var dialog=document.createElement("div")
