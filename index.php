@@ -252,6 +252,7 @@ long2ip ( sprintf ( '%d', 3233851584 ) ); //right
 	public function __destruct()
 	{
 		self::EchoEnd ();
+		echo date('Y-m-d',strtotime('+7 days'));
 	}
 	
 }
