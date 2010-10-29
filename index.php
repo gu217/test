@@ -145,6 +145,54 @@ FOOT;
 		echo $string . "--" . strlen ( $string ) . "<br />\r\n";
 	}
 
+	public function StrtoTimeTest()
+	{
+		echo strtotime("now"), "\n";
+		echo strtotime("10 September 2000"), "\n";
+		echo strtotime("+1 day"), "\n";
+		echo strtotime("+1 week"), "\n";
+		echo strtotime("+1 week 2 days 4 hours 2 seconds"), "\n";
+		echo strtotime("next Thursday"), "\n";
+		echo strtotime("last Monday"), "\n";
+		echo strtotime('noon');
+		echo strtotime('midnight');
+		echo strtotime('10am');
+		echo strtotime('2pm'); 
+		
+	}
+	
+	function isUkWorkingDay( $utDate )
+  {
+
+	$holidays[] = date( 'Y-m-d', strtotime( 'first monday january ' . $year ));
+	$holidays[] = date( 'Y-m-d',  $utFirstJan) ;
+	$holidays[] = date( 'Y-m-d', strtotime( 'last friday', $utEasterSunday ));
+	$holidays[] = date( 'Y-m-d', strtotime( 'next monday', $utEasterSunday ));
+	$holidays[] = date( 'Y-m-d', strtotime( 'first monday may ' . $year ));
+	$holidays[] = date( 'Y-m-d', strtotime( 'last monday june ' . $year )); // end of may B.H.
+	$holidays[] = date( 'Y-m-d', strtotime( 'last monday september ' . $year ));  // end of August B.H.
+	$holidays[] = date( 'Y-m-d', strtotime( 'next monday', $xmasDay ));
+	$holidays[] = date( 'Y-m-d', strtotime( 'next monday', $xmasDay ));
+	$holidays[] = date( 'Y-m-d', strtotime( 'next tuesday', $xmasDay ));
+	$holidays[] = date( 'Y-m-d', $xmasDay );
+	$holidays[] = date( 'Y-m-d', strtotime( 'next day', $xmasDay ));
+	    # on 2/8/2010
+	date('m/d/y', strtotime('first day')); # 02/01/10
+	date('m/d/y', strtotime('last day')); # 02/28/10
+	date('m/d/y', strtotime('last day next month')); # 03/31/10
+	date('m/d/y', strtotime('last day last month')); # 01/31/10
+	date('m/d/y', strtotime('2009-12 last day')); # 12/31/09 - this doesn't work if you reverse the order of the year and month
+	date('m/d/y', strtotime('2009-03 last day')); # 03/31/09
+	date('m/d/y', strtotime('2009-03')); # 03/01/09
+	date('m/d/y', strtotime('last day of march 2009')); # 03/31/09
+	date('m/d/y', strtotime('last day of march')); # 03/31/10
+	date( "Y-m-d", strtotime( "last day next month 2009-01-31" ) )."<br>";
+	date( "Y-m-d", strtotime( "2009-01-31 +1 month" ) );//2009-03-03
+	strtotime('+0 week sun nov 2009'); // first sunday in nov 2009
+	strtotime('+1 week sun nov 2009'); // second sunday
+	strtotime('-1 week sun nov 2009'); // last sunday in oct 2009 
+    return( !in_array( date( 'Y-m-d', $utDate ), $holidays ) ) ;
+  } 
 	public function DoTest()
 	{
 		//echo time(),'<br />',strtotime(date('Y-m-d'));
@@ -252,12 +300,12 @@ long2ip ( sprintf ( '%d', 3233851584 ) ); //right
 	public function __destruct()
 	{
 		self::EchoEnd ();
-		echo date('Y-m-d',strtotime('+7 days'));
+		echo date('Y-m-d',strtotime('+7 days')),'<br />',date('Y-m-d H:i:s',strtotime('midnight +1 day')),'<br />',strtotime(date('Y-m-d',strtotime('+1 day')));
+		echo '<br />'.date( "Y-m-d", strtotime( "last day next month 2000-01-31" ) )."<br>";
 	}
 	
 }
 
 $a = new MyClass ( );
 $a->UrlFuncTest();
-MyClass::JsonUsage();
 ?>
