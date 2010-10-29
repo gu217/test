@@ -11,33 +11,45 @@
   <script type="text/javascript">
   (function (window)//此处window为形参
   {
-	var Q = 
+	var Q = function (b)
 	{
-			'con' : undefined, // null   typeof this.con == 'object'
-			'echo':function(a){alert(a)},
-			'dis':function(a){document.write(a+'<br />');},
-			'AddA':function(A)
-			{
-				 a = A || '(A)';
-				 if(typeof(this.con)!='undefined')
-					this.con+='(a)'+a+'(a)';
-				else
-					this.con='(a)'+a+'(a)';
-				return this;
-			},
-			'AddB':function(B)
-			{
-				 b = B || '(B)';
-				 if(typeof this.con!='undefined')
-					this.con+='(b)'+b+'(b)';
-				else
-					this.con='(b)'+b+'(b)';
-				return this.con;
-			}
+		return new Q.fn.init(b);
 	};
-	Q.version = '1.0';
-
-	window.Q = Q; //将Q绑定到window,方便在外部调用
+	Q.fn = Q.prototype = 
+	{
+		init : function(b)
+		{
+			//alert(b);
+			return Q;
+		},
+		'con' : undefined, // null   typeof this.con == 'object'
+		'echo':function(a){alert(a)},
+		'dis':function(a){document.write(a+'<br />');},
+		'AddA':function(A)
+		{
+			 a = A || '(A)';
+			 if(typeof(this.con)!='undefined')
+				this.con+='(a)'+a+'(a)';
+			else
+				this.con='(a)'+a+'(a)';
+			return this;
+		},
+		'AddB':function(B)
+		{
+			 b = B || '(B)';
+			 if(typeof this.con!='undefined')
+				this.con+='(b)'+b+'(b)';
+			else
+				this.con='(b)'+b+'(b)';
+			return this.con;
+		},
+		ver : '1.0',
+		version : function()
+		{
+			return this.ver;		
+		}
+	};
+	window.Q = Q.fn.init; //将Q绑定到window,方便在外部调用
   })
   (window); //此处window为实参
   </script>
@@ -47,7 +59,11 @@
  </head>
  <body>
   <script type="text/javascript">
-	Q.dis('Hello,world!');alert(Q.AddA('Q').AddB('T'));
+	for(each in window)
+		document.write(each+':'+window[each]+'<br />');
+document.write('<br />'+'=========================================================='+'<br />');
+	for(each in $)
+		document.write(each+':'+$[each]+'<br />');
   </script>
  </body>
 </html>
