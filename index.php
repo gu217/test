@@ -1,6 +1,6 @@
 <?php
 define ( 'INC_DIR', $_SERVER ['DOCUMENT_ROOT'] . '/include' );
-require_once INC_DIR . "/func/function_360.php"; 
+require_once INC_DIR . "/func/function_360.php";
 require_once INC_DIR . "/func/str_func.php";
 require_once INC_DIR . "/func/func.php";
 
@@ -14,10 +14,11 @@ class MyClass
 
 	public function ArrayAdd()
 	{
-		$arr_1 = array(1=>'a',2=>'b',3=>'c');
-		$arr_2 = array(3=>'d',5=>'e',6=>'f');
-		ToEcho($arr_1+$arr_2);
+		$arr_1 = array (1 => 'a', 2 => 'b', 3 => 'c' );
+		$arr_2 = array (3 => 'd', 5 => 'e', 6 => 'f' );
+		ToEcho ( $arr_1 + $arr_2 );
 	}
+
 	public function ArrayMultisort()
 	{
 		$ar = array (array ("10", 11, 100, 100, "a" ), array (1, 2, "2", 3, 1 ) );
@@ -91,6 +92,7 @@ class MyClass
 <meta name="Keywords" content="">
 <meta name="Description" content="">
 <script src="/js/error.js"></script>
+<script src="/js/x.js"></script>
 </head>
 <body>
 
@@ -121,23 +123,22 @@ FOOT;
 
 	public static function JsonUsage()
 	{
-		$arr = array(
-						'a'=>'a',
-						'b'=>array('c'=>'d')
-						);
+		$arr = array ('a' => 'a', 'b' => array ('c' => 'd' ) );
 		echo '
 		<script type="text/javascript"> 
-			js=\'',json_encode($arr),'\';
+			js=\'', json_encode ( $arr ), '\';
 			js=eval("("+js+")");
 			document.write(js.b.c);
 		</script>';
 	}
+
 	public function StrFunction()
 	{
 		$len = 8;
 		$string = 'PHP 有支援很方便的 function 可以直接達到此功能.';
 		//$string = 'AF,S F,ADFSA,DFDAS  A AGHGHGH    FFFFFHHHHHHHHHJJJJJJPPPPPPOOOOOOOOOOO';
 		
+
 		$string = strip_tags ( $string );
 		//$string = mb_strimwidth ( $string, 0, $len, '...', 'UTF-8' );
 		$string = mb_substr ( $string, 0, $len, 'UTF-8' );
@@ -147,52 +148,54 @@ FOOT;
 
 	public function StrtoTimeTest()
 	{
-		echo strtotime("now"), "\n";
-		echo strtotime("10 September 2000"), "\n";
-		echo strtotime("+1 day"), "\n";
-		echo strtotime("+1 week"), "\n";
-		echo strtotime("+1 week 2 days 4 hours 2 seconds"), "\n";
-		echo strtotime("next Thursday"), "\n";
-		echo strtotime("last Monday"), "\n";
-		echo strtotime('noon');
-		echo strtotime('midnight');
-		echo strtotime('10am');
-		echo strtotime('2pm'); 
-		
-	}
+		echo strtotime ( "now" ), "\n";
+		echo strtotime ( "10 September 2000" ), "\n";
+		echo strtotime ( "+1 day" ), "\n";
+		echo strtotime ( "+1 week" ), "\n";
+		echo strtotime ( "+1 week 2 days 4 hours 2 seconds" ), "\n";
+		echo strtotime ( "next Thursday" ), "\n";
+		echo strtotime ( "last Monday" ), "\n";
+		echo strtotime ( 'noon' );
+		echo strtotime ( 'midnight' );
+		echo strtotime ( '10am' );
+		echo strtotime ( '2pm' );
 	
-	function isUkWorkingDay( $utDate )
-  {
+	}
 
-	$holidays[] = date( 'Y-m-d', strtotime( 'first monday january ' . $year ));
-	$holidays[] = date( 'Y-m-d',  $utFirstJan) ;
-	$holidays[] = date( 'Y-m-d', strtotime( 'last friday', $utEasterSunday ));
-	$holidays[] = date( 'Y-m-d', strtotime( 'next monday', $utEasterSunday ));
-	$holidays[] = date( 'Y-m-d', strtotime( 'first monday may ' . $year ));
-	$holidays[] = date( 'Y-m-d', strtotime( 'last monday june ' . $year )); // end of may B.H.
-	$holidays[] = date( 'Y-m-d', strtotime( 'last monday september ' . $year ));  // end of August B.H.
-	$holidays[] = date( 'Y-m-d', strtotime( 'next monday', $xmasDay ));
-	$holidays[] = date( 'Y-m-d', strtotime( 'next monday', $xmasDay ));
-	$holidays[] = date( 'Y-m-d', strtotime( 'next tuesday', $xmasDay ));
-	$holidays[] = date( 'Y-m-d', $xmasDay );
-	$holidays[] = date( 'Y-m-d', strtotime( 'next day', $xmasDay ));
-	    # on 2/8/2010
-	date('m/d/y', strtotime('first day')); # 02/01/10
-	date('m/d/y', strtotime('last day')); # 02/28/10
-	date('m/d/y', strtotime('last day next month')); # 03/31/10
-	date('m/d/y', strtotime('last day last month')); # 01/31/10
-	date('m/d/y', strtotime('2009-12 last day')); # 12/31/09 - this doesn't work if you reverse the order of the year and month
-	date('m/d/y', strtotime('2009-03 last day')); # 03/31/09
-	date('m/d/y', strtotime('2009-03')); # 03/01/09
-	date('m/d/y', strtotime('last day of march 2009')); # 03/31/09
-	date('m/d/y', strtotime('last day of march')); # 03/31/10
-	date( "Y-m-d", strtotime( "last day next month 2009-01-31" ) )."<br>";
-	date( "Y-m-d", strtotime( "2009-01-31 +1 month" ) );//2009-03-03
-	strtotime('+0 week sun nov 2009'); // first sunday in nov 2009
-	strtotime('+1 week sun nov 2009'); // second sunday
-	strtotime('-1 week sun nov 2009'); // last sunday in oct 2009 
-    return( !in_array( date( 'Y-m-d', $utDate ), $holidays ) ) ;
-  } 
+	function isUkWorkingDay($utDate)
+	{
+		
+		$holidays [] = date ( 'Y-m-d', strtotime ( 'first monday january ' . $year ) );
+		$holidays [] = date ( 'Y-m-d', $utFirstJan );
+		$holidays [] = date ( 'Y-m-d', strtotime ( 'last friday', $utEasterSunday ) );
+		$holidays [] = date ( 'Y-m-d', strtotime ( 'next monday', $utEasterSunday ) );
+		$holidays [] = date ( 'Y-m-d', strtotime ( 'first monday may ' . $year ) );
+		$holidays [] = date ( 'Y-m-d', strtotime ( 'last monday june ' . $year ) ); // end of may B.H.
+		$holidays [] = date ( 'Y-m-d', strtotime ( 'last monday september ' . $year ) ); // end of August B.H.
+		$holidays [] = date ( 'Y-m-d', strtotime ( 'next monday', $xmasDay ) );
+		$holidays [] = date ( 'Y-m-d', strtotime ( 'next monday', $xmasDay ) );
+		$holidays [] = date ( 'Y-m-d', strtotime ( 'next tuesday', $xmasDay ) );
+		$holidays [] = date ( 'Y-m-d', $xmasDay );
+		$holidays [] = date ( 'Y-m-d', strtotime ( 'next day', $xmasDay ) );
+		# on 2/8/2010
+		date ( 'm/d/y', strtotime ( 'first day' ) ); # 02/01/10
+		date ( 'm/d/y', strtotime ( 'last day' ) ); # 02/28/10
+		date ( 'm/d/y', strtotime ( 'last day next month' ) ); # 03/31/10
+		date ( 'm/d/y', strtotime ( 'last day last month' ) ); # 01/31/10
+		date ( 'm/d/y', strtotime ( '2009-12 last day' ) ); # 12/31/09 - this doesn't work if you reverse the order of the year and month
+		date ( 'm/d/y', strtotime ( '2009-03 last day' ) ); # 03/31/09
+		date ( 'm/d/y', strtotime ( '2009-03' ) ); # 03/01/09
+		date ( 'm/d/y', strtotime ( 'last day of march 2009' ) ); # 03/31/09
+		date ( 'm/d/y', strtotime ( 'last day of march' ) ); # 03/31/10
+		date ( "Y-m-d", strtotime ( "last day next month 2009-01-31" ) ) . "<br>";
+		date ( "Y-m-d", strtotime ( "2009-01-31 +1 month" ) ); //2009-03-03
+		strtotime ( '+0 week sun nov 2009' ); // first sunday in nov 2009
+		strtotime ( '+1 week sun nov 2009' ); // second sunday
+		strtotime ( '-1 week sun nov 2009' ); // last sunday in oct 2009 
+		echo date ( 'Y-m-d', strtotime ( '+7 days' ) ), '<br />', date ( 'Y-m-d H:i:s', strtotime ( 'midnight +1 day' ) ), '<br />', strtotime ( date ( 'Y-m-d', strtotime ( '+1 day' ) ) );
+		date ( "Y-m-d", strtotime ( "last day next month 2000-01-31" ) );
+	}
+
 	public function DoTest()
 	{
 		//echo time(),'<br />',strtotime(date('Y-m-d'));
@@ -221,6 +224,7 @@ FOOT;
 		
 		echo date ( 'Y-m-d H:i:s', strtotime ( '+1 day', strtotime ( '2010-02-28 00:00:00' ) ) ), '<br />', $ip_long = sprintf ( '%u', ip2long ( '192.192.168.192' ) ), '<br />', $ip_long, '<br />', '<b>' . long2ip ( sprintf ( '%d', $ip_long ) ) . '</b>', //wrong
 long2ip ( sprintf ( '%d', 3233851584 ) ); //right
+	
 
 	}
 
@@ -228,13 +232,13 @@ long2ip ( sprintf ( '%d', 3233851584 ) ); //right
 	{
 		try
 		{
-			goog();
+			goog ();
 			$error = 'Always throw this error';
 			throw new Exception ( $error );
 			//$this->b();
 		} catch ( Exception $e )
 		{
-			trigger_error('111 wrong');
+			trigger_error ( '111 wrong' );
 		}
 	}
 
@@ -247,25 +251,26 @@ long2ip ( sprintf ( '%d', 3233851584 ) ); //right
 	public function RegularExpressions()
 	{
 		// var_dump(preg_match("/^0|104$/","004"));  // wrong==>(0|1)04
-		var_dump(preg_match("/^(0|(104))$/","004",$matches),$matches,'<br />');	// int(1)
-		var_dump(preg_match("/^0|(104)$/","004",$matches),$matches,'<br />');	// int(1)
-		var_dump(preg_match("/^z|food$/","z",$matches),$matches,'<br />');	// int(1)
-		var_dump(preg_match("/^z|food$/","zood",$matches),$matches,'<br />');	// int(1)
-		var_dump(preg_match("/^(0|(104))$/","104",$matches),$matches,'<br />');	// int(1)
-		var_dump(preg_match("/^(0|104)$/","004",$matches),$matches,'<br />');	// int(1)
-		var_dump(preg_match("/^(0|104)$/","104",$matches),$matches,'<br />');	// int(1)
-		var_dump(preg_match("/^(0|104)$/","004",$matches),$matches,'<br />');		// int(0)
-		var_dump(preg_match("/^(0|104)$/","404",$matches),$matches,'<br />');		// int(0)
-		var_dump(preg_match("/^(0|99|100|101)$/","101",$matches),$matches,'<br />');		// int(0)
-		
-	}
+		var_dump ( preg_match ( "/^(0|(104))$/", "004", $matches ), $matches, '<br />' ); // int(1)
+		var_dump ( preg_match ( "/^0|(104)$/", "004", $matches ), $matches, '<br />' ); // int(1)
+		var_dump ( preg_match ( "/^z|food$/", "z", $matches ), $matches, '<br />' ); // int(1)
+		var_dump ( preg_match ( "/^z|food$/", "zood", $matches ), $matches, '<br />' ); // int(1)
+		var_dump ( preg_match ( "/^(0|(104))$/", "104", $matches ), $matches, '<br />' ); // int(1)
+		var_dump ( preg_match ( "/^(0|104)$/", "004", $matches ), $matches, '<br />' ); // int(1)
+		var_dump ( preg_match ( "/^(0|104)$/", "104", $matches ), $matches, '<br />' ); // int(1)
+		var_dump ( preg_match ( "/^(0|104)$/", "004", $matches ), $matches, '<br />' ); // int(0)
+		var_dump ( preg_match ( "/^(0|104)$/", "404", $matches ), $matches, '<br />' ); // int(0)
+		var_dump ( preg_match ( "/^(0|99|100|101)$/", "101", $matches ), $matches, '<br />' ); // int(0)
 	
+
+	}
+
 	public function UrlFuncTest()
 	{
 		$url = "http://zhiyao.gongye360.com/index.html?a=1&b=2";
 		$url = "index.html";
-		ToEcho(http_build_query(array('a'=>1,'b'=>2)));//string(7) "a=1&b=2" // array() ""
-		ToEcho(parse_url($url));
+		ToEcho ( http_build_query ( array ('a' => 1, 'b' => 2 ) ) ); //string(7) "a=1&b=2" // array() ""
+		ToEcho ( parse_url ( $url ) );
 		/**
 		 * array(4) {
 					  ["scheme"]=>
@@ -279,7 +284,7 @@ long2ip ( sprintf ( '%d', 3233851584 ) ); //right
 					}
 		 * 
 		 */
-		ToEcho(pathinfo($url));
+		ToEcho ( pathinfo ( $url ) );
 		/**
 		 * array(4) {
 					  ["dirname"]=>
@@ -293,19 +298,21 @@ long2ip ( sprintf ( '%d', 3233851584 ) ); //right
 					}
 		 * 
 		 */
-		echo GetSuffixOfUrl($url),'<br />';
+		echo GetSuffixOfUrl ( $url ), '<br />';
 	}
-	
+
+	public function DoNiWan()
+	{
+		echo '逗你玩!';
+	}
 
 	public function __destruct()
 	{
 		self::EchoEnd ();
-		echo date('Y-m-d',strtotime('+7 days')),'<br />',date('Y-m-d H:i:s',strtotime('midnight +1 day')),'<br />',strtotime(date('Y-m-d',strtotime('+1 day')));
-		echo '<br />'.date( "Y-m-d", strtotime( "last day next month 2000-01-31" ) )."<br>";
 	}
-	
+
 }
 
 $a = new MyClass ( );
-$a->UrlFuncTest();
+$a->DoNiWan ();
 ?>
