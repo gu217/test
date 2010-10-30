@@ -301,9 +301,21 @@ long2ip ( sprintf ( '%d', 3233851584 ) ); //right
 		echo GetSuffixOfUrl ( $url ), '<br />';
 	}
 
-	public function DoNiWan()
+	public function DouNiWan()
 	{
-		echo '逗你玩!';
+		echo <<<HTML
+			<div id='dou'>逗你玩!</div>
+			<div id='meinv' style='display:none;'><h1>美女噢!</h1></div>
+			<div id='love' style='display:none;'><h1>送给你!</h1></div>
+			<script type="text/javascript">
+				$('#dou').click(function (){
+	
+				$(this).hide();
+				$('#meinv').show('slown');
+				setTimeout("$('#love').show('slown')",500);
+				});
+			</script>
+HTML;
 	}
 
 	public function __destruct()
@@ -314,5 +326,5 @@ long2ip ( sprintf ( '%d', 3233851584 ) ); //right
 }
 
 $a = new MyClass ( );
-$a->DoNiWan ();
+$a->DouNiWan ();
 ?>
