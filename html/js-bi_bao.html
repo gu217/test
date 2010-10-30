@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+ <head>
+  <title> New Document </title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="Generator" content="EditPlus">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.3.js"></script>
+  <script type="text/javascript">
+  (function (window)//此处window为形参
+  {
+	var Q = function (b)
+	{
+		return new Q.fn.init(b);
+	};
+	Q.fn = Q.prototype = 
+	{
+		init : function(b)
+		{
+			//alert(b);
+			return Q;
+		},
+		'con' : undefined, // null   typeof this.con == 'object'
+		'echo':function(a){alert(a)},
+		'dis':function(a){document.write(a+'<br />');},
+		'AddA':function(A)
+		{
+			 a = A || '(A)';
+			 if(typeof(this.con)!='undefined')
+				this.con+='(a)'+a+'(a)';
+			else
+				this.con='(a)'+a+'(a)';
+			return this;
+		},
+		'AddB':function(B)
+		{
+			 b = B || '(B)';
+			 if(typeof this.con!='undefined')
+				this.con+='(b)'+b+'(b)';
+			else
+				this.con='(b)'+b+'(b)';
+			return this.con;
+		},
+		ver : '1.0',
+		version : function()
+		{
+			return this.ver;		
+		}
+	};
+	window.Q = Q.fn.init; //将Q绑定到window,方便在外部调用
+  })
+  (window); //此处window为实参
+  </script>
+  <style type="text/css">
+  
+  </style>
+ </head>
+ <body>
+  <script type="text/javascript">
+	for(each in window)
+		document.write(each+':'+window[each]+'<br />');
+document.write('<br />'+'=========================================================='+'<br />');
+	for(each in $)
+		document.write(each+':'+$[each]+'<br />');
+  </script>
+ </body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+	<title>javascript obj</title>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+	<meta name="generator" content="Geany 0.19" />
+	<script type="text/javascript" src="http://go.com/js/x.js"></script>
+	<script type="text/javascript">
+	(function (window)
+	{
+		var onerror = function error(msg,file,line)	
+					{
+						//generate error message-div
+						var dialog=document.createElement("div")
+						dialog.className='errordialog'
+						dialog.innerHTML='<div style="font-family:Courier New;font-size:12px;border:1px dashed #C3D9FF;padding:2px;background-color:#F9F9F9">'+
+						'<div style="font-weight:bold;color:red;">JavaScript Error: </div><ul style="line-height:150%;"><li>Wrong:　' + 
+						msg +' </li><li>Line:　' + 
+						line +' </li><!--li>File:　'+
+						file+
+						'</li--><ul></div>';
+						document.body.appendChild(dialog);
+						return true;
+					};
+		var Q = {
+				'version' 	: '1.0',
+				'echo'		: function (a){document.write(a);},
+				'log'		: function (a){document.write(a+'<br />');},
+				'html_body'	: function ()
+								{
+									for(var each in document.body)
+									{
+										document.write(each+':'+document.body[each]+'<br />');
+									}
+								}
+				};
+		window.Q = Q;
+		window.onerror = onerror;
+	}
+	)(window);
+	</script>
+</head>
+
+<body>
+	<script type="text/javascript">
+	//	Q.html_body(1);
+		
+	</script>
+</body>
+
+</html>

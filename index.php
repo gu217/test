@@ -1,26 +1,15 @@
 <?php
 define ( 'INC_DIR', $_SERVER ['DOCUMENT_ROOT'] . '/include' );
-include INC_DIR . "/func/function_360.php";
-include INC_DIR . "/func/str_func.php";
-
-function ToEcho($var, $quit = false)
-{
-	echo '<pre>', var_dump ( $var ), '</pre>';
-	if ($quit)
-	{
-		exit ();
-	}
-	//如果使用print_r NULL显示为空
-}
+require_once INC_DIR . "/func/function_360.php"; 
+require_once INC_DIR . "/func/str_func.php";
+require_once INC_DIR . "/func/func.php";
 
 class MyClass
 {
-	public static $_start = 1;
-	public static $_end = 1;
 
 	public function __construct()
 	{
-		$this->EchoHead ();
+		self::EchoHead ();
 	}
 
 	public function ArrayAdd()
@@ -89,9 +78,8 @@ class MyClass
 		echo $dom->saveXML ();
 	}
 
-	public function EchoHead()
+	private static function EchoHead()
 	{
-		self::$_start = self::$_start * (- 1);
 		echo <<<HEAD
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -102,16 +90,15 @@ class MyClass
 <meta name="Author" content="">
 <meta name="Keywords" content="">
 <meta name="Description" content="">
-<script type="text/javascript" src="/js/error.js"></script>
+<script src="/js/error.js"></script>
 </head>
 <body>
 
 HEAD;
 	}
 
-	public function EchoEnd()
+	private static function EchoEnd()
 	{
-		self::$_end = self::$_end * (- 1);
 		echo <<<FOOT
 
 </body>
@@ -132,45 +119,25 @@ FOOT;
 		echo $str2;
 	}
 
-	/**
-	 * 获得网址中文件名的后缀
-	 * 
-	 * */
-	public function GetFileExtenionFromUrl()
+	public static function JsonUsage()
 	{
-		$url = 'http://www.sina.com.cn/abc/de/fg.php?id=1&class=article';
-		$parse_url = parse_url ( $url );
-		/***parse_url ***
-		 * Array
-			(
-				[scheme] => http
-				[host] => www.sina.com.cn
-				[path] => /abc/de/fg.php
-				[query] =>  id=1&class=article
-			)
-		 * 
-		 **/
-		$pathinfo = pathinfo ( $parse_url ['path'] );
-		echo $pathinfo ['extension'];
-	/** pathinfo ***
-			 Array
-			(
-				[dirname] => /abc/de
-				[basename] => fg.php
-				[extension] => php
-				[filename] => fg
-			)
-	 **/
-	//print_r($parse_url);
+		$arr = array(
+						'a'=>'a',
+						'b'=>array('c'=>'d')
+						);
+		echo '
+		<script type="text/javascript"> 
+			js=\'',json_encode($arr),'\';
+			js=eval("("+js+")");
+			document.write(js.b.c);
+		</script>';
 	}
-
 	public function StrFunction()
 	{
 		$len = 8;
 		$string = 'PHP 有支援很方便的 function 可以直接達到此功能.';
 		//$string = 'AF,S F,ADFSA,DFDAS  A AGHGHGH    FFFFFHHHHHHHHHJJJJJJPPPPPPOOOOOOOOOOO';
 		
-
 		$string = strip_tags ( $string );
 		//$string = mb_strimwidth ( $string, 0, $len, '...', 'UTF-8' );
 		$string = mb_substr ( $string, 0, $len, 'UTF-8' );
@@ -178,6 +145,54 @@ FOOT;
 		echo $string . "--" . strlen ( $string ) . "<br />\r\n";
 	}
 
+	public function StrtoTimeTest()
+	{
+		echo strtotime("now"), "\n";
+		echo strtotime("10 September 2000"), "\n";
+		echo strtotime("+1 day"), "\n";
+		echo strtotime("+1 week"), "\n";
+		echo strtotime("+1 week 2 days 4 hours 2 seconds"), "\n";
+		echo strtotime("next Thursday"), "\n";
+		echo strtotime("last Monday"), "\n";
+		echo strtotime('noon');
+		echo strtotime('midnight');
+		echo strtotime('10am');
+		echo strtotime('2pm'); 
+		
+	}
+	
+	function isUkWorkingDay( $utDate )
+  {
+
+	$holidays[] = date( 'Y-m-d', strtotime( 'first monday january ' . $year ));
+	$holidays[] = date( 'Y-m-d',  $utFirstJan) ;
+	$holidays[] = date( 'Y-m-d', strtotime( 'last friday', $utEasterSunday ));
+	$holidays[] = date( 'Y-m-d', strtotime( 'next monday', $utEasterSunday ));
+	$holidays[] = date( 'Y-m-d', strtotime( 'first monday may ' . $year ));
+	$holidays[] = date( 'Y-m-d', strtotime( 'last monday june ' . $year )); // end of may B.H.
+	$holidays[] = date( 'Y-m-d', strtotime( 'last monday september ' . $year ));  // end of August B.H.
+	$holidays[] = date( 'Y-m-d', strtotime( 'next monday', $xmasDay ));
+	$holidays[] = date( 'Y-m-d', strtotime( 'next monday', $xmasDay ));
+	$holidays[] = date( 'Y-m-d', strtotime( 'next tuesday', $xmasDay ));
+	$holidays[] = date( 'Y-m-d', $xmasDay );
+	$holidays[] = date( 'Y-m-d', strtotime( 'next day', $xmasDay ));
+	    # on 2/8/2010
+	date('m/d/y', strtotime('first day')); # 02/01/10
+	date('m/d/y', strtotime('last day')); # 02/28/10
+	date('m/d/y', strtotime('last day next month')); # 03/31/10
+	date('m/d/y', strtotime('last day last month')); # 01/31/10
+	date('m/d/y', strtotime('2009-12 last day')); # 12/31/09 - this doesn't work if you reverse the order of the year and month
+	date('m/d/y', strtotime('2009-03 last day')); # 03/31/09
+	date('m/d/y', strtotime('2009-03')); # 03/01/09
+	date('m/d/y', strtotime('last day of march 2009')); # 03/31/09
+	date('m/d/y', strtotime('last day of march')); # 03/31/10
+	date( "Y-m-d", strtotime( "last day next month 2009-01-31" ) )."<br>";
+	date( "Y-m-d", strtotime( "2009-01-31 +1 month" ) );//2009-03-03
+	strtotime('+0 week sun nov 2009'); // first sunday in nov 2009
+	strtotime('+1 week sun nov 2009'); // second sunday
+	strtotime('-1 week sun nov 2009'); // last sunday in oct 2009 
+    return( !in_array( date( 'Y-m-d', $utDate ), $holidays ) ) ;
+  } 
 	public function DoTest()
 	{
 		//echo time(),'<br />',strtotime(date('Y-m-d'));
@@ -217,7 +232,6 @@ long2ip ( sprintf ( '%d', 3233851584 ) ); //right
 			$error = 'Always throw this error';
 			throw new Exception ( $error );
 			//$this->b();
-
 		} catch ( Exception $e )
 		{
 			trigger_error('111 wrong');
@@ -245,27 +259,53 @@ long2ip ( sprintf ( '%d', 3233851584 ) ); //right
 		var_dump(preg_match("/^(0|99|100|101)$/","101",$matches),$matches,'<br />');		// int(0)
 		
 	}
-	public function __destruct()
+	
+	public function UrlFuncTest()
 	{
-		$this->EchoEnd ();
+		$url = "http://zhiyao.gongye360.com/index.html?a=1&b=2";
+		$url = "index.html";
+		ToEcho(http_build_query(array('a'=>1,'b'=>2)));//string(7) "a=1&b=2" // array() ""
+		ToEcho(parse_url($url));
+		/**
+		 * array(4) {
+					  ["scheme"]=>
+					  string(4) "http"
+					  ["host"]=>
+					  string(20) "zhiyao.gongye360.com"
+					  ["path"]=>
+					  string(11) "/index.html"
+					  ["query"]=>
+					  string(7) "a=1&b=2"
+					}
+		 * 
+		 */
+		ToEcho(pathinfo($url));
+		/**
+		 * array(4) {
+					  ["dirname"]=>
+					  string(27) "http://zhiyao.gongye360.com"
+					  ["basename"]=>
+					  string(18) "index.html?a=1&b=2"
+					  ["extension"]=>
+					  string(12) "html?a=1&b=2"
+					  ["filename"]=>
+					  string(5) "index"
+					}
+		 * 
+		 */
+		echo GetSuffixOfUrl($url),'<br />';
 	}
 	
+
+	public function __destruct()
+	{
+		self::EchoEnd ();
+		echo date('Y-m-d',strtotime('+7 days')),'<br />',date('Y-m-d H:i:s',strtotime('midnight +1 day')),'<br />',strtotime(date('Y-m-d',strtotime('+1 day')));
+		echo '<br />'.date( "Y-m-d", strtotime( "last day next month 2000-01-31" ) )."<br>";
+	}
 	
 }
 
-function PassReference(&$arr)
-{
-	$arr [1] = '11';
-}
 $a = new MyClass ( );
-//$a->TryCatch();
-$a->ArrayAdd();
-$a->RegularExpressions();
-//
-/** cann't pass value by reference
-$arr[0] = '00';
-$arr[1] = '00';
-PassReference($arr);
-var_dump($arr);
- ***/
+$a->UrlFuncTest();
 ?>
