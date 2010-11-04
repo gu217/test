@@ -305,8 +305,8 @@ long2ip ( sprintf ( '%d', 3233851584 ) ); //right
 	{
 		echo <<<HTML
 			<div id='dou'>逗你玩!</div>
-			<div id='meinv' style='display:none;'><h1>美女噢!</h1></div>
-			<div id='love' style='display:none;'><h1>送给你!</h1></div>
+			<div id='meinv' style='display:none;'><h1>噢!</h1></div>
+			<div id='love' style='display:none;'><h1>送给你!<img src="/image/001.jpg" style="height:500px;width:500px;" alt="LOVE" /></h1></div>
 			<script type="text/javascript">
 				$('#dou').click(function (){
 	
