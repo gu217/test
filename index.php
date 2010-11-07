@@ -54,7 +54,8 @@ class MyClass
 		$d_2 = strtotime( $date2 );
 		$max = max( $d_1, $d_2 );
 		$min = min( $d_1, $d_2 );
-		echo ($max-$min)/(24*60*60);
+		
+		echo ($max-$min)/86400; //24*60*60 = 86400
 	}
 
 	public function DomClass()
@@ -225,7 +226,6 @@ FOOT;
 		echo date( 'Y-m-d H:i:s', strtotime( '+1 day', strtotime( '2010-02-28 00:00:00' ) ) ), '<br />', $ip_long = sprintf( '%u', ip2long( '192.192.168.192' ) ), '<br />', $ip_long, '<br />', '<b>'.long2ip( sprintf( '%d', $ip_long ) ).'</b>', //wrong
 long2ip( sprintf( '%d', 3233851584 ) ); //right
 	
-
 	}
 
 	public function TryCatch()
@@ -262,7 +262,6 @@ long2ip( sprintf( '%d', 3233851584 ) ); //right
 		var_dump( preg_match( "/^(0|104)$/", "404", $matches ), $matches, '<br />' ); // int(0)
 		var_dump( preg_match( "/^(0|99|100|101)$/", "101", $matches ), $matches, '<br />' ); // int(0)
 	
-
 	}
 
 	public function UrlFuncTest()
