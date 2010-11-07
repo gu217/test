@@ -35,42 +35,30 @@ class Pager
 	
 	public function __construct($iEachDispNum, $iTotalRecord, $iCurrentPage, $mPagesDispOneTime, $sSubPageLink, $iPagesDispOneTimeType = 1)
 	{
-		$this->iEachDispNum = intval ( $iEachDispNum );
-		$this->iTotalRecord = intval ( $iTotalRecord );
-		$this->iTotalPage = ceil ( $iTotalRecord / $iEachDispNum );
-		$this->iCurrentPage = intval ( $iCurrentPage ) < 1 ? 1 : intval ( $iCurrentPage );
-		if ($this->iCurrentPage > $this->iTotalPage)
+		$this->iEachDispNum = intval( $iEachDispNum );
+		$this->iTotalRecord = intval( $iTotalRecord );
+		$this->iTotalPage = ceil( $iTotalRecord/$iEachDispNum );
+		$this->iCurrentPage = intval( $iCurrentPage )<1 ? 1 : intval( $iCurrentPage );
+		if($this->iCurrentPage>$this->iTotalPage)
 			$this->iCurrentPage = $this->iTotalPage;
 			//类似搜索引擎的翻页,刚开始显示5页,最多显示10页
-		if (strpos ( $mPagesDispOneTime, ',' ) === FALSE)
+		if(strpos( $mPagesDispOneTime, ',' )===FALSE)
 		{
-			$this->iPagesDispOneTime = intval ( $mPagesDispOneTime );
+			$this->iPagesDispOneTime = intval( $mPagesDispOneTime );
 			//default 
-			$this->iMaxPagesDispOneTime = $this->iPagesDispOneTime * 2;
+			$this->iMaxPagesDispOneTime = $this->iPagesDispOneTime*2;
 		}
 		else
 		{
-			$ar = explode ( ',', $mPagesDispOneTime, 2 );
-			$this->iPagesDispOneTime = intval ( $ar [0] );
-			$this->iMaxPagesDispOneTime = intval ( $var [1] );
+			$ar = explode( ',', $mPagesDispOneTime, 2 );
+			$this->iPagesDispOneTime = intval( $ar [0] );
+			$this->iMaxPagesDispOneTime = intval( $var [1] );
 		}
 		$this->sSubPageLink = $sSubPageLink;
 		$this->iPagesDispOneTimeType = $iPagesDispOneTimeType;
-		$this->LimitInfo ();
+		$this->LimitInfo();
 		//return $this->ShowSubPage ( $iPagesDispOneTimeType );
 		return;
-	}
-
-	public function __destruct()
-	{
-		unset ( $iEachDispNum );
-		unset ( $iTotalRecord );
-		unset ( $iCurrentPage );
-		unset ( $iPagesDispOneTime );
-		unset ( $iTotalRecord );
-		unset ( $PageArray );
-		unset ( $sSubPageLink );
-		unset ( $iPagesDispOneTimeType );
 	}
 
 	/**
@@ -80,9 +68,9 @@ class Pager
 	 */
 	public function ShowSubPage()
 	{
-		if (! method_exists ( $this, 'SubPageCss' . $this->iPagesDispOneTimeType ))
-			exit ( 'Give the wrong param "$ipagesDispOneTimeType"!' );
-		return $this->{'SubPageCss' . $this->iPagesDispOneTimeType} ();
+		if(!method_exists( $this, 'SubPageCss'.$this->iPagesDispOneTimeType ))
+			exit( 'Give the wrong param "$ipagesDispOneTimeType"!' );
+		return $this->{'SubPageCss'.$this->iPagesDispOneTimeType}();
 	}
 
 	/**
@@ -92,29 +80,29 @@ class Pager
 	 */
 	public function GetPageArray()
 	{
-		$page_start_info = $this->iCurrentPage < $this->iPagesDispOneTime ? 0 : floor ( ($this->iCurrentPage - 1) / $this->iPagesDispOneTime );
+		$page_start_info = $this->iCurrentPage<$this->iPagesDispOneTime ? 0 : floor( ($this->iCurrentPage-1)/$this->iPagesDispOneTime );
 		//不到一页
-		if ($this->iTotalPage < $this->iPagesDispOneTime)
+		if($this->iTotalPage<$this->iPagesDispOneTime)
 		{
-			for($i = 0; $i < $this->iTotalPage; $i ++)
+			for($i = 0;$i<$this->iTotalPage;$i++)
 			{
-				$pages_array [$i] = $i + 1;
+				$pages_array [$i] = $i+1;
 			}
 		}
-		elseif ($this->iCurrentPage <= $this->iTotalPage - ($this->iTotalPage % $this->iPagesDispOneTime))
+		elseif($this->iCurrentPage<=$this->iTotalPage-($this->iTotalPage%$this->iPagesDispOneTime))
 		{
-			for($i = 0; $i < $this->iPagesDispOneTime; $i ++)
+			for($i = 0;$i<$this->iPagesDispOneTime;$i++)
 			{
-				$pages_array [$i] = $page_start_info * $this->iPagesDispOneTime + $i + 1;
+				$pages_array [$i] = $page_start_info*$this->iPagesDispOneTime+$i+1;
 			}
 		}
 		//最后剩下的不到一页
 		else
 		{
-			$mod = $this->iTotalPage % $this->iPagesDispOneTime;
-			for($i = 0; $i < $mod; $i ++)
+			$mod = $this->iTotalPage%$this->iPagesDispOneTime;
+			for($i = 0;$i<$mod;$i++)
 			{
-				$pages_array [$i] = $page_start_info * $this->iPagesDispOneTime + $i + 1;
+				$pages_array [$i] = $page_start_info*$this->iPagesDispOneTime+$i+1;
 			}
 		}
 		return $pages_array;
@@ -128,15 +116,15 @@ class Pager
 	public function SubPageCss1()
 	{
 		$sub_page_css1_str = "";
-		$sub_page_css1_str .= "共" . $this->iTotalRecord . "条记录，";
-		$sub_page_css1_str .= "每页显示" . $this->iEachDispNum . "条，";
-		$sub_page_css1_str .= "当前第" . $this->iCurrentPage . "/" . $this->iTotalPage . "页 ";
-		if ($this->iCurrentPage > 1)
+		$sub_page_css1_str .= "共".$this->iTotalRecord."条记录，";
+		$sub_page_css1_str .= "每页显示".$this->iEachDispNum."条，";
+		$sub_page_css1_str .= "当前第".$this->iCurrentPage."/".$this->iTotalPage."页 ";
+		if($this->iCurrentPage>1)
 		{
-			$firstPageUrl = $this->sSubPageLink . "1";
-			$prewPageUrl = $this->sSubPageLink . ($this->iCurrentPage - 1);
-			$sub_page_css1_str .= "[<a href='$firstPageUrl'>" . $this->aHeadEndStyle ['index'] . "</a>] ";
-			$sub_page_css1_str .= "[<a href='$prewPageUrl'>" . $this->aHeadEndStyle ['font-page'] . "</a>] ";
+			$firstPageUrl = $this->sSubPageLink."1";
+			$prewPageUrl = $this->sSubPageLink.($this->iCurrentPage-1);
+			$sub_page_css1_str .= "[<a href='$firstPageUrl'>".$this->aHeadEndStyle ['index']."</a>] ";
+			$sub_page_css1_str .= "[<a href='$prewPageUrl'>".$this->aHeadEndStyle ['font-page']."</a>] ";
 		}
 		else
 		{
@@ -144,12 +132,12 @@ class Pager
 			$sub_page_css1_str .= $this->aHeadEndStyle ['font-page'];
 		}
 		
-		if ($this->iCurrentPage < $this->iTotalPage)
+		if($this->iCurrentPage<$this->iTotalPage)
 		{
-			$lastPageUrl = $this->sSubPageLink . $this->iTotalPage;
-			$nextPageUrl = $this->sSubPageLink . ($this->iCurrentPage + 1);
-			$sub_page_css1_str .= " [<a href='$nextPageUrl'>" . $this->aHeadEndStyle ['next-page'] . "</a>] ";
-			$sub_page_css1_str .= "[<a href='$lastPageUrl'>" . $this->aHeadEndStyle ['end'] . "</a>] ";
+			$lastPageUrl = $this->sSubPageLink.$this->iTotalPage;
+			$nextPageUrl = $this->sSubPageLink.($this->iCurrentPage+1);
+			$sub_page_css1_str .= " [<a href='$nextPageUrl'>".$this->aHeadEndStyle ['next-page']."</a>] ";
+			$sub_page_css1_str .= "[<a href='$lastPageUrl'>".$this->aHeadEndStyle ['end']."</a>] ";
 		}
 		else
 		{
@@ -167,13 +155,13 @@ class Pager
 	public function SubPageCss2()
 	{
 		$sub_page_css2_str = "";
-		$sub_page_css2_str .= "当前第" . $this->iCurrentPage . "/" . $this->iTotalPage . "页 ";
-		if ($this->iCurrentPage > 1)
+		$sub_page_css2_str .= "当前第".$this->iCurrentPage."/".$this->iTotalPage."页 ";
+		if($this->iCurrentPage>1)
 		{
-			$firstPageUrl = $this->sSubPageLink . "1";
-			$prewPageUrl = $this->sSubPageLink . ($this->iCurrentPage - 1);
-			$sub_page_css2_str .= "[<a href='$firstPageUrl'>" . $this->aHeadEndStyle ['index'] . "</a>] ";
-			$sub_page_css2_str .= "[<a href='$prewPageUrl'>" . $this->aHeadEndStyle ['font-page'] . "</a>] ";
+			$firstPageUrl = $this->sSubPageLink."1";
+			$prewPageUrl = $this->sSubPageLink.($this->iCurrentPage-1);
+			$sub_page_css2_str .= "[<a href='$firstPageUrl'>".$this->aHeadEndStyle ['index']."</a>] ";
+			$sub_page_css2_str .= "[<a href='$prewPageUrl'>".$this->aHeadEndStyle ['font-page']."</a>] ";
 		}
 		else
 		{
@@ -181,26 +169,26 @@ class Pager
 			$sub_page_css2_str .= $this->aHeadEndStyle ['font-page'];
 		}
 		//$a = $this->ConstructNumPage ();
-		$a = $this->GetPageArray ();
-		$size = sizeof ( $a );
-		for($i = 0; $i < $size; $i ++)
+		$a = $this->GetPageArray();
+		$size = sizeof( $a );
+		for($i = 0;$i<$size;$i++)
 		{
-			if ($a [$i] == $this->iCurrentPage)
+			if($a [$i]==$this->iCurrentPage)
 			{
-				$sub_page_css2_str .= "<span style='color:red;font-weight:bold;'>" . $a [$i] . "</span>";
+				$sub_page_css2_str .= "<span style='color:red;font-weight:bold;'>".$a [$i]."</span>";
 			}
 			else
 			{
-				$url = $this->sSubPageLink . $a [$i];
-				$sub_page_css2_str .= "[<a href='$url'>" . $a [$i] . "</a>]";
+				$url = $this->sSubPageLink.$a [$i];
+				$sub_page_css2_str .= "[<a href='$url'>".$a [$i]."</a>]";
 			}
 		}
-		if ($this->iCurrentPage < $this->iTotalPage)
+		if($this->iCurrentPage<$this->iTotalPage)
 		{
-			$lastPageUrl = $this->sSubPageLink . $this->iTotalPage;
-			$nextPageUrl = $this->sSubPageLink . ($this->iCurrentPage + 1);
-			$sub_page_css2_str .= " [<a href='$nextPageUrl'>" . $this->aHeadEndStyle ['next-page'] . "</a>] ";
-			$sub_page_css2_str .= "[<a href='$lastPageUrl'>" . $this->aHeadEndStyle ['end'] . "</a>] ";
+			$lastPageUrl = $this->sSubPageLink.$this->iTotalPage;
+			$nextPageUrl = $this->sSubPageLink.($this->iCurrentPage+1);
+			$sub_page_css2_str .= " [<a href='$nextPageUrl'>".$this->aHeadEndStyle ['next-page']."</a>] ";
+			$sub_page_css2_str .= "[<a href='$lastPageUrl'>".$this->aHeadEndStyle ['end']."</a>] ";
 		}
 		else
 		{
@@ -218,41 +206,41 @@ class Pager
 	public function SubPageCss3()
 	{
 		$sub_page_css = '';
-		if ($this->iCurrentPage == 1)
+		if($this->iCurrentPage==1)
 		{
 			//$page_array = $this->GetPageArray ();
-			$length = ($this->iTotalPage > $this->iPagesDispOneTime)? $this->iPagesDispOneTime : $this->iTotalPage;
-			$pages_array = range ( 1, $length );
-			print_r($pages_array);
-			$size = sizeof ( $pages_array );
+			$length = ($this->iTotalPage>$this->iPagesDispOneTime) ? $this->iPagesDispOneTime : $this->iTotalPage;
+			$pages_array = range( 1, $length );
+			print_r( $pages_array );
+			$size = sizeof( $pages_array );
 			$sub_page_css .= '<span style="font-color:red">1</span>';
-			for($i = 1; $i < $size; $i ++)
+			for($i = 1;$i<$size;$i++)
 			{
-				$sub_page_css .= ' <a href="' . $this->sSubPageLink . $pages_array [$i] . '">' . $pages_array [$i] . '</a> ';
+				$sub_page_css .= ' <a href="'.$this->sSubPageLink.$pages_array [$i].'">'.$pages_array [$i].'</a> ';
 			}
-			if ($this->iTotalPage > $length)
-				$sub_page_css .= ' <a href="' . $this->sSubPageLink . ($this->iCurrentPage + 1) . '">' . $this->aHeadEndStyle ['next-page'] . '</a> ';
+			if($this->iTotalPage>$length)
+				$sub_page_css .= ' <a href="'.$this->sSubPageLink.($this->iCurrentPage+1).'">'.$this->aHeadEndStyle ['next-page'].'</a> ';
 		}
 		else
 		{
-			$sub_page_css .= '<a href="' . $this->sSubPageLink . ($this->iCurrentPage - 1) . '">' . $this->aHeadEndStyle ['font-page'] . '</a>';
+			$sub_page_css .= '<a href="'.$this->sSubPageLink.($this->iCurrentPage-1).'">'.$this->aHeadEndStyle ['font-page'].'</a>';
 			$pages_array = array ();
-			$fonter_num = ceil ( $this->iMaxPagesDispOneTime / 2 );
-			$latter_num = $this->iMaxPagesDispOneTime - $fonter_num-1;
+			$fonter_num = ceil( $this->iMaxPagesDispOneTime/2 );
+			$latter_num = $this->iMaxPagesDispOneTime-$fonter_num-1;
 			//$last_page = $this->iTotalPage>($this->iCurrentPage+$this->iMaxPagesDispOneTime-1)?($this->iCurrentPage+$this->iMaxPagesDispOneTime-1):$this->iTotalPage;
-			$start = $this->iCurrentPage - $fonter_num > 0 ? $this->iCurrentPage - $fonter_num : 1;
-			$end = $this->iCurrentPage + $latter_num > $this->iTotalPage ? $this->iTotalPage : ($this->iCurrentPage + $latter_num);
-			$pages_array = range ( $start, $end );
-			$size = sizeof ( $pages_array );
-			for($i = 0; $i < $size; $i ++)
+			$start = $this->iCurrentPage-$fonter_num>0 ? $this->iCurrentPage-$fonter_num : 1;
+			$end = $this->iCurrentPage+$latter_num>$this->iTotalPage ? $this->iTotalPage : ($this->iCurrentPage+$latter_num);
+			$pages_array = range( $start, $end );
+			$size = sizeof( $pages_array );
+			for($i = 0;$i<$size;$i++)
 			{
-				if ($this->iCurrentPage == $pages_array [$i])
-					$sub_page_css .= '<span style="font-color:red">' . $this->iCurrentPage . '</span>';
+				if($this->iCurrentPage==$pages_array [$i])
+					$sub_page_css .= '<span style="font-color:red">'.$this->iCurrentPage.'</span>';
 				else
-					$sub_page_css .= ' <a href="' . $this->sSubPageLink . $pages_array [$i] . '">' . $pages_array [$i] . '</a> ';
+					$sub_page_css .= ' <a href="'.$this->sSubPageLink.$pages_array [$i].'">'.$pages_array [$i].'</a> ';
 			}
-			if ($this->iCurrentPage != $end)
-				$sub_page_css .= ' <a href="' . $this->sSubPageLink . ($this->iCurrentPage + 1) . '">' . $this->aHeadEndStyle ['next-page'] . '</a> ';
+			if($this->iCurrentPage!=$end)
+				$sub_page_css .= ' <a href="'.$this->sSubPageLink.($this->iCurrentPage+1).'">'.$this->aHeadEndStyle ['next-page'].'</a> ';
 		}
 		return $sub_page_css;
 	}
@@ -264,7 +252,7 @@ class Pager
 	 */
 	public function HeadEndStyle($str)
 	{
-		$style = explode ( ',', $str );
+		$style = explode( ',', $str );
 		$this->aHeadEndStyle ['index'] = $style [0];
 		$this->aHeadEndStyle ['end'] = $style [1];
 		$this->aHeadEndStyle ['font-page'] = $style [2];
@@ -278,7 +266,7 @@ class Pager
 	 */
 	public function LimitInfo()
 	{
-		$this->sLimit ['start'] = ($this->iCurrentPage - 1) * $this->iPagesDispOneTime;
+		$this->sLimit ['start'] = ($this->iCurrentPage-1)*$this->iPagesDispOneTime;
 		$this->sLimit ['length'] = $this->iPagesDispOneTime;
 		return;
 	}
@@ -320,24 +308,24 @@ class Pager
 	public function GetTableHtml($title, $data)
 	{
 		$info = '';
-		if (! empty ( $data ) && sizeof ( $data [0] ))
+		if(!empty( $data )&&sizeof( $data [0] ))
 		{
 			$info .= '<table>';
 			$info .= '<thead><tr>';
-			foreach ( $title as $v )
+			foreach( $title as $v )
 			{
-				$info .= '<td>' . $v . '</td>';
+				$info .= '<td>'.$v.'</td>';
 			}
 			$info .= '</tr></thead>';
-			$data_size = sizeof ( $title ); //标题和数据是一对一的,数据可能有MYSQL_BOTH形式的
+			$data_size = sizeof( $title ); //标题和数据是一对一的,数据可能有MYSQL_BOTH形式的
 			$info .= '<tbody>';
-			for($i = 0; $i < $data_size; $i ++)
+			for($i = 0;$i<$data_size;$i++)
 			{
 				$info .= '<tr>';
 				//不好处理,数据的顺序
-				foreach ( $data [$i] as $v )
+				foreach( $data [$i] as $v )
 				{
-					$info .= '<td>' . $v . '</td>';
+					$info .= '<td>'.$v.'</td>';
 				}
 				$info .= '</tr>';
 			}
@@ -351,6 +339,18 @@ class Pager
 			$info = '<p>没有查到相关数据!</p>';
 		}
 		return $info;
+	}
+
+	public function __destruct()
+	{
+		unset( $iEachDispNum );
+		unset( $iTotalRecord );
+		unset( $iCurrentPage );
+		unset( $iPagesDispOneTime );
+		unset( $iTotalRecord );
+		unset( $PageArray );
+		unset( $sSubPageLink );
+		unset( $iPagesDispOneTimeType );
 	}
 }
 ?>
