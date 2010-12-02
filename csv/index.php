@@ -9,11 +9,13 @@ class CSV
 	public static function ReadCsv($url)
 	{
 		$rs_arr = array();
-		$str_file = trim(file_get_contents($url)); //去掉最后的空行
+		$str_file = trim(file_get_contents($url)); //去掉前后的空行
 		$str_file = self::CheckAndConverEncoding($str_file);//字符转换
 		$tmp_arr = explode("\n",$str_file);
 		foreach($tmp_arr as $k=>$v)
 		{
+			if(empty(trim($v)))
+				continue;//去掉中间的空行
 			$tmp_arr_2 = explode(',',$v);
 			if(count($tmp_arr_2)!= CSV_FIELDS)
 			{
