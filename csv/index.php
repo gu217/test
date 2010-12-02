@@ -5,62 +5,56 @@ define('CODELIST',"ASCII,GBK,GB2312,big5,UTF-8,CP936,EUC-CN,BIG-5,EUC-TW");
 header('content-type:text/html;charset=utf-8');
 class CSV
 {
-	
+	//读取CSV文件
 	public static function ReadCsv($url)
 	{
-		//echo mb_detect_encoding(file_get_contents($url),array('UTF-8','GBK','GB2312'));
-		//exit();
-		$row = 1;
-		$rs_ar = array();
-		$handle = fopen($url,"r");
-		while ($data = fgetcsv($handle, 1000, ",")) 
+		$rs_arr = array();
+		$str_file = trim(file_get_contents($url)); //去掉最后的空行
+		$str_file = self::CheckAndConverEncoding($str_file);//字符转换
+		$tmp_arr = explode("\n",$str_file);
+		foreach($tmp_arr as $k=>$v)
 		{
-		    $rs_ar[$row]['flag'] = true;
-			$num = count($data);
-		    if($num!=CSV_FIELDS)
-		    {
-		    	$rs_ar[$row]['flag'] = false;
-		    	$rs_ar[$row]['str'] = "第{$row}数据错误:".implode(',',$data);
-		    }
-		    else
-		    {
-		    	for ($c=0; $c < $num; $c++) 
-			    {
-			        $data[$c]=self::CheckAndConverEncoding($data[$c]);
-			    }
-		  	$rs_ar[$row]['arr'] = $data;
-		    }
-		    $row++;
+			$tmp_arr_2 = explode(',',$v);
+			if(count($tmp_arr_2)!= CSV_FIELDS)
+			{
+				$rs_arr[$k]['flag'] = false;
+				$rs_arr[$k]['str'] = $v.' 字段数不正确';
+				continue;
+			}
+			else
+			{
+				unset($tmp_arr_2);
+				$rs_arr[$k]['flag'] = true;
+				list($rs_arr[$k]['arr']['username'],$rs_arr[$k]['arr']['password'],$rs_arr[$k]['arr']['corpname'],$rs_arr[$k]['arr']['realname'],$rs_arr[$k]['arr']['email'],$rs_arr[$k]['arr']['mobile']) = explode(',',$v);
+			}
 		}
-		fclose($handle);
-		unset($rs_ar[1]);
-		return $rs_ar;
+		unset($tmp_arr,$v);
+		return $rs_arr;
 	}
 	
 	public static function CheckAndConverEncoding($str)
 	{
-		$str = trim($str);
-		$encoding = mb_detect_encoding($str,CODELIST); //$encoding 有时为false
-		echo $encoding,'---',$str,'<br />';
+		$encoding = mb_detect_encoding($str,CODELIST); //$encoding 有时为false(编码检测失败)
 		if($encoding != STANDARD_ENCODING && !empty($encoding))
 		{
 			$str = mb_convert_encoding($str,STANDARD_ENCODING,$encoding);
-			//$str = iconv($encoding,STANDARD_ENCODING,$str);
 		}
-		//	$str = mb_convert_encoding($str,STANDARD_ENCODING);
 		return $str;	
 	}
-	
-	public function FileCsv($url)
+	public static function FileReadCsv()
 	{
-		$file = file($url);
-		foreach($file as $line)
+		$lines = file('http://www.example.com/');
+		// 在数组中循环，显示 HTML 的源文件并加上行号。
+		foreach ($lines as $line_num => $line) 
 		{
-			echo $line,'<br />';
+			echo "Line #<b>{$line_num}</b> : " . htmlspecialchars($line) . "<br />\n";
 		}
+		// 另一个例子将 web 页面读入字符串。参见 file_get_contents()。
+		$html = implode('', file ('http://www.example.com/'));
 	}
 }
 
-var_dump(CSV::ReadCsv('zh_utf8.csv'));
-CSV::FileCsv('zh.csv');
+$rs = CSV::ReadCsv('zh_utf8.csv');
+print_r($rs);
+//CSV::FileCsv('zh.csv');
 ?>

@@ -139,7 +139,6 @@ FOOT;
 		$string = 'PHP 有支援很方便的 function 可以直接達到此功能.';
 		//$string = 'AF,S F,ADFSA,DFDAS  A AGHGHGH    FFFFFHHHHHHHHHJJJJJJPPPPPPOOOOOOOOOOO';
 
-
 		$string = strip_tags( $string );
 		//$string = mb_strimwidth ( $string, 0, $len, '...', 'UTF-8' );
 		$string = mb_substr( $string, 0, $len, 'UTF-8' );
@@ -220,12 +219,7 @@ FOOT;
 		echo truncateText( $str2, 7 ), '<br />';
 		echo SubstrGb( $str, 0, 7 ), '<br />';
 		echo SubstrGb( $str2, 0, 7 ), '<br />';
-		$arr = array ('000' );
-		echo $str.(string)$arr;
-		var_dump( (string)array ('000' ) );
-		$arr [] ['a'] = 'aa';
-		$arr [] ['b'] = 'bb';
-		ToEcho( $arr );
+
 		ToEcho( $_SERVER );
 
 		echo date( 'Y-m-d H:i:s', strtotime( '+1 day', strtotime( '2010-02-28 00:00:00' ) ) ), '<br />', $ip_long = sprintf( '%u', ip2long( '192.192.168.192' ) ), '<br />', $ip_long, '<br />', '<b>'.long2ip( sprintf( '%d', $ip_long ) ).'</b>', //wrong
@@ -234,7 +228,7 @@ long2ip( sprintf( '%d', 3233851584 ) ); //right
 	}
 
 	public function TryCatch()
-	{
+	{ //PHP不能自动抛出异常，不知道try catch有何用
 		try
 		{
 			goog();
