@@ -54,7 +54,7 @@ class MyClass
 		$d_2 = strtotime( $date2 );
 		$max = max( $d_1, $d_2 );
 		$min = min( $d_1, $d_2 );
-		
+
 		echo ($max-$min)/86400; //24*60*60 = 86400
 	}
 
@@ -65,7 +65,7 @@ class MyClass
 		for($i = 0;$i<10;$i++)
 		{
 			$child = $dom->CreateElement( 'child', 'The Child'.$i );
-			
+
 			$id = $dom->CreateAttribute( 'id' );
 			$text = $dom->createTextNode( $i );
 			$id->appendChild( $text );
@@ -138,13 +138,14 @@ FOOT;
 		$len = 8;
 		$string = 'PHP 有支援很方便的 function 可以直接達到此功能.';
 		//$string = 'AF,S F,ADFSA,DFDAS  A AGHGHGH    FFFFFHHHHHHHHHJJJJJJPPPPPPOOOOOOOOOOO';
-		
+
 
 		$string = strip_tags( $string );
 		//$string = mb_strimwidth ( $string, 0, $len, '...', 'UTF-8' );
 		$string = mb_substr( $string, 0, $len, 'UTF-8' );
 		$string .= (mb_strlen( $string, 'UTF-8' )<$len) ? '...' : '';
 		echo $string."--".strlen( $string )."<br />\r\n";
+		//mb_detect_encoding mb_convert_encoding
 	}
 
 	public function StrtoTimeTest()
@@ -160,12 +161,12 @@ FOOT;
 		echo strtotime( 'midnight' );
 		echo strtotime( '10am' );
 		echo strtotime( '2pm' );
-	
+
 	}
 
 	function isUkWorkingDay($utDate)
 	{
-		
+
 		$holidays [] = date( 'Y-m-d', strtotime( 'first monday january '.$year ) );
 		$holidays [] = date( 'Y-m-d', $utFirstJan );
 		$holidays [] = date( 'Y-m-d', strtotime( 'last friday', $utEasterSunday ) );
@@ -193,13 +194,18 @@ FOOT;
 		strtotime( '+0 week sun nov 2009' ); // first sunday in nov 2009
 		strtotime( '+1 week sun nov 2009' ); // second sunday
 		strtotime( '-1 week sun nov 2009' ); // last sunday in oct 2009
-		echo date( 'Y-m-d', strtotime( '+7 days' ) ), '<br />', date( 'Y-m-d H:i:s', strtotime( 'midnight +1 day' ) ), '<br />', strtotime( date( 'Y-m-d', strtotime( '+1 day' ) ) );
+		date( 'Y-m-d', strtotime( '+7 days' ) );
+		date( 'Y-m-d H:i:s', strtotime( 'midnight +1 day' ) );
+		strtotime( date( 'Y-m-d', strtotime( '+1 day' ) ) );
 		date( "Y-m-d", strtotime( "last day next month 2000-01-31" ) );
+		//echo date('Y-m-d',strtotime('+7 days')),'<br />',date('Y-m-d H:i:s',strtotime('midnight +1 day')),'<br />',strtotime(date('Y-m-d',strtotime('+1 day')));
+		//echo '<br />'.date( "Y-m-d", strtotime( "last day next month 2000-01-31" ) )."<br>";
+		//echo date('Y-m-d H:i:s',strtotime('midnight +1 day'));
 	}
 
 	public function DoTest()
 	{
-		//echo time(),'<br />',strtotime(date('Y-m-d'));
+		echo time(),'<br />',strtotime(date('Y-m-d'));
 		//var_dump(strlen(0)==strlen(''));
 		//ToEcho(get_headers("http://google.com/11111gu.php"),false);
 		//ToEcho(get_headers("http://google.com"));
@@ -208,7 +214,6 @@ FOOT;
 		//var_dump($_GET['OK']!='');	//notice
 		//var_dump(is_null($_GET['OK']));  //notice
 		//var_dump(count($_GET['OK']));  //notice
-		//ToEcho(time(),true);
 		$str = "谷歌1010百度";
 		$str2 = "0123456789";
 		echo truncateText( $str, 7 ), '<br />';
@@ -222,10 +227,10 @@ FOOT;
 		$arr [] ['b'] = 'bb';
 		ToEcho( $arr );
 		ToEcho( $_SERVER );
-		
+
 		echo date( 'Y-m-d H:i:s', strtotime( '+1 day', strtotime( '2010-02-28 00:00:00' ) ) ), '<br />', $ip_long = sprintf( '%u', ip2long( '192.192.168.192' ) ), '<br />', $ip_long, '<br />', '<b>'.long2ip( sprintf( '%d', $ip_long ) ).'</b>', //wrong
 long2ip( sprintf( '%d', 3233851584 ) ); //right
-	
+
 	}
 
 	public function TryCatch()
@@ -242,12 +247,6 @@ long2ip( sprintf( '%d', 3233851584 ) ); //right
 		}
 	}
 
-	public function PassReference($arr)
-	{
-		//		cann't pass value by reference
-		$arr [1] = '11';
-	}
-
 	public function RegularExpressions()
 	{
 		// var_dump(preg_match("/^0|104$/","004"));  // wrong==>(0|1)04
@@ -261,7 +260,7 @@ long2ip( sprintf( '%d', 3233851584 ) ); //right
 		var_dump( preg_match( "/^(0|104)$/", "004", $matches ), $matches, '<br />' ); // int(0)
 		var_dump( preg_match( "/^(0|104)$/", "404", $matches ), $matches, '<br />' ); // int(0)
 		var_dump( preg_match( "/^(0|99|100|101)$/", "101", $matches ), $matches, '<br />' ); // int(0)
-	
+
 	}
 
 	public function UrlFuncTest()
@@ -316,13 +315,7 @@ long2ip( sprintf( '%d', 3233851584 ) ); //right
 			</script>
 HTML;
 	}
-<<<<<<< Updated upstream
 
-	public function __destruct()
-	{
-		self::EchoEnd();
-=======
-	
 	public function ChargetCode()
 	{
 		$text = '网页中添加百度搜索框';
@@ -332,7 +325,7 @@ HTML;
 		 $cls_path = '3_4_1847';
 		 echo $cls_path = str_replace('_','\_',$cls_path);
 	}
-	
+
 	public function  TestT()
 	{
 		$log['push_flag'] = 0;
@@ -343,14 +336,14 @@ HTML;
 			$log['push_flag'] = 0;
 		}
 	}
-	
+
 	//CSV 文件读取(待修改)
 	public static function ReadCsv($url)
 	{
 		$row = 1;
 		$rs_ar = array();
 		$handle = fopen($url,"r");
-		while ($data = fgetcsv($handle, 1000, ",")) 
+		while ($data = fgetcsv($handle, 1000, ","))
 		{
 		    $rs_ar[$row]['flag'] = true;
 			$num = count($data);
@@ -361,7 +354,7 @@ HTML;
 		    }
 		    else
 		    {
-		    	for ($c=0; $c < $num; $c++) 
+		    	for ($c=0; $c < $num; $c++)
 			    {
 			        $data[$c]=self::CheckAndConverEncoding($data[$c]);
 			    }
@@ -377,19 +370,13 @@ HTML;
 	public function __destruct()
 	{
 		self::EchoEnd ();
-		//echo date('Y-m-d',strtotime('+7 days')),'<br />',date('Y-m-d H:i:s',strtotime('midnight +1 day')),'<br />',strtotime(date('Y-m-d',strtotime('+1 day')));
-		//echo '<br />'.date( "Y-m-d", strtotime( "last day next month 2000-01-31" ) )."<br>";
-		//echo date('Y-m-d H:i:s',strtotime('midnight +1 day'));
-		
 		//var_dump(preg_match("/[\xB0-\xF7][\xA1-\xFE]/",'001中国',$matches),$matches); 检测是否含有中文
-		
-		//换行符 chr(10)
-		
+		//换行符 chr(10)  换行符使用\n时，要用双引号包括
+		//echo ord("\n"); //10
 		//define('CODELIST',"ASCII,GBK,GB2312,big5,UTF-8,CP936,EUC-CN,BIG-5,EUC-TW");
 	}
 }
 $a = new MyClass ( );
-//$a->ChargetCode();
-//var_dump(preg_match('/^(([+]{0,1}(\d){1,3}(\s)?)?([-]?((\d)|\s){1,12})+)$/','132311',$matches));
-echo ord("\n");
+$a->DoTest();
+
 ?>

@@ -7,13 +7,13 @@
   <meta name="Author" content="">
   <meta name="Keywords" content="">
   <meta name="Description" content="">
-  <script type="text/javascript" src="http://go.com/js/jquery-1.4.3.js"></script>
+  <script type="text/javascript" src="/js/jquery-1.4.3.js"></script>
   <script type="text/javascript">
   function AddOneAtt()
   {
 	var html = '<form name="frm" method="post" enctype="multipart/form-data">'+
-			'<input type="file" size="25" name="filename" id="filename"/>'+
-			'<input type="hidden" name="filetype" id="filetype" value="file"/>'+
+			'<input type="file" size="25" name="filename" />'+
+			'<input type="hidden" name="filetype" value="file"/>'+
 			'<input type="button" onclick="AttSub(this)" value="上传文件"/>'+
 			'</form>'+
 			'<input type="hidden" name="att[url]" class="att_url" />'+
@@ -36,9 +36,16 @@
 	};
 	//$(this).ajaxSubmit(theparam);
 	$(_obj).parent('form').css({'border':'1px solid green'});
-	$(_obj).parent('form + input').css({'border':'1px solid red'});
-	$(_obj).parent('form').next(':input').css({'border':'1px solid red'});
-	$(_obj).parent('form').next(':input').css({'border':'1px solid red'});
+	$(_obj).parent('form').nextAll().eq(0).addClass('OK0');
+	$(_obj).parent('form').nextAll().eq(1).addClass('OK1');
+	$(_obj).parent('form').nextAll().eq(2).addClass('OK2');
+
+	//$(_obj).parent('form').siblings().filter('.att_url,:last').css({'border':'1px solid red'});
+	//$(_obj).parent('form').next().filter('input').css({'border':'1px solid red'});
+	//$(_obj).parent('form').next().css({'border':'1px solid red'});
+	//$(_obj).parent('form').next().css({'border':'1px solid red'});
+
+	//next 无论如何只能找到第一个元素？？？::TOTHINK
 
   }
   </script>
@@ -49,8 +56,8 @@
  <body>
   					<div id="attachment">
 						<form name="frm" method="post" enctype="multipart/form-data">
-							<input type="file" size="25" name="filename" id="filename"/>
-							<input type="hidden" name="filetype" id="filetype" value="file"/>
+							<input type="file" size="25" name="filename" />
+							<input type="hidden" name="filetype" value="file"/>
 							<input type="button" onclick="AttSub(this)" value="上传文件"/>
 						</form>
 							<input type="hidden" name="att[url]" class="att_url" />
