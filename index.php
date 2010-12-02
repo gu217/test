@@ -316,15 +316,80 @@ long2ip( sprintf( '%d', 3233851584 ) ); //right
 			</script>
 HTML;
 	}
+<<<<<<< Updated upstream
 
 	public function __destruct()
 	{
 		self::EchoEnd();
+=======
+	
+	public function ChargetCode()
+	{
+		$text = '网页中添加百度搜索框';
+		$rs =	iconv ( 'UTF-8' , 'GB2312' , $text );
+		var_dump(urlencode($text));
+		 echo json_encode($text);
+		 $cls_path = '3_4_1847';
+		 echo $cls_path = str_replace('_','\_',$cls_path);
+	}
+	
+	public function  TestT()
+	{
+		$log['push_flag'] = 0;
+		$log['push_start_time'] = '2010-11-04 00:00:00';
+		$log['push_end_time'] = '2010-11-05 00:00:00';
+		if($log['push_flag']!=0&&(strtotime($log['push_start_time'])>strtotime(date('Y-m-d'))||strtotime($log['push_end_time'])<strtotime(date('Y-m-d'))))
+		{
+			$log['push_flag'] = 0;
+		}
+	}
+	
+	//CSV 文件读取(待修改)
+	public static function ReadCsv($url)
+	{
+		$row = 1;
+		$rs_ar = array();
+		$handle = fopen($url,"r");
+		while ($data = fgetcsv($handle, 1000, ",")) 
+		{
+		    $rs_ar[$row]['flag'] = true;
+			$num = count($data);
+		    if($num!=FIELDS_SIZE)
+		    {
+		    	$rs_ar[$row]['flag'] = false;
+		    	$rs_ar[$row]['str'] = "第{$row}行字段数目不正确,请检查是否漏写了分隔符:".implode(',',$data);
+		    }
+		    else
+		    {
+		    	for ($c=0; $c < $num; $c++) 
+			    {
+			        $data[$c]=self::CheckAndConverEncoding($data[$c]);
+			    }
+				$rs_ar[$row]['arr'] = $data;
+		    }
+		    $row++;
+		}
+		fclose($handle);
+		//unset($rs_ar[1]);
+		return $rs_ar;
 	}
 
+	public function __destruct()
+	{
+		self::EchoEnd ();
+		//echo date('Y-m-d',strtotime('+7 days')),'<br />',date('Y-m-d H:i:s',strtotime('midnight +1 day')),'<br />',strtotime(date('Y-m-d',strtotime('+1 day')));
+		//echo '<br />'.date( "Y-m-d", strtotime( "last day next month 2000-01-31" ) )."<br>";
+		//echo date('Y-m-d H:i:s',strtotime('midnight +1 day'));
+		
+		//var_dump(preg_match("/[\xB0-\xF7][\xA1-\xFE]/",'001中国',$matches),$matches); 检测是否含有中文
+		
+		//换行符 chr(10)
+		
+		//define('CODELIST',"ASCII,GBK,GB2312,big5,UTF-8,CP936,EUC-CN,BIG-5,EUC-TW");
+	}
 }
-
-$a = new MyClass( );
-$b = UnicodeEncode( '这日子过的,真他妈没劲!瓷҉器҉国҉家҉' );
-echo $b, '<br />', UnicodeDecode( $b ), '<br />', UnicodeDecode( '\u8fd9\u65e5\u5b50\u8fc7\u7684,\u771f\u4ed6\u5988\u6ca1\u52b2!' );
+$a = new MyClass ( );
+//$a->ChargetCode();
+//var_dump(preg_match('/^(([+]{0,1}(\d){1,3}(\s)?)?([-]?((\d)|\s){1,12})+)$/','132311',$matches));
+echo ord("\n");
 ?>

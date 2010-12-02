@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+ <head>
+  <title> New Document </title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="Generator" content="EditPlus">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <script type="text/javascript" src="http://go.com/js/jquery-1.4.3.js"></script>
+  <script type="text/javascript">
+  function AddOneAtt()
+  {
+	var html = '<form name="frm" method="post" enctype="multipart/form-data">'+
+			'<input type="file" size="25" name="filename" id="filename"/>'+
+			'<input type="hidden" name="filetype" id="filetype" value="file"/>'+
+			'<input type="button" onclick="AttSub(this)" value="上传文件"/>'+
+			'</form>'+
+			'<input type="hidden" name="att[url]" class="att_url" />'+
+			'<input type="hidden" name="att[title]" class="att_title"  />'+
+			'<input type="hidden" name="att[d_url]" class="att_d_url"  />'
+			;
+	$('#attachment').append(html);
+  }
+  function AttSub(_obj)
+  {
+		var theparam = {
+		url: 'uploadfile.php',
+		dataType: 'json',
+		type:'POST',
+		success: function(data) {
+			$("#psize").val(data.fsize);
+			$("#pfiles").val(data.url);
+			alert("上传成功");
+		}
+	};
+	//$(this).ajaxSubmit(theparam);
+	$(_obj).parent('form').css({'border':'1px solid green'});
+	$(_obj).parent('form + input').css({'border':'1px solid red'});
+	$(_obj).parent('form').next(':input').css({'border':'1px solid red'});
+	$(_obj).parent('form').next(':input').css({'border':'1px solid red'});
+
+  }
+  </script>
+  <style type="text/css">
+  
+  </style>
+ </head>
+ <body>
+  					<div id="attachment">
+						<form name="frm" method="post" enctype="multipart/form-data">
+							<input type="file" size="25" name="filename" id="filename"/>
+							<input type="hidden" name="filetype" id="filetype" value="file"/>
+							<input type="button" onclick="AttSub(this)" value="上传文件"/>
+						</form>
+							<input type="hidden" name="att[url]" class="att_url" />
+							<input type="hidden" name="att[title]" class="att_title"  />
+							<input type="hidden" name="att[d_url]" class="att_d_url"  />
+					</div>
+						<input type="button" onclick="AddOneAtt()" value="再添加一个" />
+ </body>
+</html>
