@@ -48,6 +48,13 @@
 	//next 无论如何只能找到第一个元素？？？::TOTHINK
 
   }
+   function AttDel(_obj)
+  {
+        $(_obj).parent('form').nextAll().eq(0).val('');
+        $(_obj).parent('form').nextAll().eq(1).val('');
+		$(_obj).parent('form').nextAll().eq(2).val('');
+		$(_obj).siblings('input[name=filename]').val('');
+  }
   </script>
   <style type="text/css">
   
@@ -59,11 +66,13 @@
 							<input type="file" size="25" name="filename" />
 							<input type="hidden" name="filetype" value="file"/>
 							<input type="button" onclick="AttSub(this)" value="上传文件"/>
+							<input type="button" onclick="AttDel(this)" value="清除"/>
 						</form>
-							<input type="hidden" name="att[url]" class="att_url" />
-							<input type="hidden" name="att[title]" class="att_title"  />
-							<input type="hidden" name="att[d_url]" class="att_d_url"  />
+							<input type="hidden" name="att_url[]" class="att_url" value="1" />
+							<input type="hidden" name="att_title[]" class="att_title" value="1" />
+							<input type="hidden" name="att_d_url[]" class="att_d_url" value="1" />
 					</div>
 						<input type="button" onclick="AddOneAtt()" value="再添加一个" />
+
  </body>
 </html>

@@ -372,5 +372,5 @@ HTML;
 }
 $a = new MyClass ( );
 $a->DoTest();
-
+echo '<br />',md5('hzjnfm');
 ?>
