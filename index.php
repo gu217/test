@@ -243,18 +243,17 @@ long2ip( sprintf( '%d', 3233851584 ) ); //right
 
 	public function RegularExpressions()
 	{
-		// var_dump(preg_match("/^0|104$/","004"));  // wrong==>(0|1)04
-		var_dump( preg_match( "/^(0|(104))$/", "004", $matches ), $matches, '<br />' ); // int(1)
-		var_dump( preg_match( "/^0|(104)$/", "004", $matches ), $matches, '<br />' ); // int(1)
-		var_dump( preg_match( "/^z|food$/", "z", $matches ), $matches, '<br />' ); // int(1)
-		var_dump( preg_match( "/^z|food$/", "zood", $matches ), $matches, '<br />' ); // int(1)
-		var_dump( preg_match( "/^(0|(104))$/", "104", $matches ), $matches, '<br />' ); // int(1)
-		var_dump( preg_match( "/^(0|104)$/", "004", $matches ), $matches, '<br />' ); // int(1)
-		var_dump( preg_match( "/^(0|104)$/", "104", $matches ), $matches, '<br />' ); // int(1)
-		var_dump( preg_match( "/^(0|104)$/", "004", $matches ), $matches, '<br />' ); // int(0)
-		var_dump( preg_match( "/^(0|104)$/", "404", $matches ), $matches, '<br />' ); // int(0)
-		var_dump( preg_match( "/^(0|99|100|101)$/", "101", $matches ), $matches, '<br />' ); // int(0)
-
+		var_dump( 1,preg_match("/^0|104$/","004",$matches),$matches,'<br />');  // wrong==>(0|1)04
+		var_dump( 2,preg_match( "/^(0|(104))$/", "004", $matches ), $matches, '<br />' ); // int(1)
+		var_dump( 3,preg_match( "/^0|(104)$/", "004", $matches ), $matches, '<br />' ); // int(1)
+		var_dump( 4,preg_match( "/^z|food$/", "z", $matches ), $matches, '<br />' ); // int(1)
+		var_dump( 5,preg_match( "/^z|food$/", "zood", $matches ), $matches, '<br />' ); // int(1)
+		var_dump( 6,preg_match( "/^(0|(104))$/", "104", $matches ), $matches, '<br />' ); // int(1)
+		var_dump( 7,preg_match( "/^(0|104)$/", "004", $matches ), $matches, '<br />' ); // int(1)
+		var_dump( 8,preg_match( "/^(0|104)$/", "104", $matches ), $matches, '<br />' ); // int(1)
+		var_dump( 9,preg_match( "/^(0|104)$/", "004", $matches ), $matches, '<br />' ); // int(0)
+		var_dump( 10,preg_match( "/^(0|104)$/", "404", $matches ), $matches, '<br />' ); // int(0)
+		var_dump( 11,preg_match( "/^(0|99|100|101)$/", "101", $matches ), $matches, '<br />' ); // int(1)
 	}
 
 	public function UrlFuncTest()
@@ -292,7 +291,44 @@ long2ip( sprintf( '%d', 3233851584 ) ); //right
 		 */
 		echo GetSuffixOfUrl( $url ), '<br />';
 	}
+	
+	public function IPCheck()
+	{
+		$ip1= '8.8.8.6';
+		$ip2= '8.8.8.7';
+		$netmask = '255.255.255.248';
+		$l_ip1 = $this->Ip2Bin($ip1);
+		$l_ip2 = $this->Ip2Bin($ip2);
+		$l_netmask = $this->Ip2Bin($netmask);
+		$s1 = $l_ip1&$l_netmask;
+		$s2 = $l_ip2&$l_netmask;
+		if($s1 == $s2)
+			echo $ip1.'和'.$ip2.'在同一个网段,网络标志为:'.$this->Bin2Ip($s1);
+		
+	}
 
+	public function Ip2Bin($ip)
+	{
+		if(!strpos($ip,'.'))
+			return '';
+		$ip_r = explode('.',$ip);
+		foreach($ip_r as &$v)
+		{
+			$v = substr('00000000'.decbin($v),-8);
+		}
+		return implode('.',$ip_r);
+	}
+	public function Bin2Ip($bin)
+	{
+		if(!strpos($bin,'.'))
+			return '';
+		$ip_r = explode('.',$bin);
+		foreach($ip_r as &$v)
+		{
+			$v = bindec($v);
+		}
+		return implode('.',$ip_r);
+	}
 	public function DouNiWan()
 	{
 		echo <<<HTML
@@ -374,3 +410,4 @@ $a = new MyClass ( );
 $a->DoTest();
 echo '<br />',md5('hzjnfm');
 ?>
+
