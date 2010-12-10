@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+ <head>
+  <title> Add option </title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="Generator" content="EditPlus">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <script type="text/javascript" src="/js/jquery-1.4.3.js"></script>
+  <script type="text/javascript">
+  $(document).ready(function(){
+		$('#topic_category').next('select').children('option').eq(0).after('<option value="全部">全部</option>');
+		alert($('option[value="2"]').text());
+		$('#topic_category').next('select').children('option').remove();
+  });
+  </script>
+  <style type="text/css">
+  
+  </style>
+ </head>
+ <body>
+ <input type="hidden" id="topic_category" class="category" name="topic_category">
+  <select id='sel'> 
+  <option value='0'>10</option>
+  <option value='1'>11</option>
+  <option value='2'>12</option>
+  </select>
+ </body>
+</html>
