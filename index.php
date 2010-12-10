@@ -396,7 +396,150 @@ HTML;
 		//unset($rs_ar[1]);
 		return $rs_ar;
 	}
-
+	public function ForTest()
+	{
+		$taskid=20;
+		$batchnum=1;
+		$contid=1;
+		$usertype=4;
+		//$userindustry = "3_4,3_419_1871,3_1358_1826,3_90";
+		$userindustry = "3_4";
+		$industy_str = '';
+		$topic_str = '';
+		$industy_arr = array();
+		$topic_arr = array();
+		if(!strstr($userindustry,'all'))
+		{
+			$userindustry_arr = explode(',',$userindustry);
+			foreach($userindustry_arr as $v)
+			{
+				$line_cnt = substr_count($v,'_');
+				if($line_cnt==1)
+				{
+					//$industy_arr[] = $v;
+					$industy_arr[] =  (int)substr($v,strrpos($v,'_')+1);
+				}
+				elseif($line_cnt==2)
+					$topic_arr[] =  (int)substr($v,strrpos($v,'_')+1);
+			}
+			
+			//if(!empty($industy_arr))
+			//	$industy_str = "'".implode("','",$industy_arr)."'";
+			$industy_str = implode(',',$industy_arr);
+			$topic_str = implode(',',$topic_arr);
+		}
+		$usertype_where_str = '';
+		if($usertype>0)
+			$usertype_where_str = " AND u.user_type_id=$usertype";
+				
+		$industy_where_str = '';	
+		if(!empty($industy_str))
+		{
+			$where_sql[] = "SELECT {$contid} AS contid, {$batchnum} AS batchnum, u.userid, u.user_type_id AS usertype, u.username, u.nickname, u.corp_name AS corpname, u.email, {$taskid} AS taskid
+							FROM T_GTUser u, user_industry ui
+							WHERE u.del_flag =0
+							AND u.audit_flag =1
+							AND u.userid = ui.user_id AND ui.industry_id IN({$industy_str}) {$usertype_where_str}";
+		}
+			
+		$topic_where_str = '';
+		if(!empty($topic_str))
+		{
+			$where_sql[] = "SELECT {$contid} AS contid, {$batchnum} AS batchnum, u.userid, u.user_type_id AS usertype, u.username, u.nickname, u.corp_name AS corpname, u.email, {$taskid} AS taskid
+							FROM T_GTUser u, T_UserTopic t
+							WHERE u.del_flag =0
+							AND u.audit_flag =1
+							AND u.userid = t.user_id AND  t.topic_id IN({$topic_str}) {$usertype_where_str}";
+		}
+				
+		if(empty($where_sql))
+		{
+			$sql = "SELECT {$contid} AS contid, {$batchnum} AS batchnum, u.userid, u.user_type_id AS usertype, u.username, u.nickname, u.corp_name AS corpname, u.email, {$taskid} AS taskid
+					FROM T_GTUser u
+					WHERE u.del_flag = 0
+					AND u.audit_flag = 1
+					GROUP BY u.email
+					ORDER BY u.userid";
+		}
+		else 
+		{
+			$sql = 'SELECT a.* FROM ('.implode(' UNION ',$where_sql).') AS a GROUP BY a.email ORDER BY a.userid';
+		}	
+		echo $sql,'<br />';
+		echo $insertsql = "INSERT IGNORE INTO T_NewsLetter_Record(contid,batchnum,userid,usertype,username,nickname,corpname,email,taskid) ".$sql;
+	}
+	
+	public function EmailTaskTest($taskid,$batchnum,$contid,$email)
+	{
+		if(empty($taskid)||empty($batchnum)||empty($contid)||empty($email))
+			return false;
+		$var_arr = array();
+		if(!is_array($email))
+		{
+			$var_arr[] = "({$contid},{$batchnum},0,0,'','','','{$email}',{$taskid})";
+		}
+		else
+		{
+			foreach($email as $v)
+			{
+				if(empty($v['email']))
+					continue;
+				$userid = empty($v['userid']) ? 0 : (int)$v['userid'];
+				$usertype = empty($v['usertype']) ? 0 : (int)$v['usertype'];
+				$username = empty($v['username']) ? '' : $v['username'];
+				$nickname = empty($v['nickname']) ? '' : $v['nickname'];
+				$corpname = empty($v['corpname']) ? '' : $v['corpname'];
+				
+				$var_arr[] = "({$contid},{$batchnum},$userid,$usertype,'{$username}','{$nickname}','{$corpname}','{$v['email']}',{$taskid})";
+			}
+		}
+		echo $values = implode(',',$var_arr);
+		$a->EmailTaskTest(1,1,1,array(0=>array('email'=>'gpc@gongye360.com'),1=>array('userid'=>1,'usertype'=>4,'username'=>'username','nickname'=>'nickname','email'=>'gpc@gongye360.com')));
+	}
+	public function SomeKnowlegeTest()
+	{
+		//echo date('Y-m-d H:i:s',strtotime('08:70')); 
+		//echo date('Y-m-d H:i:s',strtotime('now'));
+		//var_dump(preg_match('/^\d{2}:\d{2}~\d{2}:\d{2}$/',"00:00~23:299"));
+		//var_dump(strtotime('08:70')); //false
+		//var_dump(preg_match('/^((\d{1,2}|\d{1,2}~\d{1,2})\,)*(\d{1,2}|\d{1,2}~\d{1,2})$/',"1,2,3~6"));
+			$send_date = "1~7,6";
+			if(!preg_match('/^((\d{1,2}|\d{1,2}~\d{1,2})\,)*(\d{1,2}|\d{1,2}~\d{1,2})$/',$send_date))
+			{
+				exit('preg');
+			}
+			$frequency = 2;
+			$max = 0;
+			if($frequency == 2||$frequency == 3)
+				$max = 7;
+			elseif ($frequency == 4)
+				$max = 31;
+			if(!empty($max))//只有当frequency为每周,每两周,每月时才检查日期合法性,其它情况此日期无效
+			{
+				$send_date_arr = explode(',',$send_date);
+				foreach ($send_date_arr as $v)
+				{
+					$s_d_arr = explode('~',$v);
+					switch(count($s_d_arr))
+					{
+						case 1:
+							if($s_d_arr[0]<1||$s_d_arr[0]>$max)
+							{
+									var_dump($s_d_arr,$max);
+									exit(1);
+							}
+							break;
+						case 2:
+							if($s_d_arr[0]<1||$s_d_arr[0]>$max||$s_d_arr[1]<1||$s_d_arr[1]>$max||$s_d_arr[0]>=$s_d_arr[1])
+							{
+									var_dump($s_d_arr,$max,count($s_d_arr));
+									exit(2);
+							}
+							break;
+					}
+				}
+			}
+	}
 	public function __destruct()
 	{
 		self::EchoEnd ();
@@ -404,10 +547,10 @@ HTML;
 		//换行符 chr(10)  换行符使用\n时，要用双引号包括
 		//echo ord("\n"); //10
 		//define('CODELIST',"ASCII,GBK,GB2312,big5,UTF-8,CP936,EUC-CN,BIG-5,EUC-TW");
+		//var_dump(false<strtotime('now'));
 	}
 }
 $a = new MyClass ( );
-$a->DoTest();
-echo '<br />',md5('hzjnfm');
+$a->ForTest();
 ?>
 
