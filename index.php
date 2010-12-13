@@ -3,6 +3,7 @@ define( 'INC_DIR', $_SERVER ['DOCUMENT_ROOT'].'/include' );
 require_once INC_DIR."/func/function_360.php";
 require_once INC_DIR."/func/str_func.php";
 require_once INC_DIR."/func/func.php";
+define('FIELDS_SIZE',15);
 
 class MyClass
 {
@@ -540,6 +541,280 @@ HTML;
 				}
 			}
 	}
+	public static function getDays($startdate,$enddate,$senddate,$frequency)
+	{
+		//暂时没考虑设为1,3,5发信但时间范围内只有1，3的情况,在此考虑的都是一个完整周期
+		$senddate_arr = explode(',',$senddate);
+		$date_part_arr = array();
+		foreach($senddate_arr as $k=>$v)
+		{
+			if(strrpos($v,'~')===false)
+				continue;
+			$temp_arr = explode('~',$v);
+			$date_part_arr[] = range($temp_arr[0],$temp_arr[1]);
+			unset($senddate_arr[$k]);
+			unset($temp_arr);
+		}
+		foreach($date_part_arr as $d)
+		{
+			$senddate_arr = array_merge_recursive($senddate_arr,$d);
+		}
+		$senddate_arr = array_unique($senddate_arr);
+		$size = sizeof($senddate_arr);
+		switch ($frequency)
+		{
+			case 2://每周
+				return $size;
+			case 3://每两周
+				return $size*2;
+			case 4://每月
+				return $size;
+			case 5://每季度
+				return $size*3;
+			case 6://每半年
+				return $size*6;
+			case 7://每年
+				return $size*12;
+		}
+	}
+	
+	public function getEmailNum($usertype,$topics)
+	{
+		$industy_str = '';
+		$topic_str = '';
+		$industy_arr = array();
+		$topic_arr = array();
+		if(!strstr($topics,'all'))
+		{
+			$userindustry_arr = explode(',',$topics);
+			foreach($userindustry_arr as $v)
+			{
+				$line_cnt = substr_count($v,'_');
+				if($line_cnt==1)//行业
+					$industy_arr[] =  (int)substr($v,strrpos($v,'_')+1);
+				elseif($line_cnt==2)//专题
+					$topic_arr[] =  (int)substr($v,strrpos($v,'_')+1);
+			}
+			
+			$industy_str = implode(',',$industy_arr);
+			$topic_str = implode(',',$topic_arr);
+		}
+		$usertype_where_str = '';
+		if($usertype>0)
+			$usertype_where_str = " AND u.user_type_id=$usertype";
+				
+		$industy_where_str = '';	
+		if(!empty($industy_str))
+		{
+			$where_sql[] = "SELECT u.email
+							FROM T_GTUser u, user_industry ui
+							WHERE u.del_flag =0
+							AND u.audit_flag =1
+							AND u.userid = ui.user_id AND ui.industry_id IN({$industy_str}) {$usertype_where_str}";
+		}
+			
+		$topic_where_str = '';
+		if(!empty($topic_str))
+		{
+			$where_sql[] = "SELECT u.email
+							FROM T_GTUser u, T_UserTopic t
+							WHERE u.del_flag =0
+							AND u.audit_flag =1
+							AND u.userid = t.user_id AND  t.topic_id IN({$topic_str}) {$usertype_where_str}";
+		}
+				
+		if(empty($where_sql))
+		{
+			$sql = "SELECT u.email
+					FROM T_GTUser u
+					WHERE u.del_flag = 0
+					AND u.audit_flag = 1
+					";
+		}
+		else 
+		{
+			$sql = 'SELECT distinct a.email FROM ('.implode(' UNION ',$where_sql).') AS a';
+		}	
+		return $sql;
+	}
+	public function arrayList()
+	{
+		$industry = array(
+							1=>array('name'=>'化工','code'=>'3_1358'),
+							2=>array('name'=>'制药','code'=>'3_4'),
+							3=>array('name'=>'物流与包装','code'=>'3_419'),
+							4=>array('name'=>'仪器仪表','code'=>'3_631'),
+							5=>array('name'=>'机械','code'=>'3_752'),
+							6=>array('name'=>'工控','code'=>'3_90')
+			);
+		$corpType = array(
+							1=>array('name'=>'生产商','code'=>'10'),
+							1=>array('name'=>'代理商','code'=>'11'),
+							1=>array('name'=>'系统集成商','code'=>'12'),
+							1=>array('name'=>'高等院校','code'=>'13'),
+							1=>array('name'=>'终端用户','code'=>'14'),
+							1=>array('name'=>'设计院所','code'=>'15'),
+							1=>array('name'=>'设备制造商','code'=>'16'),
+							1=>array('name'=>'媒体出版','code'=>'132'),
+							1=>array('name'=>'行业协会','code'=>'133'),
+							1=>array('name'=>'政府机构','code'=>'134'),
+							1=>array('name'=>'OEM厂商','code'=>'135'),
+							1=>array('name'=>'会议展览','code'=>'467')
+		);
+	}
+	/**
+	 * 格式化输入文本
+	 *
+	 * @param string $text
+	 * @return array   $format_info['flag'] //验证通过		$format_info['str'] //行数据  $format_info['arr'] //正确的数据分组
+	 */
+	
+	public static function ParseText($text)
+	{
+		$format_info = array();
+		$param_arr = explode("\n",$text);
+		$size = count($param_arr);
+		for($i=0;$i<$size;$i++)
+		{
+			$param_arr[$i] = trim($param_arr[$i]);
+			$format_info[$i]['flag'] = false;
+			$format_info[$i]['str'] = $param_arr[$i];
+			if(!strpos($param_arr[$i],','))
+			{
+				$format_info[$i]['str'] .= ' 格式错误的行，没有分隔符';//格式错误的行，没有分隔符
+				continue;
+			}
+			list($tem_arr['corpName'],$tem_arr['corpType'],$tem_arr['industry'],$tem_arr['corpNature'],$tem_arr['turnover_id'],$tem_arr['realName'],$tem_arr['gender'],$tem_arr['remail'],$tem_arr['mobile'],$tem_arr['tel'],$tem_arr['fax'],$tem_arr['address'],$tem_arr['zipCode'],$tem_arr['corpimage']) = explode(',',$param_arr[$i]);
+			foreach ($tem_arr as &$t)
+			{
+				$t = trim($t);
+			}
+			if(!empty($tem_arr['corpimage']))
+				$tem_arr['picUrl'] = str_replace('_thumb180','_thumb400',$tem_arr['corpimage']);
+			
+			if(count($tem_arr)!=FIELDS_SIZE)//字段与数据表字段不符
+			{
+				$format_info[$i]['str'] .= ' 字段数不正确,请检查有没有缺少分隔符';
+				unset($tem_arr);				
+				continue;
+			}
+			$format_info[$i]['flag'] = true;
+			$format_info[$i]['arr'] = $tem_arr;
+			unset($tem_arr);
+		}
+		return self::CheckParam($format_info);
+	}
+	
+	/**
+	 * 检查生产数组的的合法性
+	 *
+	 * @param array $arr
+	 */
+	public static function CheckParam($arr)
+	{
+		/** 字段检测
+		$regular = array(
+						0=>'/^[0-9a-zA-Z]+[0-9a-zA-Z-]+$/',//username
+						1=>'/^.{6,18}$/',//password
+						2=>'/^[^\s]{2,64}$/',//corpname
+						3=>'/^.{2,16}$/',//realname
+						4=>'/^(([0-9a-zA-Z]+)|([0-9a-zA-Z]+[_.0-9a-zA-Z-]*[0-9a-zA-Z]+))@([a-zA-Z0-9-]+[.])+([a-zA-Z]{2}|net|com|gov|mil|org|edu|int)$/',//email
+						5=>'/^([\+]?(\d){2})?1\d{10}$/'//mobile
+						);
+		**/
+		$fields_name = array(
+					0=>'用户名',
+					1=>'密码',
+					2=>'企业名称',
+					3=>'联系人',
+					4=>'Email',
+					5=>'手机号'
+		);
+		foreach($arr as &$v)
+		{
+			if( !$v['flag'])
+				continue;
+			for($i=0;$i<6;$i++)
+			{
+				switch ($i)
+				{
+					case 0:
+						$username_len = strlen($v['arr'][0]);
+						if($username_len<2||$username_len>18)
+						{
+							$v['flag'] = false;
+							$v['str'] .= " 用户名要大于等于2位，小于等于18位"; 
+							unset($var['arr']);
+							break 2;//退出for循环
+						}
+						elseif(!preg_match('/^[0-9a-zA-Z]+[0-9a-zA-Z-]+$/',$v['arr'][0]))
+						{
+							$v['flag'] = false;
+							$v['str'] .= " 用户名由字母数字或者“-”组成"; 
+							unset($var['arr']);
+							break 2;//退出for循环
+						}
+						break;
+					case 1:
+						$password_len = strlen($v['arr'][1]);
+						if($password_len<6||$password_len>18)
+						{
+							$v['flag'] = false;
+							$v['str'] .= " 密码要大于等于6位，小于等于18位"; 
+							unset($var['arr']);
+							break 2;//退出for循环
+						}
+						break;
+					case 2:
+						$corpname_len = strlen($v['arr'][2]);
+						if($corpname_len<2||$corpname_len>64)
+						{
+							$v['flag'] = false;
+							$v['str'] .= " 企业名称要大于等于2位，小于等于30位"; 
+							unset($var['arr']);
+							break 2;//退出for循环
+						}
+						break;
+					case 3:
+						$realname_len = strlen($v['arr'][3]);
+						if($realname_len<2||$realname_len>16)
+						{
+							$v['flag'] = false;
+							$v['str'] .= " 联系人姓名要大于等于2位，小于等于16位"; 
+							unset($var['arr']);
+							break 2;//退出for循环
+						}
+						break;
+					case 4:
+						if(!preg_match('/^(([0-9a-zA-Z]+)|([0-9a-zA-Z]+[_.0-9a-zA-Z-]*[0-9a-zA-Z]+))@([a-zA-Z0-9-]+[.])+([a-zA-Z]{2}|net|com|gov|mil|org|edu|int)$/',$v['arr'][4]))
+						{
+							$v['flag'] = false;
+							$v['str'] .= " Email格式不正确"; 
+							unset($var['arr']);
+							break 2;//退出for循环
+						}
+						break;
+					case 5:
+						$mobile_len = strlen($v['arr'][5]);
+						if($mobile_len<11||$mobile_len>14)
+						{
+							$v['flag'] = false;
+							$v['str'] .= " 手机号码长度不正确"; 
+							unset($var['arr']);
+							break 2;//退出for循环
+						}elseif(!preg_match('/^([\+]?(\d){2})?1\d{10}$/',$v['arr'][5]))
+						{
+							$v['flag'] = false;
+							$v['str'] .= " 手机号码格式不正确"; 
+							unset($var['arr']);
+							break 2;//退出for循环
+						}
+						break;
+				}
+			}
+		}
+		return $arr;
+	}
 	public function __destruct()
 	{
 		self::EchoEnd ();
@@ -548,9 +823,10 @@ HTML;
 		//echo ord("\n"); //10
 		//define('CODELIST',"ASCII,GBK,GB2312,big5,UTF-8,CP936,EUC-CN,BIG-5,EUC-TW");
 		//var_dump(false<strtotime('now'));
+		var_dump(explode('/','/'));
 	}
 }
 $a = new MyClass ( );
-$a->ForTest();
+echo $a->getEmailNum(4,'3_4');
 ?>
 
