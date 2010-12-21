@@ -815,6 +815,84 @@ HTML;
 		}
 		return $arr;
 	}
+	public function MinDays($senddate,$frequency)
+	{
+		$senddate_arr = explode(',',$senddate);
+		$date_part_arr = array();
+		foreach($senddate_arr as $k=>$v)
+		{
+			if(strrpos($v,'~')===false)
+				continue;
+			$temp_arr = explode('~',$v);
+			$date_part_arr[] = range($temp_arr[0],$temp_arr[1]);
+			unset($senddate_arr[$k]);
+			unset($temp_arr);
+		}
+		foreach($date_part_arr as $d)
+		{
+			$senddate_arr = array_merge_recursive($senddate_arr,$d);
+		}
+		$senddate_arr = array_unique($senddate_arr);
+		if($frequency==2||$frequency==3)
+			$loop = 7;
+		elseif($frequency==4)
+			$loop = 30;
+		$size = sizeof($senddate_arr);
+		if($size==1)
+			return $loop;
+		sort($senddate_arr,SORT_NUMERIC);
+		print_r($senddate_arr);
+		$min = 30;//月数
+		for($i=$size-1;$i>=1;$i--)
+		{
+			$min = min($min,$senddate_arr[$i]-$senddate_arr[$i-1]);
+		}
+		$min = min($min,$senddate_arr[0]+$loop-$senddate[$size-1]);
+		return $min;
+	}
+	public function CheckTime($sendtime)
+	{
+		if(empty($sendtime))
+			return true;
+		$time_arr = explode('~',$sendtime);
+		$now = strtotime('now');
+		print_r($time_arr);
+		var_dump(strtotime($time_arr[1]));
+		var_dump(strtotime('now'));
+		var_dump(strtotime($time_arr[0]));
+		if(strtotime($time_arr[1])<$now||$now<strtotime($time_arr[0]))
+			return false;
+		else 
+			return true;
+			
+	}
+	
+	public static function str_getcsv_self($input, $delimiter=',', $enclosure='"', $escape=null, $eol=null) 
+	{
+		  $temp=fopen("php://memory", "rw");
+		  fwrite($temp, $input);
+		  fseek($temp, 0);
+		  $r=fgetcsv($temp, 4096, $delimiter, $enclosure);
+		  fclose($temp);
+		  return $r;
+		  //fgetcsv 读取中文可能出错,要用setlocale(LC_ALL, 'nl_NL');
+		  // utf-8
+			//setlocale(LC_ALL, 'en_US.UTF-8');
+			// 简体
+			//setlocale(LC_ALL, 'zh_CN');
+			/**http://hi.baidu.com/qiaoyuetian/blog/item/40e4953d19dba8e43d6d9712.html
+			 * 以下是常用的地区标识
+		zh_CN GB2312
+		en_US.UTF-8 UTF-8
+		zh_TW BIG5
+		zh_HK BIG5-HKSCS
+		zh_TW.EUC-TW EUC-TW
+		zh_TW.UTF-8 UTF-8
+		zh_HK.UTF-8 UTF-8
+		zh_CN.GBK GBK
+			 */
+	}
+	
 	public function __destruct()
 	{
 		self::EchoEnd ();
@@ -823,10 +901,14 @@ HTML;
 		//echo ord("\n"); //10
 		//define('CODELIST',"ASCII,GBK,GB2312,big5,UTF-8,CP936,EUC-CN,BIG-5,EUC-TW");
 		//var_dump(false<strtotime('now'));
-		var_dump(explode('/','/'));
+		//print_r($_SERVER);
+		//list($arr[1],$arr[2])=explode(',','1111');
+		//var_dump(substr_count(",,,北京某某化工公司01,,",','));
 	}
 }
 $a = new MyClass ( );
-echo $a->getEmailNum(4,'3_4');
+//$b = $a->CheckTime('08:50~14:40');
+//var_dump($b);
+var_dump($a->str_getcsv_self(',,北京某某化工公司01,'));
 ?>
 
