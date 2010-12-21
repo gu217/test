@@ -117,9 +117,7 @@ function FileUpload($filesource, $filename, $dest_dir, $dir_type = 0)
 			$date_format = "Ym";
 	}
 	$foldir = date( $date_format );
-	//if($dest_dir{0}=='/')//$_SERVER['DOCUMENT_ROOT']=>D:/myphp/lab.com/
-	//   $dest_dir = substr($_SERVER['DOCUMENT_ROOT'],1);
-	//$dest_dir = str_replace($dest_dir,'//','/');
+
 	if(substr( $_SERVER ['DOCUMENT_ROOT'], -1 )!='/'&&$dest_dir {0}!='/')
 		$dest_dir = '/'.$dest_dir;
 	if(substr( $_SERVER ['DOCUMENT_ROOT'], -1 )=='/'&&$dest_dir {0}=='/')
@@ -203,7 +201,6 @@ function GoUrl($url, $prefix = '', $time = 0, $type = 2)
 	{
 		case 1 :
 			sleep( $time );
-			//Maybe have output before this
 			@header( "Location:$url" );
 			break;
 		case 2 :
@@ -224,45 +221,6 @@ function GoUrl($url, $prefix = '', $time = 0, $type = 2)
 	exit();
 }
 
-/**
- * 通过给出的URL参数和网站目录获得完整的URL example: GetFormatUrl('a=cc&c=dd')
- *
- * @param array $params array('a'=>'cc','b'=>'dd')
- * @return string Get the full URL;such as: http://baidu.com/img/?a=cc&c=dd
- */
-/**
-function GetFormatUrl($params = '')
-{
-
-//	$params = ($params!='' && $params {0} == '?') ? $params : '?' . $params;
-//	if($dir!='')
-//	{
-//		$dir = $dir {0} == '/' ? $dir : '/' . $dir;
-//		$dir = substr ( $dir, - 1 ) == '/' ? $dir : $dir . '/';
-//	}
-
-	$dir = dirname ( __FILE__ );
-	if ($dir {0} == '/')
-		$dir = substr ( $dir, strrpos ( $dir, '/' ) + 1 );
-	else
-		$dir = substr ( $dir, strrpos ( $dir, '\\' ) + 1 );
-	$params = $params == '' ? $params : '?' . $params;
-	$dir = $dir == '' ? $dir : '/' . $dir . '/';
-	$url = 'http';
-	if (isset ( $_SERVER ['HTTPS'] ) && $_SERVER ['HTTPS'] == 'on')
-		$url .= 's://';
-	else
-		$url .= '://';
-	$url .= $_SERVER ['HTTP_HOST'];
-	$port = ($_SERVER ['SERVER_PORT'] == '80') ? '' : ':' . $_SERVER ['SERVER_PORT'];
-	$url .= $port;
-	if ($dir != '' && substr ( $_SERVER ['REQUEST_URI'], 0, strlen ( $dir ) ) == $dir)
-		$url .= $dir . $params;
-	else
-		$url .= $params;
-	return $url;
-}
- **/
 /**
  * 通过给出的参数获得完整的网站路径
  *
@@ -352,33 +310,6 @@ function Msg($msg = '', $level = 0, $line = '')
 	}
 }
 
-function RandomZhChar($len = 2)
-{
-	//header('Content-Type:text/html; charset=utf-8');
-	$return = array ();
-	$str = "天朝万岁人命公司共和国大力";
-	//将汉字转换成16进制代码的形式
-	$str = substr( json_encode( $str ), 1, -1 );
-	$arr = str_split( $str, 6 );
-	$char_arr_keys = array_rand( $arr, $len );
-	foreach( $char_arr_keys as $v )
-	{
-		$char_arr [] = $arr [$v];
-	}
-	$return ['code'] = '"'.implode( '', $char_arr ).'"'; //将穿过来的值 json_encode 对比即可
-	$return ['char'] = '';
-	for($i = 0;$i<$len;$i++)
-	{
-		echo $char_arr [$i];
-		$return ['char'] .= chr( hexdec( substr( $char_arr [$i], 2 ) ) );
-		$return ['char'] .= chr( hexdec( substr( $char_arr [$i], 0, 2 ) ) );
-		echo iconv( 'UTF-16', 'UTF-8', $return ['char'] );
-		exit();
-	}
-	$return ['char'] = iconv( 'UTF-16', 'UTF-8', $return ['char'] );
-	var_dump( $return );
-
-}
 
 /**
  * 验证码的生产(包括字母型和汉字)
@@ -393,7 +324,6 @@ function GetCheckImg($mod = 0)
 	//生成验证码图片
 	Header( "Content-type: image/PNG" );
 	@session_start(); //将随机数存入session中
-	
 
 	//	$auth_code = RandomStr ( 5, 'Aa0' );
 	$auth_code = RandomStr( 4, '0' );
@@ -401,7 +331,6 @@ function GetCheckImg($mod = 0)
 	$_SESSION ['auth_code'] = $auth_code;
 	$im = imagecreate( $width, $height ); //制定图片背景大小
 	
-
 	$black = ImageColorAllocate( $im, 0, 0, 0 ); //设定三种颜色
 	$white = ImageColorAllocate( $im, 255, 255, 255 );
 	$gray = ImageColorAllocate( $im, 200, 200, 200 );
@@ -561,35 +490,6 @@ function SubstrUtf8($str, $start = 0, $len, $marker = '...', $encoding = 'utf-8'
 	return '';
 } // end of func SubstrIgnHtml
 
-
-function MyTrim($var, $mod)
-{
-	$mod = strtoupper( $mod );
-	switch($mod)
-	{
-		case 'B' :
-			$trim = 'trim';
-			break;
-		case 'L' :
-			$trim = 'ltrim';
-			break;
-		case 'R' :
-			$trim = 'rtrim';
-			break;
-		default:
-			$trim = 'trim';
-	}
-	if(is_array( $var ))
-	{
-		foreach( $var as &$v )
-		{
-			$v = $trim( $v );
-		}
-	}
-	else
-		$var = $trim( $var );
-	return $var;
-}
 
 function GetCfg($cfg)
 {
