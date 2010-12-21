@@ -1,9 +1,5 @@
 <?php
 
-/**** 字段验证函数部分 开始 ***************/
-
-/**** 字段验证函数部分 结束 ***************/
-
 function SysError($msgobj)
 {
 	if(is_array($msgobj))
@@ -31,72 +27,6 @@ function SysDebug($msgobj,$errtype=E_USER_WARNING)
 	}
 }
 
-/**
- * 后端调试输出，需要第一个参数是一个变量
- */
-function SysTrace($obj, $prefix="", $nodebug=true)
-{
-	if(!$nodebug||CWDF_DEBUG_MODE){
-		if(is_array($obj)){
-			if(strlen($prefix)>0){
-				ue_echo("SysTrace [".$prefix."] : ".str_replace("\n", "", print_r($obj, true)));
-			}else{
-				ue_echo("SysTrace : ".str_replace("\n", "", print_r($obj, true)));
-			}
-		}else{
-			if(strlen($prefix)>0){
-				ue_echo("SysTrace [".$prefix."] : ".str_replace("\n", "", strval($obj)));
-			}else{
-				ue_echo("SysTrace : ".str_replace("\n", "", strval($obj)));
-			}	
-		}
-		return;
-	}
-}
-/**
- * 轻量级的调试输出，需要第一个参数是一个变量
- */
-function SysTraceLight(&$obj, $prefix="", $nodebug=true)
-{
-	if(!$nodebug||CWDF_DEBUG_MODE){
-		if(is_array($obj)){
-			if(strlen($prefix)>0){
-				ue_echo("SysTrace [".$prefix."] : ".str_replace("\n", "", print_r($obj, true)));
-			}else{
-				ue_echo("SysTrace : ".str_replace("\n", "", print_r($obj, true)));
-			}
-		}else{
-			if(strlen($prefix)>0){
-				ue_echo("SysTrace [".$prefix."] : ".str_replace("\n", "", strval($obj)));
-			}else{
-				ue_echo("SysTrace : ".str_replace("\n", "", strval($obj)));
-			}	
-		}
-		return;
-	}
-}
-/**
- * 黑名单词汇过滤函数
- * 依赖文件 ../cache/blachwords.php，该文件通过后台管理系统生成字典表cache，然后再tools里面执行dictcache2array.php生成
- * @return string
- */
-function blackwordProcess($text){
-	global $blackwords, $blackwordsreplace;
-	if(is_null($text)||strlen($text)<1)return "";
-	$ret = preg_replace($blackwords, $blackwordsreplace, $text);
-	return $ret;
-}
-
-/**
- * 获取请求网址
- *
- * @return string
- */
-function RequestUri()
-{
-	$uri = "http://" . CWDF_HTTPHOST . ($_SERVER['PHP_SELF'] ? $_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'] : $_SERVER['REQUEST_URI']);
-	return $uri;
-}
 
 /**
  * 对数组内每一个元素进行adsslashes操作
@@ -195,11 +125,7 @@ function urlMergeParams($url,$params)
  * @return string		返回分页字符串
  */
 function PageStrSearch($count, $pagenum, $per, $url="",$params=array())
-{ 
-	if(empty($url)){
-		global $page;
-		$url = $page->sessions["referpage"];
-	}
+{
 	$sum = ceil($count/$per);
 	if ($sum == 1)
 		return;
@@ -402,36 +328,6 @@ function PageArray($totalPage, $currentPage, $pre = 9, $next = 9)
 	return $ret;
 }
 
-/**
- *返回查询的记录数
- *@param int $count	总数
- *@param int $page 页数
- *@param int $perpage 每页多少条
- *@param int $offset 偏移量
- *@return string
- */
-function getPageLimit($count,$page=1,$perpage=10,$offset=0){
-    if(empty($perpage)){
-        $perpage = 10;
-    }
-    if($page<=0){
-        $page = 1;
-        $startlimit = 0;
-    }
-    else{
-        $startlimit = ($page-1)*$perpage;
-    }
-    if($startlimit>$count){
-        $startlimit = ((int)($count/$perpage))*$perpage;
-    }
-    if($startlimit<0){
-        $startlimit = 0;
-    }
-    if($offset>0){
-        $startlimit += $offset;
-    }
-    return $startlimit.",".$perpage;
-}
 /**
  * 生成分页字符串。输入列表总数，当前页数，每页显示数，网址URL，它将来自动生成分页列表字符串。
  *
@@ -686,14 +582,6 @@ function IsDateTime($strDateTime)
 	}
 }
 
-/**
- * pass密钥
- * @param string $md5password 经过md5加密的密码字符串
- */
-function PasskeyEncode($md5password)
-{
-	return md5($md5password . CWDF_PASSKEY);
-}
 
 /**
  * 将给定的由特定符号分隔开的字符串过滤掉空白字符
@@ -821,22 +709,6 @@ function getSlashedJson($obj) {
 	return mb_ereg_replace("'", "\\'", json_encode($obj));
 }
 
-/**
- * @param dnsname $usertype 用户的dns名称以及用户类型
- * @return string 用户的空间站点url
- */
-function gethosturl($dnsname, $usertype)
-{
-	if($usertype == 4)
-	{
-		$ret = "http://".$dnsname.".corp.gongye360.com";
-	}
-	else
-	{
-		$ret = "http://".$dnsname.".blog.gongye360.com";
-	}
-	return $ret;
-} 
 
 /**
  * 生成随机数
@@ -896,206 +768,6 @@ function unescapeXml($xml, $trim=false)
 }
 
 
-/**
- * 获取用户主站地址
- */
-function getUserBlogUrl($dnsname,$usertype=2)
-{
-	if(empty($dnsname))
-	{
-		return "";
-	}
-	global $page;
-	if($page->sessions["referiscom"] == "true")
-	{
-		if(preg_match ("/^.*test\.gongye360\.com$/i", $_SERVER['HTTP_HOST'])) {
-			$extra_flag = "test";
-		} else if(preg_match ("/^.*bj\.gongye360\.com$/i", $_SERVER['HTTP_HOST'])) {
-			$extra_flag = "bj";
-		} else {
-			$extra_flag = "";
-		}
-		if($usertype < 4)
-		{
-			return "http://".$dnsname.".blog".$extra_flag.".gongye360.com";
-		}
-		else if($usertype == 4)
-		{
-			return "http://".$dnsname.".corp".$extra_flag.".gongye360.com";
-		}
-	}
-	else
-	{
-		if($usertype < 4)
-		{
-			return "http://".$dnsname.".blog.gongye360.net".$page->sessions["refermidpath"]."/products/blog";
-		}
-		else if($usertype == 4)
-		{
-			return "http://".$dnsname.".corp.gongye360.net".$page->sessions["refermidpath"]."/products/corp";
-		}
-	}
-	return "";
-}
-
-/**
- * 获取用户健康管理主站地址
- * @deprecated
- */
-function getUserHmUrl($dnsname,$usertype=3)
-{
-	if(empty($dnsname))
-	{
-		return "";
-	}
-	global $page;
-	if($page->sessions["referiscom"] == "true")
-	{
-		if(preg_match ("/^.*test\.gongye360\.com$/i", $_SERVER['HTTP_HOST'])) {
-			$extra_flag = "test";
-		} else if(preg_match ("/^.*bj\.gongye360\.com$/i", $_SERVER['HTTP_HOST'])) {
-			$extra_flag = "bj";
-		} else {
-			$extra_flag = "";
-		}
-		return "http://".$dnsname.".".CWDF_HM_PORTAL;
-	}
-	else
-	{
-		return "http://".$dnsname.".blog.gongye360.net".$page->sessions["refermidpath"]."/products/healthmgr";
-	}
-}
-
-function GetProdType($url)
-{
-	$urlstruct = parse_url($url);
-	$host = $urlstruct["host"];
-	$path = $urlstruct["path"];
-	unset($urlstruct);
-	$iscom = false;
-	if(stristr($host, "gongye360.com"))
-	{
-		$iscom = true;
-	}
-	$extra_flag = "";
-	if($iscom)
-	{
-		if(stristr($host,"www".$extra_flag.".gongye360."))
-		{
-			return 1000;
-		}
-		elseif(stristr($host, "zhiyao" . $extra_flag. ".gongye360.")) {
-			return 1001;
-		}
-		elseif(stristr($host, "gongkong" . $extra_flag. ".gongye360.")) {
-			return 1002;
-		}
-		elseif(stristr($host, "baozhuang" . $extra_flag. ".gongye360.")) {
-			return 1003;
-		}
-		elseif(stristr($host, "yibiao" . $extra_flag. ".gongye360.")) {
-			return 1004;
-		}
-		elseif(stristr($host, "jixie" . $extra_flag. ".gongye360.")) {
-			return 1005;
-		}
-		elseif(stristr($host, "huagong" . $extra_flag. ".gongye360.")) {
-			return 1006;
-		}
-
-		elseif(stristr($host,"passport".$extra_flag.".gongye360."))
-		{
-			return 2000;
-		}
-		elseif(stristr($host,"blog".$extra_flag.".gongye360."))
-		{
-			return 3000;
-		}
-		elseif(stristr($host,"group".$extra_flag.".gongye360."))
-		{
-			return 4000;
-		}
-		elseif(stristr($host,"ask".$extra_flag.".gongye360."))
-		{
-			return 5000;
-		}
-		elseif(stristr($host,"wiki".$extra_flag.".gongye360."))
-		{
-			return 6000;
-		}
-		elseif(stristr($host,"exam".$extra_flag.".gongye360."))
-		{
-			return 7000;
-		}
-		elseif(stristr($host,"admin".$extra_flag.".gongye360."))
-		{
-			return 8000;
-		}
-		else if(stristr($host,"corp".$extra_flag.".gongye360."))
-		{
-			return 9000;
-		}
-		else
-		{
-			return 10000;
-		}
-	}
-	else
-	{
-		if(stristr($path,"/products/www"))
-		{
-			return 1000;
-		}
-		else if(stristr($path,"/products/passport"))
-		{
-			return 2000;
-		}
-		else if(stristr($path,"/products/blog"))
-		{
-			return 3000;
-		}
-		else if(stristr($path,"/products/group"))
-		{
-			return 4000;
-		}
-		else if(stristr($path,"/products/ask"))
-		{
-			return 5000;
-		}
-		else if(stristr($path,"/products/wiki"))
-		{
-			return 6000;
-		}
-		else if(stristr($path,"/products/sysadmin"))
-		{
-			return 8000;
-		}
-		else if(stristr($path,"/products/corp"))
-		{
-			return 9000;
-		}
-		else
-		{
-			return 10000;
-		}
-	}
-}
-
-function getIndustryIdFromProdType($prodtype)
-{
-	global $gIndustryIdMap;
-	return !empty($gIndustryIdMap[$prodtype]) ? $gIndustryIdMap[$prodtype] : 0;
-
-}
-
-//根据catepath获取行业ID
-function getIndustryIdFromPath($path)
-{
-	$pos = strpos($path, '_');
-	if ($pos === false)
-			return 0;
-	return (int)substr($path, $pos + 1); 
-}
 
 /**
  * 获取当前时间串，到微秒
@@ -1103,8 +775,10 @@ function getIndustryIdFromPath($path)
 function microtime_format($light=false)
 {
 	list($usec, $sec) = explode(" ", microtime());
-	if($light)return (date("Y-m-d H:i:s", $sec) . substr($usec, 1));
-	else return ((float)$usec + (float)$sec);
+	if($light)
+		return (date("Y-m-d H:i:s", $sec) . substr($usec, 1));
+	else 
+		return ((float)$usec + (float)$sec);
 }
 
 /**
@@ -1134,26 +808,33 @@ function utf8_strlen($str)
  * @start 起始字节位数
  * @endchars 结束字符 mixed, 可以是数组或单字
  */
-function utf8_substr(&$str, $ulength=0, $start=0, $endchars=0){
+function utf8_substr(&$str, $ulength=0, $start=0, $endchars=0)
+{
 	$substr="";
     $count = 0;//字串进位
 	$strlen = strlen($str);
-    for($i = $start; $i < $strlen; $i++){
+    for($i = $start; $i < $strlen; $i++)
+    {
 		if($count>=$ulength)break; //判断是否到达长度
         $value = ord($str[$i]);
 		if(is_array($endchars)){//判断是否抵达结束特殊字符
 			$broken = false;
 			$endCharCnt = count($endchars);
 			if($endCharCnt>0){
-				for($j=0;$j<$endCharCnt;$j++){
+				for($j=0;$j<$endCharCnt;$j++)
+				{
 					$endchar = $endchars[$j];
 					if(is_int($endchar)){//数组此项为单字符
-						if($value==$endchar){
+						if($value==$endchar)
+						{
 							$broken=true;
 							break;	
 						}
-					}else if(is_string($endchar)){//字串比较
-						if(utf8_string_match($endchar, $str, $i, $strlen)){
+					}
+					else if(is_string($endchar))
+					{//字串比较
+						if(utf8_string_match($endchar, $str, $i, $strlen))
+						{
 							$broken=true;
 							break;	
 						}
@@ -1161,22 +842,30 @@ function utf8_substr(&$str, $ulength=0, $start=0, $endchars=0){
 				}
 			}
 			if($broken)break;
-		}else if(is_int($endchars)&&$endchars>0){ //判断是否抵达结束特殊字符
-			if($value==$endchars){
+		}
+		else if(is_int($endchars)&&$endchars>0)
+		{ //判断是否抵达结束特殊字符
+			if($value==$endchars)
+			{
 				break;	
 			}
 		}
        	$count++;//utf8 字串进位
         if($value > 127) {
-        	if($value >= 192 && $value <= 223){
+        	if($value >= 192 && $value <= 223)
+        	{
 				$substr .= substr($str, $i, 2);
 				$i++;
 				continue;
-			}elseif($value >= 224 && $value <= 239){
+			}
+			elseif($value >= 224 && $value <= 239)
+			{
 				$substr .= substr($str, $i, 3);
 				$i = $i + 2;
 				continue;
-			}elseif($value >= 240 && $value <= 247){
+			}
+			elseif($value >= 240 && $value <= 247)
+			{
 				$substr .= substr($str, $i, 4);
 				$i = $i + 3;
 				continue;
@@ -1190,15 +879,19 @@ function utf8_substr(&$str, $ulength=0, $start=0, $endchars=0){
 /**
  * utf8字节匹配关键词，匹配成功，返回true，否则返回false
  */
-function utf8_string_match(&$key, &$str, $start=0, $final=0){
+function utf8_string_match(&$key, &$str, $start=0, $final=0)
+{
 	$keysize = strlen($key);
 	//*//实现一：按字符比较
 	if($final==0)$final=strlen($str);
-	for($i=0;$i<$keysize;$i++){
-		if($start+$i>=$final)return false;//结束处理
+	for($i=0;$i<$keysize;$i++)
+	{
+		if($start+$i>=$final)
+			return false;//结束处理
 		$value1=$str[$start+$i];
 		$value2=$key[$i];
-		if($value1==$value2)continue;
+		if($value1==$value2)
+			continue;
 		return false;
 	}
 	/*/
@@ -1209,93 +902,59 @@ function utf8_string_match(&$key, &$str, $start=0, $final=0){
 }	
 
 /**
- * 获取文件内容，直接输出
- */
-function WriteJs($jsFile, $withTag=true, $notCompress=true)
-{
-	print("<script type=\"text/javascript\" src=\"$jsFile\"></script>\n");
-	return;
-	if(is_readable($jsFile)){
-		if($withTag){
-			$pos = strrpos($jsFile, "/")+1;
-			print("<script language=\"javascript\">\n//<!--".substr($jsFile, $pos, strlen($jsFile)-$pos)."\n");
-		}
-		$jsStr = file_get_contents($jsFile);
-		$message = array();
-		$writeStr = phpJSO_compress($jsStr, $messages, $notCompress);
-		print($writeStr);
-		if($withTag)print("\n//-->\n</script>\n");
-		if(count($message)>0){
-			//TODO 
-			print("<!--TRACE:js file obfuscator failed:\n".print_r($message, true)."\n-->\n");
-		}
-		unset($jsStr);
-		unset($writeStr);
-		unset($message);
-	}else{
-		print("<!--WARNING:js file '$jsFile' not exist!-->\n");
-	}
-}
-
-/**
- * 获取文件内容，直接输出
- */
-function WriteCss($cssFile, $withTag=false)
-{
-	if(is_readable($cssFile)){
-		$pos = strrpos($jsFile, "/")+1;
-		if($withTag)print("<style type=\"text/css\">\n/*cssfile:".substr($cssFile, $pos, strlen($cssFile)-$pos)."*/\n");
-		$cssStr = file_get_contents($cssFile);
-		print($cssStr);
-		if($withTag)print("</style>\n");
-		unset($cssStr);
-	}else{
-		print("<!--WARNING:style file '$cssFile' not exist!-->\n");
-	}
-}
-
-/**
  * 裁剪字符串，去除多个回车，进格，换行，中英文逗号，中英文空格 UTF8编码实现
  * @param text	待裁剪字符串
  * @param replace 裁剪字串的替换字串，默认为一个英文空格
  */
-function stripText($text, $replace=' '){
+function stripText($text, $replace=' ')
+{
 	$strlen = strlen($text);
 	if($strlen>0){
 		$retstr = "";
-		for($i=0;$i<$strlen;$i++){	
+		for($i=0;$i<$strlen;$i++)
+		{	
 			$value = ord($text[$i]);
-			//print($value."\n");
-			if($value > 127) {
-				if($value >= 192 && $value <= 223){//双字节编码
+			if($value > 127) 
+			{
+				if($value >= 192 && $value <= 223)
+				{//双字节编码
 					$retstr .= substr($text, $i, 2);
-					//$value1 = ord($text[$i+1]);
-					//print("$value|$value1\n");
 					$i++;
-				}elseif($value >= 224 && $value <= 239){//三字节编码
+				}
+				elseif($value >= 224 && $value <= 239)
+				{//三字节编码
 					$value1 = ord($text[$i+1]);
 					$value2 = ord($text[$i+2]);
-					if(($value==239&&$value1==188&&$value2==140)||($value==227&&$value1==128&&$value2==128)){//中文'，', 中文'　' , 此处处理将连续多个视为一个
+					if(($value==239&&$value1==188&&$value2==140)||($value==227&&$value1==128&&$value2==128))
+					{//中文'，', 中文'　' , 此处处理将连续多个视为一个
 						$offset=0;
-						while(true){
+						while(true)
+						{
 							$j=$i+3+$offset;
 							if($j>=$strlen)break;
 							$value_comp = ord($text[$j]);
 							$value1_comp = ord($text[$j+1]);
 							$value2_comp = ord($text[$j+2]);
-							if($value_comp==$value&&$value1_comp==$value1&&$value2_comp==$value2){
+							if($value_comp==$value&&$value1_comp==$value1&&$value2_comp==$value2)
+							{
 								$offset = $offset+3;
-							}else{
+							}
+							else
+							{
 								break;
 							}
 						}
 						if($offset>0)$i=$i+$offset;
 						$retstr .= $replace;	
-					}else{
+					}
+					else
+					{
 						$retstr .= substr($text, $i, 3);
 					}
 					$i= $i+2;
-				}elseif($value >= 240 && $value <= 247){//四字节编码
+				}
+				elseif($value >= 240 && $value <= 247)
+				{//四字节编码
 					$retstr .= substr($text, $i, 4);
 					//$value1 = ord($text[$i+1]);
 					//$value2 = ord($text[$i+2]);
@@ -1306,25 +965,35 @@ function stripText($text, $replace=' '){
 					$retstr .= substr($text, $i, 1);
 				}
 			}else{
-				if($value==10||$value==9||$value==44||$value==32){//0a换行\n 14Tab\t 44encomma 32en空格
+				if($value==10||$value==9||$value==44||$value==32)
+				{//0a换行\n 14Tab\t 44encomma 32en空格
 					//处理连续多个视为一个
 					$offset=0;
-					while(true){
+					while(true)
+					{
 						$j=$i+1+$offset;
 						if($j>=$strlen)break;
 						$value1 = ord($text[$j]);
-						if($value1==$value){
+						if($value1==$value)
+						{
 							$offset++;
-						}else{
+						}
+						else
+						{
 							break;
 						}
 					}
-					if($offset>0){
+					if($offset>0)
+					{
 						$i=$i+$offset;
 					}
 					$retstr .= $replace;	
-				}else if($value<32){//ignore \r
-				}else{
+				}
+				else if($value<32)
+				{//ignore \r
+				}
+				else
+				{
 					$retstr .= substr($text, $i, 1);
 				}
 			}
@@ -1521,7 +1190,8 @@ function truncateText($string, $length=80, $etc = '...', $break_words = false, $
 /**
  * 裁剪html文本
  */
-function truncateHtml($html, $length=80, $strip=true, $etc = '...', $break_words = false, $middle = false){
+function truncateHtml($html, $length=80, $strip=true, $etc = '...', $break_words = false, $middle = false)
+{
 	if(strlen($html)>0){
 		$text = html2text($html);
 		if(strlen($text)>0){
@@ -1559,39 +1229,6 @@ function EncodeQueryStr($url)
 	{ 
 		return $fpath ;
 	}
-}
-
-function PresetWidgetGet($querystr, $tpl=null)
-{
-	if(!is_null($querystr)&&strlen($querystr)>0){
-		//特殊字符处理
-		$querystr = str_replace("&amp;", "&", $querystr);
-		parse_str($querystr, $params);
-		global $_GET,$page;
-		if(is_array($_GET)){
-			$_GET=array_merge($_GET,$params);
-			if($tpl){
-				$tpl->assign('_GET', $_GET);
-			}else{
-				if(!is_null($page)&&!is_null($page->tpl))
-					$page->tpl->assign('_GET', $_GET);
-			}
-		}
-	}
-}
-
-function htmlFilterAdvertLink($htmlstr,$advertArray)
-{
-	$advertArray=array("healthoo.cn","xlzpt.com","fx999.net");
-	$search = array();
-	$replace = array();
-	foreach($advertArray as $adstr)
-	{
-		$adstr = str_replace('.','\\.',$adstr);
-		$search[] = "/\s+(href|src)=[\"']?http:\\/\\/(\w+\.)*".$adstr."[^\s>]*[\"']?/i";
-		$replace[] = "";
-	}
-    return preg_replace($search,$replace, $htmlstr);
 }
 
 ?>
