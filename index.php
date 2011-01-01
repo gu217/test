@@ -377,6 +377,11 @@ IMG;
 }
 $a = new MyClass ( );
 $a->ImgDisInCode();
+$rs = mail('neagle.net@gmail.com','Hello','Hello,my friend!','');
+if($rs)
+	echo 'OK';
+else 
+	echo 'false';
 //var_dump($a->str_getcsv_self(',,北京某某化工公司01,'));
 ?>
 

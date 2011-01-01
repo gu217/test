@@ -15,7 +15,7 @@ SetCfg ('dir.upload.image','upload_files/images/');
 SetCfg ( 'db.free.host', 'localhost' );
 SetCfg ( 'db.free.username', 'root' );
 SetCfg ( 'db.free.password', '' );
-SetCfg ( 'db.free.dbname', 'bjmu_lab' );
+SetCfg ( 'db.free.dbname', '' );
 SetCfg ( 'db.free.lang', 'utf8' );
 
 ?>
