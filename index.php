@@ -280,6 +280,17 @@ long2ip( sprintf( '%d', 3233851584 ) ); //right
 		
 	}
 
+	public function ImgDisInCode()
+	{
+		$url = '/home/acer/Pictures/Photos/trash_ie6.gif';
+		$mime = mime_content_type($url);
+		$data = base64_encode(file_get_contents($url));
+		$src = "data:{$mime};base64,{$data}";
+		echo <<<IMG
+			<img src="{$src}" onload="this.height=100;this.weight=100;" />	
+IMG;
+	}
+	
 	public function Ip2Bin($ip)
 	{
 		if(!strpos($ip,'.'))
@@ -327,6 +338,7 @@ long2ip( sprintf( '%d', 3233851584 ) ); //right
 	
 	public static function str_getcsv_self($input, $delimiter=',', $enclosure='"', $escape=null, $eol=null) 
 	{
+		  setlocale(LC_ALL, 'zh_CN UTF-8');
 		  $temp=fopen("php://memory", "rw");
 		  fwrite($temp, $input);
 		  fseek($temp, 0);
@@ -359,9 +371,12 @@ long2ip( sprintf( '%d', 3233851584 ) ); //right
 		//换行符 chr(10)  换行符使用\n时，要用双引号包括
 		//echo ord("\n"); //10
 		//define('CODELIST',"ASCII,GBK,GB2312,big5,UTF-8,CP936,EUC-CN,BIG-5,EUC-TW");
+		echo preg_replace("/[\\/\\\]+/",'/','//d//e//\\f');
 	}
+
 }
 $a = new MyClass ( );
-var_dump($a->str_getcsv_self(',,北京某某化工公司01,'));
+$a->ImgDisInCode();
+//var_dump($a->str_getcsv_self(',,北京某某化工公司01,'));
 ?>
 

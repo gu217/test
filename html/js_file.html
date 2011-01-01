@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!-- 
+图片预览,base64编码 
+图片上传时预览,图片加载时自动调整大小
+-->
+<head>
+	<title>js处理文件</title>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+	<meta name="generator" content="Geany 0.19" />
+	<script src="http://go.com/js/jquery.js"></script>
+	<script type="text/javascript">
+	function previewImage(fileObj, imageObj)
+	{
+		if (document.all) 
+		{
+			$(imageObj).attr('src', $(fileObj).val());
+			if ($(fileObj).val() != '')
+				$(imageObj).show();
+			else
+				$(imageObj).hide();
+		} 
+		else if(fileObj.files[0].getAsDataURL) 
+		{
+			$(imageObj).attr('src', fileObj.files[0].getAsDataURL());
+			if ($(fileObj).val() != '')
+				$(imageObj).show();
+			else
+				$(imageObj).hide();
+		}
+	}
+	<!-- -->
+	// resize image
+function DrawImage(imgDest) 
+{
+	var imgTemp = new Image();
+	imgTemp.onload = function() 
+	{
+		if (this.width > 0 && this.height > 0) 
+		{
+			if (this.width/this.height >= 400/400) 
+			{
+				if (this.width > 400) 
+				{
+					imgDest.width = 400;
+					imgDest.height = (this.height*400)/this.width;
+				} 
+				else 
+				{
+					imgDest.width = this.width;
+					imgDest.height = this.height;
+				}
+			} 
+			else 
+			{
+				if (this.height > 400) 
+				{
+					imgDest.height = 400;
+					imgDest.width = (this.width*400)/this.height;
+				} else {
+					imgDest.width = this.width;
+					imgDest.height = this.height;
+				}
+			}
+			var _sizeinfo = "(" + this.width + "x" + this.height + ")";
+			if (imgDest.alt.indexOf(_sizeinfo) < 0) 
+			{
+				imgDest.alt += _sizeinfo;
+			}
+			if (imgDest.title.indexOf(_sizeinfo) < 0) 
+			{
+				imgDest.title += _sizeinfo;
+			}
+		}
+	}
+	imgTemp.src = imgDest.src;
+}
+
+
+	function ReSizeImg(imgObj,w,h)
+	{
+		var wid = imgObj.width;
+		var hei = imgObj.height;
+		if(wid<=w && hei<=h)
+		{
+			 return;
+		}
+		if (wid/hei >= w/h) 
+		{
+			hei = hei*w/wid;
+			wid = w;
+		} 
+		else 
+		{
+			wid = wid*h/hei;
+			hei = h;
+		}
+		imgObj.width = wid;
+		imgObj.height = hei;
+	}
+	
+	function playerReSizeImg(imgObj,w,h)
+	{
+		if(!imgObj.complete){
+			return false;
+		}
+		var wid,hei;
+		if(imgObj.naturalWidth==null || typeof(imgObj.naturalWidth)=='undefined')
+		{
+			imgObj.removeAttribute("width");
+			imgObj.removeAttribute("height");
+			wid = imgObj.width;
+			hei = imgObj.height;
+		}
+		else
+		{
+			wid = imgObj.naturalWidth;
+			hei = imgObj.naturalHeight;
+		}
+		if(wid<=w && hei<=h)
+		{
+			imgObj.width = wid;
+			imgObj.height = hei;
+			return true;
+		}
+		if (wid/hei >= w/h) 
+		{
+			hei = hei*w/wid;
+			wid = w;
+		} 
+		else 
+		{
+			wid = wid*h/hei;
+			hei = h;
+		}
+		imgObj.width = wid;
+		imgObj.height = hei;
+	}
+
+	<!-- -->
+	$(function()
+	{
+		$('#img_test').change(function()
+		{
+			$('#img_obj').attr('src',this.files[0].getAsDataURL());
+		});
+	});
+	</script>
+</head>
+<!--
+<input type="file" id="myinput">
+Now the data of the file selected can be accessed with:
+
+// Get the file's data as a data: URL
+document.getElementById('myinput').files[0].getAsDataURL()
+fileName：用于获取到用户所选文件的名称，这和直接取value值所得到的结果一样。
+fileSize：得到用户所选文件的大小。
+getAsBinary()：得到用户所选文件的二进制数据。
+getAsDataURL()：得到用户所选文件的路径，该路径被加密了，目前只能在FireFox中使用。
+getAsText()：得到用户所选文件的指定字符编码的文本。
+php实现: index.php MyClass->ImgDisInCode();
+-->
+<body>
+<div id="note">说明: 图片上传时预览,图片加载时自动调整大小</div>
+	<input type="file" id="img_test" />
+	<div id="show_img">
+	<img src="/image/default.gif" id="img_obj" onload="ReSizeImg(this,200,150);"/>
+	</div>
+</body>
+
+</html>
