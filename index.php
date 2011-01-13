@@ -94,7 +94,7 @@ class MyClass
 <meta name="Keywords" content="">
 <meta name="Description" content="">
 <script src="/js/error.js"></script>
-<script src="/js/x.js"></script>
+<script src="/js/jquery.min.js"></script>
 </head>
 <body>
 
@@ -371,17 +371,24 @@ IMG;
 		//换行符 chr(10)  换行符使用\n时，要用双引号包括
 		//echo ord("\n"); //10
 		//define('CODELIST',"ASCII,GBK,GB2312,big5,UTF-8,CP936,EUC-CN,BIG-5,EUC-TW");
-		echo preg_replace("/[\\/\\\]+/",'/','//d//e//\\f');
+		//echo preg_replace("/[\\/\\\]+/",'/','//d//e//\\f');
 	}
 
 }
 $a = new MyClass ( );
 $a->ImgDisInCode();
-$rs = mail('neagle.net@gmail.com','Hello','Hello,my friend!','');
-if($rs)
-	echo 'OK';
-else 
-	echo 'false';
-//var_dump($a->str_getcsv_self(',,北京某某化工公司01,'));
+//$rs = mail('neagle.net@gmail.com','Hello','Hello,my friend!','');
+//if($rs)
+//	echo 'OK';
+//else 
+//	echo 'false';
+$a = new Memcache;
+$a->connect("localhost","11211");
+$arr = array(1,2,3);
+var_dump($arr);
+$a->add("s",$arr,false,30);
+array_shift($arr);
+var_dump($arr);
+
 ?>
 
