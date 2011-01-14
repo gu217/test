@@ -3,6 +3,8 @@ define( 'INC_DIR', $_SERVER ['DOCUMENT_ROOT'].'/include' );
 require_once INC_DIR."/func/function_360.php";
 require_once INC_DIR."/func/str_func.php";
 require_once INC_DIR."/func/func.php";
+require_once INC_DIR."/func/func.php";
+require_once INC_DIR."/class/phpQuery/phpQuery.php";
 define('FIELDS_SIZE',15);
 
 class MyClass
@@ -95,6 +97,7 @@ class MyClass
 <meta name="Description" content="">
 <script src="/js/error.js"></script>
 <script src="/js/jquery.min.js"></script>
+<script src="/js/jquery.form.js"></script>
 </head>
 <body>
 
@@ -371,24 +374,116 @@ IMG;
 		//换行符 chr(10)  换行符使用\n时，要用双引号包括
 		//echo ord("\n"); //10
 		//define('CODELIST',"ASCII,GBK,GB2312,big5,UTF-8,CP936,EUC-CN,BIG-5,EUC-TW");
-		//echo preg_replace("/[\\/\\\]+/",'/','//d//e//\\f');
+//		var_dump(strtotime('2010-12-21 00:00:00'));
+//		echo preg_replace("/[\\/\\\]+/","/","a//b\\c//d//");
+//		$a = http_build_query(array("id_str"=>array(1,2,3)));
+//		parse_str("$a");
+//		
+//		$rs1 = array(1,2,3);
+//		$rs2 = array(4,5,6);
+//		$rs3 = array_merge($rs1,$rs2);
+//		var_dump($rs3);
+	}
+	
+	public function AddLinkForKeyWord($content='',$keywords=array())
+	{
+		$content = <<<CONTENT
+<p>
+	工业自动化控制是工业技术进步的重要方向，是机电一体化、推进两化融合的基础工作。但是，多年来一直缺少国家层面的关注和战略性安排，处于严重落后阶段，并存有重大隐患。</p>
+<p>
+	四是配套政策跟进，如首台套须给以足够支持、资助示范工程、试运行改进、首台套采购政策等。<br />
+	&nbsp;</p>		
+CONTENT;
+		$keywords = array(
+			array(
+				'keyword'=>'洁净室',
+				'link'=>'http://jiejingshi11.com'
+			),
+			array(
+				'keyword'=>'ff',
+				'link'=>'http://beng22.com'
+			),
+			array(
+				'keyword'=>'泵',
+				'link'=>'http://beng33.com'
+			),
+			array(
+				'keyword'=>'PLC',
+				'link'=>'http://gongkong.gongye360.com/plc/index.html'
+			),
+			array(
+				'keyword'=>'ff',
+				'link'=>'http://beng55.com'
+			),
+			array(
+				'keyword'=>'ff',
+				'link'=>'http://beng66.com'
+			),
+		);
+		$i = 0;
+		$link_num = 5;
+		foreach($keywords as $v)
+		{
+			if($i>=$link_num)
+				break;
+			$pos = mb_stripos($content,$v['keyword'],0);
+			if($pos === FALSE)
+				continue;
+			if($pos<=3)
+			{
+				$content = preg_replace("/{$v['keyword']}/i","<a href=\"{$v['link']}\" target=\"_blank\">\\0</a>",$content,1);
+				$i++;
+			}
+			else
+			{
+				while(TRUE)
+				{
+					if($i>=$link_num)
+						break 2;
+					$tmp_before = mb_substr($content,0,$pos);
+					$tmp_after = mb_substr($content,$pos);
+					$pos1 = strripos($tmp_before,'<a ');
+					$pos2 = strripos($tmp_before,'</a>');
+					if($pos2>=$pos1&&strrpos($tmp_before,'>')>=strrpos($tmp_before,'<'))
+					{
+
+						$tmp_after = preg_replace("/{$v['keyword']}/i","<a href=\"{$v['link']}\" title=\"{$v['keyword']}\" target=\"_blank\">\\0</a>",$tmp_after,1);
+						$i++;
+						$content = $tmp_before.$tmp_after;
+						break;
+					}
+					else
+					{
+						$pos = mb_stripos($content,$v['keyword'],mb_strlen($tmp_before.$v['keyword']));
+						if($pos === FALSE)
+							break;
+						else 
+							continue;
+					}
+				}
+			}
+		}
+		echo $content;
+	}
+	
+	public function HtmlExplode()
+	{
+//		$url = "http://www.chemequ.cn/company--------------1.html";
+//		phpQuery::newDocumentFile($url,"text/html; charset=utf-8");
+//		$page_lsit = pq('div.sj-list')->find('div:last>a:last');
+//		echo $text = $page_lsit->text();
+//		echo $href = $page_lsit->attr("href");
+		$href="http://xintai-cn.cn.chemnet.com/show/plist--------1.html";
+		phpQuery::newDocumentFile($href,"text/html; charset=utf-8");
+//		$site = strtolower(trim(pq("div.contrt2>dl>dd>table>tbody>tr:eq(5)>td:eq(1)>a.blue")->text()));
+		preg_match("/^http:\/\/(.*)\.cn\.chemnet\.com.*$/",$href,$matches);
+//		$site = strtolower(trim(pq("div.contrt2>dl>dd>table>tr:eq(1)>td:eq(1)")->text()));
+		print_r($matches);
+//		echo $next = pq('div.sj-list->div:eq(2)->a:last')->text();
 	}
 
 }
 $a = new MyClass ( );
-$a->ImgDisInCode();
-//$rs = mail('neagle.net@gmail.com','Hello','Hello,my friend!','');
-//if($rs)
-//	echo 'OK';
-//else 
-//	echo 'false';
-$a = new Memcache;
-$a->connect("localhost","11211");
-$arr = array(1,2,3);
-var_dump($arr);
-$a->add("s",$arr,false,30);
-array_shift($arr);
-var_dump($arr);
-
+$a->HtmlExplode();
 ?>
 

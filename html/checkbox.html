@@ -19,7 +19,8 @@
  <script language="JavaScript">
   function GetValue()
   {
-	//alert($("input[name=box]:checked").length);  选定数目
+	$("input[name='box[]']").attr("checked",true);
+	alert($("input[name='box[]']:checked").length);
 	function DoCheck(check_item)
 	{
 		check_flag = false;
@@ -34,9 +35,27 @@
 		}
 		return check_flag;
 	}
-	if(!DoCheck('box[]'))
-	alert('请选择');
+	//if(!DoCheck('box[]'))
+	//alert('请选择');
   }
+
+				function DelSel()
+				{
+					$("input[name='id_str[]']").attr("checked",false);
+				}
+				function SelAll()
+				{
+					$("input[name='id_str[]']").attr("checked",true);
+				}
+				function TurnBack()
+				{
+					$("input[name='id_str[]']").each(function(){
+						if($(this).attr("checked")==true)
+							$(this).attr("checked",false);
+						else
+							$(this).attr("checked",true);
+					});
+				}
   </script>
  </body>
 </html>
