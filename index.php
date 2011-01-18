@@ -3,13 +3,13 @@ define( 'INC_DIR', $_SERVER ['DOCUMENT_ROOT'].'/include' );
 require_once INC_DIR."/func/function_360.php";
 require_once INC_DIR."/func/str_func.php";
 require_once INC_DIR."/func/func.php";
-require_once INC_DIR."/func/func.php";
+require_once INC_DIR."/func/grab_function.php";
 require_once INC_DIR."/class/phpQuery/phpQuery.php";
 define('FIELDS_SIZE',15);
 
 class MyClass
 {
-
+	
 	public function __construct()
 	{
 		self::EchoHead();
@@ -375,14 +375,11 @@ IMG;
 		//echo ord("\n"); //10
 		//define('CODELIST',"ASCII,GBK,GB2312,big5,UTF-8,CP936,EUC-CN,BIG-5,EUC-TW");
 //		var_dump(strtotime('2010-12-21 00:00:00'));
-//		echo preg_replace("/[\\/\\\]+/","/","a//b\\c//d//");
-//		$a = http_build_query(array("id_str"=>array(1,2,3)));
-//		parse_str("$a");
-//		
-//		$rs1 = array(1,2,3);
-//		$rs2 = array(4,5,6);
-//		$rs3 = array_merge($rs1,$rs2);
-//		var_dump($rs3);
+//		echo preg_replace("/[\\/\\\]+/",'/','//d//e//\\f');
+//		echo $a = http_build_query(array("id_str"=>array(1,2,3)));
+//		preg_match("/\d{1,3}?/","1234",$matches);
+//		print_r($matches);
+//		$a = "81 \n";++$a;//$a 的值不会发生改变
 	}
 	
 	public function AddLinkForKeyWord($content='',$keywords=array())
@@ -466,24 +463,56 @@ CONTENT;
 		echo $content;
 	}
 	
-	public function HtmlExplode()
+	public function PqLearn()
 	{
-//		$url = "http://www.chemequ.cn/company--------------1.html";
-//		phpQuery::newDocumentFile($url,"text/html; charset=utf-8");
-//		$page_lsit = pq('div.sj-list')->find('div:last>a:last');
-//		echo $text = $page_lsit->text();
-//		echo $href = $page_lsit->attr("href");
-		$href="http://xintai-cn.cn.chemnet.com/show/plist--------1.html";
-		phpQuery::newDocumentFile($href,"text/html; charset=utf-8");
-//		$site = strtolower(trim(pq("div.contrt2>dl>dd>table>tbody>tr:eq(5)>td:eq(1)>a.blue")->text()));
-		preg_match("/^http:\/\/(.*)\.cn\.chemnet\.com.*$/",$href,$matches);
-//		$site = strtolower(trim(pq("div.contrt2>dl>dd>table>tr:eq(1)>td:eq(1)")->text()));
-		print_r($matches);
-//		echo $next = pq('div.sj-list->div:eq(2)->a:last')->text();
+		$href="http://comp_23914.cn.chemnet.com/show/clist--.html";
+		$href="http://comp_21447.cn.chemnet.com/show/pdetail--406213.html";
+		$b = phpQuery::newDocumentFile($href);
+//		phpQuery::newDocumentHTML("<div>");
+		print_r(phpQuery::$documents);
+		$a = phpQuery::newDocumentFile($href);
+		$id = $a->getDocumentID();
+//		array_pop(phpQuery::$documents);
+		phpQuery::unloadDocuments($id);
+		phpQuery::selectDocument($b->getDocumentID());
+		var_dump($b->getDocumentID(),pq('body')->getDocumentID());//equal to 
+		$prod['title'] = trim(pq("div#vipright_1_1>div.vipright_1s>dl>dt>h1")->text());
+		echo $prod['title'];
 	}
+	
+	public function Test()
+	{
+//		$href="http://www.pack.cn/company/company_list.aspx?bigid=0";
+//		phpQuery::newDocumentFile($href);
+//		$event_target = pq("#__EVENTTARGET")->attr("VALUE");
+//		$event_argument = pq("#__EVENTARGUMENT")->attr("VALUE");
+//		$view_state = pq("#__VIEWSTATE")->attr("VALUE");
+//		$url = "company_list.aspx?bigid=0";
 
+//		$href="http://search.pack.cn/company/?s=31";
+//		$content = getRemoteContent($href,2,5);
+//		$content = str_replace('<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />','<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />',$content);
+//		phpQuery::newDocument($content);
+//		echo $href = pq("div#pages>a.cur")->next("a")->attr("href");
+//		foreach (pq("div#mainContent>ul") as $list)
+//		{
+//			$href=  pq($list)->find("li>a:eq(0)")->attr('href');
+//			preg_match("/http:\/\/(.*)\.shop\.pack\.cn\//",$href,$matches);
+//			$corp_code = $matches[1];	
+//			echo pq($list)->find("li>img")->attr("src");
+//			exit();
+//		}
+		$href = "http://wxjnyj.shop.pack.cn/Contact/wxjnyj.html";
+		phpQuery::newDocumentFile($href,"text/html;charset=utf-8");
+		$html = file_get_contents($href);
+		$html = str_replace('id="ctl00_Head1"','',$html);
+		phpQuery::newDocument($html);
+		echo $html = pq('#ctl00_ContentPlaceHolder1_BaseLabel1')->html();
+//		echo mb_convert_encoding($html,'utf-8');
+//	echo 	mb_detect_encoding(file_get_contents($href));
+	}
 }
 $a = new MyClass ( );
-$a->HtmlExplode();
+$a->Test();
 ?>
 
