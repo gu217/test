@@ -290,7 +290,8 @@ long2ip( sprintf( '%d', 3233851584 ) ); //right
 		$data = base64_encode(file_get_contents($url));
 		$src = "data:{$mime};base64,{$data}";
 		echo <<<IMG
-			<img src="{$src}" onload="this.height=100;this.weight=100;" />	
+			<img src="{$src}" onload="this.height=100;this.weight=100;" />
+			<img src="/image/default.gif" />
 IMG;
 	}
 	
