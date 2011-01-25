@@ -492,28 +492,69 @@ CONTENT;
 
 //		$href="http://search.pack.cn/company/?s=31";
 //		$content = getRemoteContent($href,2,5);
+//		$content = str_replace("<meta http-equiv=\"Content-Type\" content=\"text\/html; charset=gb2413\" \/>","<meta http-equiv=\"Content-Type\" content=\"text\/html; charset=gb2312\" \/>",$content);
+//		:TOTHINK: //双引号转义替换不成功
 //		$content = str_replace('<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />','<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />',$content);
 //		phpQuery::newDocument($content);
 //		echo $href = pq("div#pages>a.cur")->next("a")->attr("href");
-//		foreach (pq("div#mainContent>ul") as $list)
-//		{
-//			$href=  pq($list)->find("li>a:eq(0)")->attr('href');
-//			preg_match("/http:\/\/(.*)\.shop\.pack\.cn\//",$href,$matches);
-//			$corp_code = $matches[1];	
-//			echo pq($list)->find("li>img")->attr("src");
-//			exit();
-//		}
-		$href = "http://wxjnyj.shop.pack.cn/Contact/wxjnyj.html";
+//
+//		$url = "http://www.c-cnc.com/qy/mode1/index5.asp?id=18417";
+//		phpQuery::newDocumentFile($url);
+//		$file_content = getRemoteContent($url);
+//		$file_content = str_replace('<meta http-equiv="Content-Type" content="text/html; charset=gb2413" />','<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />',$file_content);
+//       	phpQuery::newDocument($file_content,"text/html;charset=utf-8");
+//		echo $detail = pq("div.right_box_bg:eq(0)>div.nr_box:eq(0)")->html();
+//		echo pq("body")->html();
+//		echo $paper['pub_time'] = preg_replace("/最近更新时间：(\d{4})年(\d+)月(\d+)日 /","$1-$2-$3","最近更新时间：2010年4月19日 ");
+//		echo strtotime($paper['pub_time']);
+		$href = "http://www.zyzhan.com/Company/t0/list_New_p1.html";
 		phpQuery::newDocumentFile($href,"text/html;charset=utf-8");
-		$html = file_get_contents($href);
-		$html = str_replace('id="ctl00_Head1"','',$html);
-		phpQuery::newDocument($html);
-		echo $html = pq('#ctl00_ContentPlaceHolder1_BaseLabel1')->html();
-//		echo mb_convert_encoding($html,'utf-8');
-//	echo 	mb_detect_encoding(file_get_contents($href));
+//		echo pq("div.content6")->html();
+//	        foreach(pq("div.content6") as $ls)
+//			{
+//				echo $corp_src = pq($ls)->find("a")->attr('href'),"\n";
+//
+//			}
+		echo $page_str = pq('div.pg_turn>form#pagenum')->text();
+	}
+	
+	public function Xpath2JqueryPath()
+	{
+		$xpath = '/html/body/div[4]/div[2]/div[2]/div[3]/div/dl';
+		$tmp_arr = explode("/",substr($xpath,1));
+		$except_arr = array('html','body','tbody');
+		foreach ($tmp_arr as $key=>&$val)
+		{
+			if($val=='html')
+			{
+				unset($tmp_arr[$key]);
+				continue;				
+			}
+			elseif( !in_array($val,$except_arr) && preg_match("/[a-z1-9]+(\[([1-9]+)\])/",$val,$matches))
+			{
+				$eq = $matches[2] - 1;
+				$val = preg_replace("/\[[1-9]\]/",":eq($eq)",$val);
+			}
+			elseif(!in_array($val,$except_arr))
+			{
+				$val = $val.':eq(0)';
+			}
+		}
+		$rs = implode('>',$tmp_arr);
+		echo $rs;
+	}
+	
+	public function Csspath2JqueryPath()
+	{
+		$url = "http://www.gongye360.com/";
+		phpQuery::newDocumentFile($url);
+		$csspath = "html body div.layer02 div.right_mod div.right_mod_cont div.video_best div.video_list div.video_item div.video_item_img a img";
+		echo $jquery_path = str_replace(array("html ","body "," "),array("","",">"),$csspath);
+		echo "<br />";
+		echo pq($jquery_path)->attr('src');
 	}
 }
 $a = new MyClass ( );
-$a->Test();
+$a->Csspath2JqueryPath();
 ?>
 
