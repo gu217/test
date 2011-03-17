@@ -551,36 +551,9 @@ CONTENT;
 		echo $rs;
 	}
 	
-	public function Csspath2JqueryPath()
-	{
-		$test_str = <<<HTML
-
-                                <h3>PH值在线检测仪，PH检测仪，在线PH检测仪</h3>
-                                <p class="down_time">最近更新时间：2009年11月30日 </p>
-                                <p class="down_tt"><span class="d1">提 供 商：</span><span class="d2"><a href="#" style="color:#2A7A01;">上海谷雨环保科技有限公司</a></span><span class="d1">资料大小：</span><span class="d2">1146.03</span></p>
-                                <p class="down_t"><span class="d1">文件类型：</span><span class="d2">JPG 图片</span><span class="d1">下载次数：</span><span class="d2">31次</span></p>
-                                <p class="down_tt"><span class="d1">资料类型：</span><span class="d2">PDF 文件</span><span class="d1">浏览次数：</span><span class="d2">79 次</span></p>
-                                <p class="down_t"><span class="d1">相关产品：</span><span class="d3"></span></p>
-                                <p class="down_js"><span class="js1">详细介绍：</span><span class="js2"><a href="DownLoadFile_2326_F.html" target="_blank">文件下载</a>    <a href="DownLoadFile_2326_I.html" target="_blank">图片下载</a></span></p>
-                                <p class="down_xx"></p>
-<p>PH值在线检测仪，PH检测仪，在线PH检测仪谷雨供应，PH检测仪有便携式PH检测，实验室台式PH检测仪及工业在线PH检测仪.</p>
-<p>谷雨供应主营:<br>PH酸度计,电导率计,余氯/总氯,浊度仪,MLSS,SS,污泥浓度,悬浮物,溶解氧DO,COD,氨氮,总磷,总氮,硝氮,亚硝氮,氰化物/总氰,水中油,硬度,挥发酚,总酚等在线水质分析仪<br>总铜、铜离子、总镍、镍离子、总铁、铁离子、总锰、锰离子、总锌、总铬、六价铬、总镉、总铅,总砷,总银,银离子等重金属在线监测仪<br>计量泵,液位计,电磁流量计等水质分析仪<br>代理品牌:美国HACH哈希,意大利SYSTEA希思迪,美国ATI大川,美国Thermo Fisher热电,新加坡EUTECH优特,美国AquaSensors,美国奥立龙Orion,美国HF,德国WTW及相关试剂,德国Bran+Lbebbe,台湾SUNTEX上泰及相关梅特勒传感器.</p>
-<p>更多信息登录：http://www.ep1718.com查看，或联系谷雨　guyu.sh@163.com</p>
-                                <p class="gb">[<a href="#" class="lse"> 打印</a> ] [ <a href="#Top" class="lse">返回顶部</a> ]  [ <a href="javascript:window.close()" class="lse">关闭</a> ] </p>
-			
-HTML;
-//			preg_match("/(<p class=\"down_xx\">[\s\S]*)<p class=\"gb\">/i",$test_str,$matches);
-//			preg_match("/<p class=\"down_xx\">[\s\S]*<\/p>/i",$test_str,$matches);
-			$s_str = "<p class=\"down_xx\">";
-			$e_str = '<p class="gb">';
-			$s_pos = strpos($test_str,$s_str)-1;
-			$e_pos = strpos($test_str,$e_str);
-			echo substr($test_str,$s_pos,$e_pos-$s_post);
-	}
-	
 }
 $a = new MyClass ( );
-$a->Csspath2JqueryPath();
+$a->Xpath2JqueryPath();
 
 ?>
 
