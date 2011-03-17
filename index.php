@@ -490,13 +490,6 @@ CONTENT;
 	
 	public function Test()
 	{
-//		$href="http://www.pack.cn/company/company_list.aspx?bigid=0";
-//		phpQuery::newDocumentFile($href);
-//		$event_target = pq("#__EVENTTARGET")->attr("VALUE");
-//		$event_argument = pq("#__EVENTARGUMENT")->attr("VALUE");
-//		$view_state = pq("#__VIEWSTATE")->attr("VALUE");
-//		$url = "company_list.aspx?bigid=0";
-
 //		$href="http://search.pack.cn/company/?s=31";
 //		$content = getRemoteContent($href,2,5);
 //		$content = str_replace("<meta http-equiv=\"Content-Type\" content=\"text\/html; charset=gb2413\" \/>","<meta http-equiv=\"Content-Type\" content=\"text\/html; charset=gb2312\" \/>",$content);
@@ -549,6 +542,7 @@ CONTENT;
 		}
 		$rs = implode('>',$tmp_arr);
 		echo $rs;
+//      echo exec("./php_test 'a' 'bb b'");
 	}
 	
 }
