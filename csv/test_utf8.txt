@@ -1,2 +1,4 @@
 用户名,密码,企业名称,联系人,Email,手机
 csv01,123456,北京某某制药公司,李四,lisi@gmail.com,13231125789
+//enca -L zh_CN file  检测编码
+//enca -L zh_CN -x UTF-8 <file.txt>rs.txt 
