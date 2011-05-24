@@ -1,7 +1,7 @@
 <?php 
 require_once dirname(__FILE__).'/include/class/phpmailer/class.phpmailer.php';
 
-function DoMail($name='*',$to='gu217@126.com',$title='myEmail',$body='HaLou!',$reply='',$att='')
+function DoMail($name='*',$to='*@126.com',$title='myEmail',$body='HaLou!',$reply='',$att='')
 {
 	$mail = new PHPMailer;
 	$mail->Body = $body;
