@@ -602,4 +602,41 @@ function UnicodeDecode($name)
 	}
 	return $rs_str;
 }
+/**
+ * 获得IP(公网IP)
+ *
+ * @return string
+ */
+function getIp()
+{
+	$url = 'http://www.ip138.com/ip2city.asp';
+	$con = file_get_contents($url);
+	if(empty($con))
+		return FALSE;
+	preg_match("/\[(\d+\.\d+\.\d+\.\d+)\]/",$con,$matches);
+	if(isset($matches[1]))
+		return $matches[1];
+	return FALSE;
+}
+
+function EchoDateTime($format = DEFAULT_DATE_FORMAT,$timestamp='')
+{
+	if(empty($timestamp))
+		echo date($format);
+	else 
+		echo date($format,$timestamp);
+	return TRUE;
+}
+
+function randomLetter($count)
+{
+    $s = 'abcdefghijklmnopqerstuvwxyz0123456789';
+    $strCount = strlen($s);
+    $rs = ''; 
+    while ($count--) {
+        $i = rand(0, $strCount - 1); 
+        $rs .= $s[$i];
+    }   
+    return $rs;
+}
 ?>
