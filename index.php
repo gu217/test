@@ -102,14 +102,14 @@ class MyClass
 <script src="/js/jquery.form.js"></script>
 </head>
 <body>
-
+<!------- ----------->
 HEAD;
 	}
 
 	private static function EchoEnd()
 	{
 		echo <<<FOOT
-
+<!------- ----------->
 </body>
 </html>
 FOOT;
@@ -907,8 +907,6 @@ exit();
 //echo JumpTo360("http://afncgm.file.800mei.net/adlinktech/signup.html");
 //$a->RandomHz();
 //$rs = getUnicodeFromOneUTF8("工");
-//echo json_encode("工");
-//echo json_decode("\"\\u".$rs.'"');
 //echo RandZhong(150);
 function JumpTo360($url)
 {
