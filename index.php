@@ -573,6 +573,13 @@ CONTENT;
 //   		}
 //		$title = pq("title")->text();
 //		var_dump($title);
+		$content = "<p background=\"1.gif\">
+				<span>dfdfd</span>
+				<p>343434</p>
+				</p>";
+		phpQuery::newDocument($content);
+		$t=pq("p[background='1.gif']")->text();
+		var_dump($t); exit();
 		$rs = pq("div.ProductTitle>div.pro_title>h1")->text();
 		var_dump($rs);
 	}
@@ -657,6 +664,8 @@ CONTENT;
 			return randomLetter(6);
 		}
 $a = new MyClass ( );
+$a->Test();
+exit();
 //echo $a->Test();
 //echo $a->Xpath2JqueryPath('/html/body/div[9]/div/div/div[3]/table/tbody/tr/td[2]',FALSE);
 //exit();
@@ -900,13 +909,12 @@ $test = <<< HTML
 HTML;
 //$b = $a->StatisticReplace($test);
 $b = $a->ContentStatisticReplace($test);
-echo $b;
-exit();
+//echo $b;
+//exit();
 //$b = preg_replace_callback('/\[URL_RAND\]/','UrlRandomReplaceOneByOne',$test);
 //echo $b;
 //echo JumpTo360("http://afncgm.file.800mei.net/adlinktech/signup.html");
 //$a->RandomHz();
-//$rs = getUnicodeFromOneUTF8("工");
 //echo RandZhong(150);
 function JumpTo360($url)
 {
@@ -1000,16 +1008,6 @@ function getArray($size = 1)
 混合设备	http://www.ccen.net/company/company_list.php?gopage=0&sortid_1=3
 分离设备	http://www.ccen.net/company/company_list.php?gopage=0&sortid_1=4
 压力容器	http://www.ccen.net/company/company_list.php?gopage=0&sortid_1=5
-制冷设备	http://www.ccen.net/company/company_list.php?gopage=0&sortid_1=6
-传质设备	http://www.ccen.net/company/company_list.php?gopage=0&sortid_1=7
-储运设备	http://www.ccen.net/company/company_list.php?gopage=0&sortid_1=8
-反应设备	http://www.ccen.net/company/company_list.php?gopage=0&sortid_1=9
-干燥设备	http://www.ccen.net/company/company_list.php?gopage=0&sortid_1=10
-环保设备	http://www.ccen.net/company/company_list.php?gopage=0&sortid_1=12
-输送设备	http://www.ccen.net/company/company_list.php?gopage=0&sortid_1=13
-仪器仪表	http://www.ccen.net/company/company_list.php?gopage=0&sortid_1=14
-包装设备	http://www.ccen.net/company/company_list.php?gopage=0&sortid_1=18
-反应设备	http://www.ccen.net/company/company_list.php?gopage=0&sortid_1=20
 HTML;
 	$tmp_arr = explode("\n",$str);
 	$rs = array();
@@ -1040,6 +1038,7 @@ HTML;
 	}
 	echo ")\n";
 }
+//getArray();
 $ttt = <<<TTHTML
       <table width="95%" align="center" cellpadding="0" cellspacing="0" style="font-size:12px; line-height:22px;">
       <tr>
@@ -1060,6 +1059,14 @@ function createRandomHtml($content, $tag = 'td')
 }
 //echo "SELECT COUNT(1) FROM `grab_content_url` WHERE `hash`='".md5('http://www.cnsb.cn/html/products/5719/info_show_5719162.html')."'";exit();
 //echo createRandomHtml($ttt);
-getArray();
+
+function RecordError($data)
+{
+	$referer = empty($_SERVER['HTTP_REFERER']) ? 'referer' : $_SERVER['HTTP_REFERER'];
+	if(empty($data['email']) || substr($data['email'],-1)=='7')
+		error_log("{$data['email']}  => {$referer} \n", 3, "my-errors.log");
+}
+$data['email'] = '127';
+RecordError($data);
 ?>
 
