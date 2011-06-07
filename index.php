@@ -657,6 +657,63 @@ CONTENT;
     	$pattern = "/(<a[^>]+href\s*=\s*[\"\']?)([^\"\' ]+)([\"\']?.*?\>[\w\W]*?\<\/a\>)/i";
 		return preg_replace_callback($pattern,'PregReplaceSiteContent',$content);
     }
+    
+	public function AddLinksForKeywords($content,$link_num=5)
+	{
+//		if(empty($content)||empty($industrypath))
+//			return $content;
+//        $industrypath = self::getIndustryPath($industrypath);
+//		$keywords = self::GetKeywords($industrypath);		
+//		if(empty($keywords))
+//			return $content;
+		$keywords = array(
+		0=>array('keyword'=>'I/O','link'=>'http://g.cn'),
+		1=>array('keyword'=>'运动控制','link'=>'http://g.cn'),
+		);
+		$i = 0;
+		foreach($keywords as $v)
+		{
+			$find_keyword = str_replace(array('/'),array('\/'),$v['keyword']);
+			if($i>=$link_num)
+				break;
+			$pos = mb_stripos($content,$v['keyword'],0);
+			if($pos === FALSE)
+				continue;
+			if($pos<=3)
+			{
+				$content = preg_replace("/{$find_keyword}/i","<a href=\"{$v['link']}\" class=\"keyword\" target=\"_blank\">\\0</a>",$content,1);
+				$i++;
+			}
+			else
+			{
+				while(TRUE)
+				{
+					if($i>=$link_num)
+						break 2;
+					$tmp_before = mb_substr($content,0,$pos);
+					$tmp_after = mb_substr($content,$pos);
+					$pos1 = strripos($tmp_before,'<a ');
+					$pos2 = strripos($tmp_before,'</a>');
+					if($pos2>=$pos1&&strrpos($tmp_before,'>')>=strrpos($tmp_before,'<'))//没有在标签内
+					{
+						$tmp_after = preg_replace("/{$find_keyword}/i","<a href=\"{$v['link']}\" title=\"{$v['keyword']}\" class=\"keyword\" target=\"_blank\">\\0</a>",$tmp_after,1);
+						$i++;
+						$content = $tmp_before.$tmp_after;
+						break;
+					}
+					else
+					{
+						$pos = mb_stripos($content,$v['keyword'],mb_strlen($tmp_before.$v['keyword']));
+						if($pos === FALSE)
+							break;
+						else 
+							continue;
+					}
+				}
+			}
+		}
+		return $content;
+	}
 
 }
 		function UrlRandomReplaceOneByOne($mathes)
@@ -664,7 +721,9 @@ CONTENT;
 			return randomLetter(6);
 		}
 $a = new MyClass ( );
-$a->Test();
+echo $a->AddLinksForKeywords("2011年6月2日，北京讯<br />
+	凌华科技发布最新&ldquo;分布式运动控制与I/O解决方案&rdquo;，该方案整合具有实时性的专用型运动控");
+//$a->Test();
 exit();
 //echo $a->Test();
 //echo $a->Xpath2JqueryPath('/html/body/div[9]/div/div/div[3]/table/tbody/tr/td[2]',FALSE);
