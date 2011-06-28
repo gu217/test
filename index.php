@@ -424,6 +424,7 @@ CONTENT;
 		$link_num = 5;
 		foreach($keywords as $v)
 		{
+			$find_keyword = str_replace(array('/'),array('\/'),$v['keyword']);
 			if($i>=$link_num)
 				break;
 			$pos = mb_stripos($content,$v['keyword'],0);
@@ -431,7 +432,7 @@ CONTENT;
 				continue;
 			if($pos<=3)
 			{
-				$content = preg_replace("/{$v['keyword']}/i","<a href=\"{$v['link']}\" target=\"_blank\">\\0</a>",$content,1);
+				$content = preg_replace("/{$find_keyword}/i","<a href=\"{$v['link']}\" target=\"_blank\">\\0</a>",$content,1);
 				$i++;
 			}
 			else
@@ -446,8 +447,7 @@ CONTENT;
 					$pos2 = strripos($tmp_before,'</a>');
 					if($pos2>=$pos1&&strrpos($tmp_before,'>')>=strrpos($tmp_before,'<'))
 					{
-
-						$tmp_after = preg_replace("/{$v['keyword']}/i","<a href=\"{$v['link']}\" title=\"{$v['keyword']}\" target=\"_blank\">\\0</a>",$tmp_after,1);
+						$tmp_after = preg_replace("/{$find_keyword}/i","<a href=\"{$v['link']}\" title=\"{$v['keyword']}\" target=\"_blank\">\\0</a>",$tmp_after,1);
 						$i++;
 						$content = $tmp_before.$tmp_after;
 						break;
@@ -485,103 +485,22 @@ CONTENT;
 	
 	public function Test()
 	{
-//		$href="http://search.pack.cn/company/?s=31";
-//		$content = getRemoteContent($href,2,5);
 //		$content = str_replace("<meta http-equiv=\"Content-Type\" content=\"text\/html; charset=gb2413\" \/>","<meta http-equiv=\"Content-Type\" content=\"text\/html; charset=gb2312\" \/>",$content);
 //		:TOTHINK: //双引号转义替换不成功
 //		$content = str_replace('<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />','<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />',$content);
 //		phpQuery::newDocument($content);
 //		echo $href = pq("div#pages>a.cur")->next("a")->attr("href");
 //
-//		$url = "http://www.c-cnc.com/qy/mode1/index5.asp?id=18417";
-//		phpQuery::newDocumentFile($url);
-//		$file_content = getRemoteContent($url);
 //		$file_content = str_replace('<meta http-equiv="Content-Type" content="text/html; charset=gb2413" />','<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />',$file_content);
-//       	phpQuery::newDocument($file_content,"text/html;charset=utf-8");
+//      phpQuery::newDocument($file_content,"text/html;charset=utf-8");
 //		echo $detail = pq("div.right_box_bg:eq(0)>div.nr_box:eq(0)")->html();
-//		echo pq("body")->html();
-//		echo $paper['pub_time'] = preg_replace("/最近更新时间：(\d{4})年(\d+)月(\d+)日 /","$1-$2-$3","最近更新时间：2010年4月19日 ");
-//		echo strtotime($paper['pub_time']);
-		$href = "http://www.cnsb.cn/shop/shop_lxfs.asp?company_id=17861";
-		$href = "http://shop.cnsb.cn/lianxi-zhanhui-66086.html";
+
 		$href = "http://www.cnsb.cn/html/products/5751/info_show_5751864.html";
-//		phpQuery::newDocumentFile($href,"text/html;charset=utf-8");
-		@phpQuery::newDocumentFile($href,"text/html;charset=utf-8");
-//		$content = getRemoteContent($href);
+		phpQuery::newDocumentFile($href,"text/html;charset=utf-8");
+//		phpQuery::newDocument($content);
 //		$content = mb_convert_encoding($content,'UTF-8','GB2312');
-//    			$this->aCorpInfo['tel'] = preg_match("/var tel = \"(\d+)\"\+\"\-\"\+\"(\d+)\"/",$content,$matches) ? $matches[1].$matches[2] : '';
-//				$this->aCorpInfo['fax'] = preg_match("/var fax = \"(\d+)\"\+\"\-\"\+\"(\d+)\"/",$content,$matches) ? $matches[1].$matches[2] : '';
-//				$this->aCorpInfo['mobile'] = preg_match("/var mb = \"(\d+)\"/",$content,$matches) ? $matches[1] : '';
-//				$this->aCorpInfo['address'] = preg_match("/<td height=\"25\" class=\"unnamed12\">　公司地址：(.+)<\/td>/",$content,$matches) ? trim($matches[1]) : '';
-//				$this->aCorpInfo['zipcode'] = preg_match("/<td height=\"25\" class=\"unnamed12\">　邮　　编：(\d{6})<\/td>/",$content,$matches) ? trim($matches[1]) : '';
-//				$this->aCorpInfo['email'] = preg_match("/<td height=\"25\" class=\"unnamed12\">　邮　　箱：(.+)<\/td>/",$content,$matches) ? strtolower(trim($matches[1])) : '';
-//				$this->aCorpInfo['site'] = preg_match("/<td height=\"25\" class=\"unnamed12\">　　　　　　((http|https)?:\/\/www\.[a-z0-9-]+\..+)<\/td>/i",$content,$matches) ? strtolower(trim($matches[1])) : '';
-//				$this->aCorpInfo['contact'] = preg_match("/<strong style=\"font\-size:14px\">(.*)<\/strong>/",$content,$matches) ? $matches[1] : '';
-//
-//		var_dump($this->aCorpInfo);exit();		
-		//body>table:eq(5)>tr:eq(0)>td:eq(2)>table:eq(2)
-		/**$this->aCorpInfo
-		$content = str_replace("&#160;",'',$content);
-		phpQuery::newDocument($content);
-		echo pq("body>table:eq(5)>tr:eq(0)>td:eq(2)>table:eq(2)")->html();
-		foreach(pq("body>table:eq(5)>tr:eq(0)>td:eq(2)>table:eq(2)>tr") as $tr)
-		{
-			$key = pq($tr)->find("td:eq(0)")->text();
-			$key = $this->CorpInfoKey($key);
-			if(empty($key))
-				continue;
-			if($key == 'site')
-				$val = pq($tr)->find("td:eq(1)>a")->attr('href');
-			else
-			{
-				$val = pq($tr)->find("td:eq(1)")->text();
-//				if(ord(substr($val,0,1)) == 194)
-//					$val = substr($val,1);
-				$val = str_replace("&nbsp;",'',$val);
-				$val = strip_tags($val);
-			}
-			$this->aCorpInfo[$key] = trim($val);
-		}
-		var_dump($this->aCorpInfo);
-		**/
-		
-//		$page_str = pq('div.cn5>form')->html();
-////		$page_str = pq('html')->html();
-//		$page_now_page = preg_match("/当前第(\d+)页/",$page_str,$matches) ? $matches[1] : 0;
-//		$url_now_page = preg_match("/page\_no=(\d+)&/",$href,$matches) ? $matches[1] : 0;
-//	    $corp_url_div = pq("div.cn3_1_1");
-//        	foreach($corp_url_div as $ls)
-//			{
-//				$corp_src = pq($ls)->find("a")->attr('href');
-//				if(!preg_match("/index\-(\d+)\.html/",$corp_src,$matches))
-//				{
-//					if(!DEBUG)
-//						$this->oMoudle->GatherCorpUrlSave($corp_src);			
-//					echo "Wrong corp URL :{$corp_src} \n";
-//					continue;
-//				}
-//				$corp_type = trim(pq($ls)->parents("div.cn3_1")->siblings("div.cn3_2[style='line-height:20px;']")->text()) == '展会服务' ? 2 : 1;
-//				echo $corp_type,"<br />";
-//			}
-//		$page_str = pq("form[name='fenye']")->html();
-//       	$page_total = 0;
-//       	$page_total = preg_match("/<font color=\"red\">共(\d+)页<\/font>/",$page_str,$mathes) ? $mathes[1] : 0;
-//   		foreach(pq("table.b_xx") as $ls)
-//   		{
-//   			$url = pq("tr:eq(0)>td:eq(1)>a",$ls)->attr("href");
-//   			echo $url,"<br />";
-//   		}
-//		$title = pq("title")->text();
-//		var_dump($title);
-		$content = "<p background=\"1.gif\">
-				<span>dfdfd</span>
-				<p>343434</p>
-				</p>";
-		phpQuery::newDocument($content);
-		$t=pq("p[background='1.gif']")->text();
-		var_dump($t); exit();
-		$rs = pq("div.ProductTitle>div.pro_title>h1")->text();
-		var_dump($rs);
+	
+
 	}
 	
 	public function CorpInfoKey($key)
@@ -657,62 +576,30 @@ CONTENT;
     	$pattern = "/(<a[^>]+href\s*=\s*[\"\']?)([^\"\' ]+)([\"\']?.*?\>[\w\W]*?\<\/a\>)/i";
 		return preg_replace_callback($pattern,'PregReplaceSiteContent',$content);
     }
-    
-	public function AddLinksForKeywords($content,$link_num=5)
+	
+	public function CurlTest()
 	{
-//		if(empty($content)||empty($industrypath))
-//			return $content;
-//        $industrypath = self::getIndustryPath($industrypath);
-//		$keywords = self::GetKeywords($industrypath);		
-//		if(empty($keywords))
-//			return $content;
-		$keywords = array(
-		0=>array('keyword'=>'I/O','link'=>'http://g.cn'),
-		1=>array('keyword'=>'运动控制','link'=>'http://g.cn'),
-		);
-		$i = 0;
-		foreach($keywords as $v)
+		$post_data = array();
+		$post_data['clientname'] = "test08";
+		$post_data['clientpasswd'] = "test08";
+		$post_data['join_batch'] = "杭州 4/28";
+		$post_data['p'] = "gongye360000ii";
+		$url='http://www.gongye360.com/static/?type=cnim';
+		$o="";
+		foreach ($post_data as $k=>$v)
 		{
-			$find_keyword = str_replace(array('/'),array('\/'),$v['keyword']);
-			if($i>=$link_num)
-				break;
-			$pos = mb_stripos($content,$v['keyword'],0);
-			if($pos === FALSE)
-				continue;
-			if($pos<=3)
-			{
-				$content = preg_replace("/{$find_keyword}/i","<a href=\"{$v['link']}\" class=\"keyword\" target=\"_blank\">\\0</a>",$content,1);
-				$i++;
-			}
-			else
-			{
-				while(TRUE)
-				{
-					if($i>=$link_num)
-						break 2;
-					$tmp_before = mb_substr($content,0,$pos);
-					$tmp_after = mb_substr($content,$pos);
-					$pos1 = strripos($tmp_before,'<a ');
-					$pos2 = strripos($tmp_before,'</a>');
-					if($pos2>=$pos1&&strrpos($tmp_before,'>')>=strrpos($tmp_before,'<'))//没有在标签内
-					{
-						$tmp_after = preg_replace("/{$find_keyword}/i","<a href=\"{$v['link']}\" title=\"{$v['keyword']}\" class=\"keyword\" target=\"_blank\">\\0</a>",$tmp_after,1);
-						$i++;
-						$content = $tmp_before.$tmp_after;
-						break;
-					}
-					else
-					{
-						$pos = mb_stripos($content,$v['keyword'],mb_strlen($tmp_before.$v['keyword']));
-						if($pos === FALSE)
-							break;
-						else 
-							continue;
-					}
-				}
-			}
+		   $o.= "$k=".urlencode($v)."&";
 		}
-		return $content;
+		$post_data_str=substr($o,0,-1);//clientname=test08&clientpasswd=test08&submit=submit
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_HEADER, 0);
+		curl_setopt($ch, CURLOPT_URL,$url);
+		//为了支持cookie
+		curl_setopt($ch, CURLOPT_COOKIEJAR, './cookie.txt');
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data_str);
+		$result = curl_exec($ch);
+		echo $result;
 	}
 
 }
@@ -720,261 +607,116 @@ CONTENT;
 		{
 			return randomLetter(6);
 		}
-$a = new MyClass ( );
-echo $a->AddLinksForKeywords("2011年6月2日，北京讯<br />
-	凌华科技发布最新&ldquo;分布式运动控制与I/O解决方案&rdquo;，该方案整合具有实时性的专用型运动控");
-//$a->Test();
-exit();
-//echo $a->Test();
+$new_class = new MyClass ( );
+//$new_class->Test();
 //echo $a->Xpath2JqueryPath('/html/body/div[9]/div/div/div[3]/table/tbody/tr/td[2]',FALSE);
 //exit();
 $test = <<< HTML
-<table style="margin: 0px auto;" border="0" cellspacing="0" cellpadding="0" width="577" align="center">
-<tbody>
-<tr>
-<td>
-<table border="0" cellspacing="0" cellpadding="0" width="575" align="center">
-<tbody>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><TITLE>凌华科技：军用宽温级产品</TITLE>
+<META content="text/html; charset=UTF-8" http-equiv=Content-Type>
+<META name=ROBOTS content=ALL>
+<META content=no-cache http-equiv=Pragma>
+<META name=GENERATOR content="MSHTML 8.00.7600.16766"></HEAD>
+<BODY leftMargin=0 rightMargin=0 topMargin=0>
+<DIV align=center>
+  <TABLE border=0 cellSpacing=0 cellPadding=0 width=720>
+    <TBODY>
+      <TR> 
+        <TD height=8></TD>
+      </TR>
+      <TR> 
+        <TD><A target="_blank"  
+      href="http://cm.adlinktech.com/login/EventAnalytics.asp?code=0511062802&no=1"><IMG src="images/e1.jpg" width="720" height="449" 
+      border=0></A></TD>
+      </TR>
+      <TR>
+        <TD><img src="images/e3.jpg" width="720" height="28"></TD>
+      </TR>
+    </TBODY>
+  </TABLE>
+<TABLE border=0 cellSpacing=0 cellPadding=0>
+  <TBODY>
+  <TR>
+        <TD width=180 align=left><A target="_blank"  
+      href="http://cm.adlinktech.com/login/EventAnalytics.asp?code=0511062802&no=2"><IMG src="images/e-cm720.jpg" alt="CoreModule 720" width="145" height="166" 
+      border=0></A></TD>
+        <TD width=180 align=left><A target="_blank"  
+      href="http://cm.adlinktech.com/login/EventAnalytics.asp?code=0511062802&no=4"><img src="images/e-etx-pvr.jpg" alt=ETX-PVR width="143" height="166" 
+      border=0></a></TD>
+        <TD width=180 align=left><A target="_blank"  
+      href="http://cm.adlinktech.com/login/EventAnalytics.asp?code=0511062802&no=6"><IMG src="images/e-express-cbr.jpg" alt=Express-CBR width="131" height="166" 
+      border=0></A></TD>
+        <TD width=180 align=left><A target="_blank"  
+      href="http://cm.adlinktech.com/login/EventAnalytics.asp?code=0511062802&no=8"><IMG 
+  src="images/e-ruff735.jpg" alt="Ruffsystem 735/840" width="167" height="166" 
+      border=0></A></TD>
+      </TR>
+  <TR>
+        <TD width=180 align=left><IMG src="images/4085.gif" width="116" height="30" border=0></TD>
+        <TD width=180 align=left><IMG src="images/4085.gif" width="116" height="30" border=0></TD>
+        <TD width=180 align=left><IMG src="images/4085.gif" width="116" height="30" border=0></TD>
+        <TD width=180 align=left><IMG src="images/4075.gif" width="116" height="30" border=0></TD>
+      </TR>
+  <TR>
+    <TD height=3></TD></TR>
+  <TR>
+        <TD width=180 align=left><A target="_blank"  
+      href="http://cm.adlinktech.com/login/EventAnalytics.asp?code=0511062802&no=3"><IMG src="images/quote-cn.gif" alt="Get a Quote" width="131" height="25" 
+      border=0></A></TD>
+        <TD width=180 align=left><A target="_blank"  
+      href="http://cm.adlinktech.com/login/EventAnalytics.asp?code=0511062802&no=5"><IMG src="images/quote-cn.gif" alt="Get a Quote" width="131" height="25" 
+      border=0></A></TD>
+        <TD width=180 align=left><A target="_blank"  
+      href="http://cm.adlinktech.com/login/EventAnalytics.asp?code=0511062802&no=7"><IMG src="images/quote-cn.gif" alt="Get a Quote" width="131" height="25" 
+      border=0></A></TD>
+        <TD width=180 align=left><A target="_blank"  
+      href="http://cm.adlinktech.com/login/EventAnalytics.asp?code=0511062802&no=9"><IMG src="images/quote-cn.gif" alt="Get a Quote" width="131" height="25" 
+      border=0></A></TD>
+      </TR>
+  <TR>
+    <TD height=15></TD></TR></TBODY></TABLE>
+<TABLE border=0 cellSpacing=0 cellPadding=1 width=720>
+  <TBODY>
+  <TR>
+    <TD bgColor=#808080 width="100%"></TD>
+    <TD bgColor=#a80000 height=5></TD></TR>
+  <TR bgColor=#ffffff>
+    <TD bgColor=#e4e4e4 width="100%" align=right>
+      <TABLE style="LINE-HEIGHT: 13pt; FONT-FAMILY: Arial,Verdana,Helvetica,sans-serif; FONT-SIZE: 11px;text-decoration:none" border=0 cellSpacing=0 cellPadding=8>
+        <TBODY>
+        <TR>
+                <TD align=right> <P>如需更多信息，请与<A target="_blank"  style="text-decoration:none;"
+            href="http://www.adlinktech.com/cn/contact_us/contactus.html"><B>凌华科技</B></A>联系<br>
+                    Tel: 010-58858666&nbsp;&nbsp;Fax: 010-58858625<BR>
+                    <IMG src="images/wheretobuy.gif" width="14" height="14" border=0 
+            align=absMiddle> <A target="_blank"  style="text-decoration:none;"
+            href="http://www.adlinktech.com/index.html?edm2011112-sandybridge">Web: 
+                    www.adlinktech.com</A><BR>
+                    <IMG 
+            src="images/mail.gif" width="14" height="11" border=0 align=absMiddle> 
+                    email: <A target="_blank"  style="text-decoration:none;"
+            href="mailto:market@adlinktech.com">market@adlinktech.com</A></P><font face="Courier New, Courier, monospace"></font>
+                  </TD></TR></TBODY></TABLE></TD>
+        <TD><A target="_blank"  style="text-decoration:none;"
+      href="http://www.adlinktech.com/cn/index.html"><IMG 
+  src="images/adlinkTech_logo.gif" alt="ADLINK Technology Inc." width="263" height="63" 
+      border=0></A></TD>
+      </TR></TBODY></TABLE>
+     </DIV>
+	  
+	  </BODY>
+	  </HTML>
 
-<tr>
-  <td><a target="_blank" href="http://www.tengcon.com/"><img src="images/biao.gif" border="0" alt="北京腾控科技有限公司" width="236" height="93" /></a></td>
-</tr>
-<tr>
-  <td><img src="images/edm-1.jpg" alt="" width="575" height="142" /></td>
-</tr>
-<tr>
-<td height="202">
-<p style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; line-height: 20px; color: #000000; font-weight: bold;"><a href="http://www.tengcon.com/news/145.html" target="_blank">腾控成功举办媒体发布会 隆重推出宽温以太网PLC</a></p>
-<p style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; line-height: 20px; color: #000000;"><a href="http://www.tengcon.com/news/145.html" target="_blank"><img src="images/image01.jpg" width="250" height="167" border="0" align="right"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4月22日下午，腾控科技以“为设备智能化提供核动力”为主题的媒体见面会，在北京香格里拉饭店二层莲花厅隆重举行。作为国产PLC的生产厂家，腾控科技此次为大家带来的T9系列的宽温以太网可编程控制器，不仅工作温度可达-40℃-85℃，同时还集成了工业以太网口，使用户的编程、扩展与调试更加方便！</p>
-<p style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; line-height: 20px; color: #000000;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本次媒体见面会吸引了行业内十余家专业权威媒体参加，包括《PLC&amp;FA》杂志、中国工控网、米尔自动化网、慧聪网、《自动化博览》、《冶金自动化》等行业媒体参与报道……<a href="http://www.tengcon.com/news/145.html" target="_blank">查看详细内容</a></p></td>
-
-</tr>
-</tbody>
-</table>
-<table border="0" cellspacing="0" cellpadding="0" width="575" align="center">
-<tbody>
-<tr>
-<td style="padding-left: 14px; font-family: Arial, Helvetica, sans-serif; height: 21px; font-size: 12px; color: #ffffff; font-weight: bold;" bgcolor="#336633">腾控科技引发主流媒体关注</td>
-</tr>
-<tr>
-<td colspan="2">&nbsp;</td>
-</tr>
-<tr>
-<td colspan="2">
-<table border="0" cellspacing="0" cellpadding="0" width="575">
-<tbody>
-<tr>
-
-<td width="105" height="146" align="left" valign="top"><img src="images/image02.jpg" width="105" height="399"></td>
-<td width="10">&nbsp;</td>
-<td width="460" valign="top"><p><span style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; line-height: 20px; color: #000000; font-weight: bold;">腾控宽温以太网PLC引起主流媒体广泛关注</span><br />
-  <span style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; line-height: 20px; color: #000000;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;继高调亮相国内发行量最大的报纸《参考消息》后，腾控科技的宽温以太网产品引发了主流媒体的广泛关注，包括央视网、新华网、人民网、新浪网、腾讯网等数十家主流媒体纷纷报道。</span></p>
-  <p><span style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #000000; font-weight:bold">部分链接：</span></p>
-  <p><span style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #000000">
-  央视网：<a href="http://tv.cctv.com/20110407/107053.shtml" target="_blank"><img src="images/cctv_logo.jpg" border="0" alt="央视网" width="120" height="51" longdesc="http://tv.cctv.com/20110407/107053.shtml" /></a>　　　    
-  新华网：<a href="http://news.xinhuanet.com/tech/2011-04/07/c_121278197.htm" target="_blank"><img src="images/xilan_logo.gif" border="0" alt="新华网" longdesc="http://news.xinhuanet.com/tech/2011-04/07/c_121278197.htm" /></a><br>
-  人民网：<a href="http://invest.people.com.cn/GB/14335460.html" target="_blank"><img src="images/people_logo.gif" border="0" width="151" height="60" alt="人民网" longdesc="http://invest.people.com.cn/GB/14335460.html" /></a>　    
-新浪网：<a href="http://tech.sina.com.cn/roll/2011-04-07/08415376829.shtml" target="_blank"><img src="images/sina.gif" border="0" alt="新浪网" width="107" height="43" longdesc="http://123" /></a><br>
-
-    腾讯网：<a href="http://tech.qq.com/a/20110407/000300.htm" target="_blank"><img src="images/qqcomlogo.png" border="0" alt="腾讯科技" longdesc="http://tech.qq.com/a/20110407/000300.htm" /></a>　　　　    
-	搜狐网：<a href="http://it.sohu.com/20110407/n280172742.shtml" target="_blank"><img src="images/sohu.jpg" border="0" width="120" height="69" alt="搜狐网" longdesc="http://it.sohu.com/20110407/n280172742.shtml" /></a><br>
-    网　易：<a href="http://news.163.com/11/0407/16/71261K3900014AEE.html" target="_blank"><img src="images/163.png" border="0" width="118" height="37" alt="网易" longdesc="http://news.163.com/11/0407/16/71261K3900014AEE.html" /></a>　　　    
-	和讯网：<a href="http://tech.hexun.com/2011-04-08/128572835.html" target="_blank"><img src="images/hexunlogo.jpg" border="0" width="100" height="59" alt="和讯网" longdesc="http://tech.hexun.com/2011-04-08/128572835.html" /></a></span></p></td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-<tr>
-<td colspan="2">&nbsp;</td>
-</tr>
-</tbody>
-
-</table>
-<table border="0" cellspacing="0" cellpadding="0" width="575" align="center">
-<tbody>
-<tr>
-<td style="padding-left: 14px; font-family: Arial, Helvetica, sans-serif; height: 21px; font-size: 12px; color: #ffffff; font-weight: bold;" bgcolor="#336633">腾控科技办事处相继成立</td>
-</tr>
-<tr>
-<td colspan="2">&nbsp;</td>
-</tr>
-<tr>
-<td colspan="2">
-<table border="0" cellspacing="0" cellpadding="0" width="575">
-<tbody>
-<tr>
-<td width="395" valign="top"><p><span style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; line-height: 20px; color: #000000; font-weight: bold;">腾控科技各地办事处相继成立</span></p>
-
-  <p><span style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; line-height: 20px; color: #000000;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;随着市场规模的不断扩大，腾控科技徐州市办事处、吉林市办事处、
-    大庆市办事处相继成立。</span></p>
-  <p><span style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; line-height: 20px; color: #000000;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;同时，为了更好的服务于全国各地用户，腾控科技其他地区办事处积极筹划中，也欢迎有志之士来电咨询洽谈。<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;咨询请洽邮箱：<a href="mailto:market@tengcon.com">market@tengcon.com</a></span></p></td>
-<td width="11">&nbsp;</td>
-<td width="169" height="146" align="left" valign="top"><img src="images/image03.jpg" alt="" width="168" height="175" /></td>
-</tr>
-</tbody>
-</table>
-<table border="0" cellspacing="0" cellpadding="0" width="575">
-<tbody>
-
-<tr>
-<td colspan="3">&nbsp;</td>
-</tr>
-<tr>
-<td colspan="3" style="padding-left: 14px; font-family: Arial, Helvetica, sans-serif; height: 21px; font-size: 12px; color: #ffffff; font-weight: bold;" bgcolor="#336633">腾控科技产品系列</td>
-</tr>
-<tr>
-<td colspan="3">&nbsp;</td>
-</tr>
-<tr>
-  <td width="33%" valign="bottom" style="text-align: center">
-	<a href="http://www.tengcon.com/product/PLC/" target="_blank"><img src="images/plc.gif" width="103" height="70" /></a>
-	</td>
-  <td valign="top" style="text-align: center">
-	<a href="http://www.tengcon.com/product/EthernetIO/" target="_blank"><img src="images/t5.gif" width="119" height="82" /></a>
-</td>
-  <td width="33%" valign="bottom" style="text-align: center">
-	<a href="http://www.tengcon.com/product/PROFIBUS-DP/" target="_blank"><img src="images/sdp.gif" width="111" height="75" /></a>
-</td>
-
-</tr>
-<tr>
-  <td valign="top" style="text-align: center">
-	<a href="http://www.tengcon.com/product/PLC/" target="_blank">T9系列可编程逻辑控制器</a>
-</td>
-  <td valign="top" style="text-align: center">
-	<a href="http://www.tengcon.com/product/EthernetIO/" target="_blank">T5系列工业以太网接口IO模块</a>
-</td>
-  <td valign="top" style="text-align: center">
-	<a href="http://www.tengcon.com/product/PROFIBUS-DP/" target="_blank">SDP系列PROFIBUS-DP IO模块</a>
-</td>
-</tr>
-<tr>
-<td valign="bottom" style="text-align: center"><p>
-	<a target="_blank" href="http://www.tengcon.com/product/ModbusIO/" target="_blank">
-		<img src="images/stc1.gif" width="104" height="71" />
-	</a></p>
-</td>
-<td valign="top" style="text-align: center">
-	<a target="_blank" href="http://www.tengcon.com/product/Power/" target="_blank"><img src="images/stc2.gif" width="122" height="84" /></a>
-</td>
-<td valign="bottom" style="text-align: center">
-	<a target="_blank" href="http://www.tengcon.com/product/Gateway/" target="_blank"><img src="images/tg.gif" width="101" height="69" /></a>
-</td>
-</tr>
-
-<tr>
-  <td valign="top" style="text-align: center"><a target="_blank" href="http://www.tengcon.com/product/ModbusIO/" target="_blank">STC系列MODBUS高性能IO模块</a></td>
-  <td valign="top" style="text-align: center"><a target="_blank" href="http://www.tengcon.com/product/Power/" target="_blank">STC系列电力自动化产品</a></td>
-  <td valign="top" style="text-align: center"><a target="_blank" href="http://www.tengcon.com/product/Gateway/" target="_blank">工业级协议转换器</a></td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-<tr>
-<td colspan="2">
-<form name='form' width="580px" method='post' enctype='multipart/form-data' action='sign_up.php'>
-<table align=center cellpadding=3 cellspacing=1 bgcolor='#DBEAF5'>
-  <tr>
-    <td height=25 colspan="2" bgcolor='ffffff'>
-		<font color="#FF0000">登记信息索取样本，并有机会获取精美礼品！</font>
-		<input name='enews' type='hidden' value='AddFeedback' />
-	</td>
-  </tr>
-  <tr>
-	<td width='16%' height=25 bgcolor='ffffff'>姓名</td>
-	<td bgcolor='ffffff'><input name='name' id='name' type='text' value=''><font color="#FF0000">(*)</font></td>
-  </tr>
-	<tr>
-		<td width='16%' height=25 bgcolor='ffffff'>职务</td>
-		<td bgcolor='ffffff'><input name="man_title" id="man_title" type='text' value=''></td>
-	</tr>
-	<tr>
-		<td width='16%' height=25 bgcolor='ffffff'>公司名称</td>
-		<td bgcolor='ffffff'><input name='company' id="company" type='text' value=''><font color="#FF0000">(*)</font></td>
-	</tr>
-	<tr>
-		<td width='16%' height=25 bgcolor='ffffff'>邮箱</td>
-		<td bgcolor='ffffff'><input name='email' id="email" type='text' value="<?php if(!empty(\$_GET['email'])) echo \$_GET['email']; ?>" /></td>
-	</tr>
-	<tr>
-		<td width='16%' height=25 bgcolor='ffffff'>电话</td>
-		<td bgcolor='ffffff'><input name='tel' id="tel" type='text' value=''><font color="#FF0000">(*)</font></td>
-	</tr>
-	<tr>
-		<td width='16%' height=25 bgcolor='ffffff'>联系地址</td>
-		<td bgcolor='ffffff'><input name='address' type='text' value='' size="50"></td>
-	</tr>
-	<tr>
-		<td width='16%' height=25 bgcolor='ffffff'>标题</td>
-		<td bgcolor='ffffff'><input name='title' type='text' value='腾控科技隆重推出宽温以太网PLC 引起主流媒体广泛关注' size="50"></td>
-	</tr>
-	<tr>
-		<td width='16%' height=25 bgcolor='ffffff'>感兴趣的产品</td>
-		<td bgcolor='ffffff'>
-			<input name="product[]" type="checkbox" value="T9 系列PLC">T9 系列PLC &nbsp;
-			<input name="product[]" type="checkbox" value="T5 系列以太网I/O模块">T5 系列以太网I/O模块 &nbsp;
-			<input name="product[]" type="checkbox" value="SDP 系列PROFIBUS-DP I/O模块">SDP 系列PROFIBUS-DP I/O模块
-			<br /><input name="product[]" type="checkbox" value="STC 系列MODBUS I/O模块">STC 系列MODBUS I/O模块 &nbsp;
-			<input name="product[]" type="checkbox" value="工业级协议转换器">工业级协议转换器 &nbsp;
-			<input name="product[]" type="checkbox" value="其他产品">其他产品 &nbsp;
-			<font color="#FF0000">(*)</font>
-		</td>
-	</tr>
-	<tr>
-		<td width='16%' height=25 bgcolor='ffffff'>内容</td>
-		<td bgcolor='ffffff'><textarea name='content' cols='60' rows='5'></textarea></td>
-	</tr>
-	<tr>
-		<td bgcolor='ffffff'></td>
-		<td bgcolor='ffffff'><input type='submit' name='submit' value='提交' /></td>
-	</tr>
-	</table>
-</form>
-<script src="js/form_check.js"></script>
-
-</td>
-
-</tr>
-</tbody>
-</table>
-<table border="0" cellspacing="0" cellpadding="0" width="575" align="center">
-<tbody>
-<tr>
-<td width="14" height="33" bgcolor="#badaba">&nbsp;</td>
-<td width="561" bgcolor="#badaba">
-<table border="0" cellspacing="0" cellpadding="0" width="557" align="center">
-<tbody>
-<tr>
-<td width="312"><span style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; line-height: 20px; color: #000000;">&nbsp;&nbsp;北京腾控科技有限公司<BR>
-&nbsp;&nbsp;北京市海淀区紫竹院路广源闸5号广源大厦3层<br />&nbsp;&nbsp;电话： 010-59790086</span><br /></td>
-<td style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; line-height: 20px; color: #000000;" width="260">E-mail: market@tengcon.com<br />
-
-  www.tengcon.com</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
-<p>&nbsp;</p>
-</td>
-</tr>
-</tbody>
-</table>
 HTML;
-//$b = $a->StatisticReplace($test);
-$b = $a->ContentStatisticReplace($test);
-//echo $b;
-//exit();
+//$b = $new_class->StatisticReplace($test);
+$b = $new_class->ContentStatisticReplace($test);
+echo $b;
+//exit('test');
 //$b = preg_replace_callback('/\[URL_RAND\]/','UrlRandomReplaceOneByOne',$test);
 //echo $b;
 //echo JumpTo360("http://afncgm.file.800mei.net/adlinktech/signup.html");
 //$a->RandomHz();
-//echo RandZhong(150);
 function JumpTo360($url)
 {
 	return preg_replace("/http:\/\/[a-z0-9]+.file.800mei.net/","http://www.gongye360.com",$url,1);
